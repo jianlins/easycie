@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>edu.utah.bmi.nlp</groupId>
+    <artifactId>rush</artifactId>
+    <name>RuSH (Rule-based sentence Segmenter using Hashing)</name>
+    <description>RuSH is an efficient, reliable, and easy adaptable rule-based sentence segmentation solution. It is
+        specifically designed to handle the telegraphic written text in clinical note. It leverages a nested hash table
+        to execute simultaneous rule processing, which reduces the impact of the rule-base growth on execution time and
+        eliminates the effect of rule order on accuracy.
+
+        If you wish to cite RuSH in a publication, please use:
+
+        Jianlin Shi ; Danielle Mowery ; Kristina M. Doing-Harris ; John F. Hurdle.RuSH: a Rule-based Segmentation Tool
+        Using Hashing for Extremely Accurate Sentence Segmentation of Clinical Text. AMIA Annu Symp Proc. 2016: 1587.
+
+        The full text can be found at:
+        https://knowledge.amia.org/amia-63300-1.3360278/t005-1.3362920/f005-1.3362921/2495498-1.3363244/2495498-1.3363247?timeStamp=1479743941616
+
+        This version allows defining section scopes for sentence segmentation.
+    </description>
+    <parent>
+        <groupId>edu.utah.bmi.nlp</groupId>
+        <artifactId>easycie</artifactId>
+        <version>1.4.0.8-SNAPSHOT</version>
+    </parent>
+    <contributors>
+        <contributor>
+            <name>Danielle Mowery</name>
+            <email>danielle.mowery@utah.edu</email>
+        </contributor>
+        <contributor>
+            <name>Kristina M. Doing-Harris</name>
+            <email>kdoing-harris@westminstercollege.edu</email>
+        </contributor>
+        <contributor>
+            <name>John F. Hurdle</name>
+            <email>john.hurdle@utah.edu</email>
+        </contributor>
+    </contributors>
+
+    <dependencies>
+        <dependency>
+            <groupId>edu.utah.bmi.nlp</groupId>
+            <artifactId>fastner</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.cbismuth</groupId>
+            <artifactId>junit-repeat-rule</artifactId>
+            <version>1.1.1</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>

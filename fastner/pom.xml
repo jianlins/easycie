@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright  2017  Department of Biomedical Informatics, University of Utah
+  ~ <p>
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~ <p>
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~ <p>
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>edu.utah.bmi.nlp</groupId>
+    <artifactId>fastner</artifactId>
+    <properties>
+        <ctakes.version>4.0.0</ctakes.version>
+    </properties>
+    <name>FastNER (Fast Name Entity Recognition)</name>
+    <description>FastNER is a fast implementation of rule-based named entity recognition using hashed rule processing
+        engine. There are two versions: FastNER supports token-based rules, FastCNER supports character-based rules.
+    </description>
+    <parent>
+        <groupId>edu.utah.bmi.nlp</groupId>
+        <artifactId>easycie</artifactId>
+        <version>1.4.0.8-SNAPSHOT</version>
+    </parent>
+    <dependencies>
+        <dependency>
+            <groupId>edu.utah.bmi.nlp</groupId>
+            <artifactId>nlp-core</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.utah.bmi.blulab</groupId>
+            <artifactId>domainontology</artifactId>
+            <version>2021-12-15</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ctakes</groupId>
+            <artifactId>ctakes-type-system</artifactId>
+            <version>${ctakes.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

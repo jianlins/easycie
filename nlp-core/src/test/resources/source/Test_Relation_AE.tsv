@@ -1,0 +1,61 @@
+&CONCEPT_FEATURES	FM_Observation	Relation	FMRelation:unknown_member	FMObservation:unknown_observation	Negation:not_negated
+&CONCEPT_FEATURES	FM_LivingStatus	Relation	FMRelation:unknown_member	FMLivingStatus:unknown_status
+&FEATURE_VALUES	FMRelation	unknown_member
+&FEATURE_VALUES	FMObservation	unknown_observation
+&FEATURE_VALUES	FMLivingStatus	unknown_status
+&FEATURE_VALUES	Negation	affirm	negated
+&RELATION_DEFINITION	FM_Observation	FMRelation:FamilyMember,FMObservation:Observation,Negation:Observation	FamilyMember,Observation	SourceDocumentInformation
+&RELATION_DEFINITION	FM_LivingStatus	FMRelation:FamilyMember,FMLivingStatus:LivingStatus	FamilyMember,LivingStatus	SourceDocumentInformation
+
+
+#vocabulories
+#rule string	direction	trigger type	modifier	window size
+ 	backward	trigger	FM_LivingStatus	10
+a	backward	termination	FM_LivingStatus	10
+an	backward	termination	FM_LivingStatus	10
+the	backward	termination	FM_LivingStatus	10
+<LivingStatus> <FamilyMember>	forward	termination	FM_LivingStatus	1000
+
+
+is	forward	trigger	FM_LivingStatus	1000
+are	forward	trigger	FM_LivingStatus	1000
+have	forward	trigger	FM_Observation	1000
+had	forward	trigger	FM_Observation	1000
+has	forward	trigger	FM_Observation	1000
+
+was	forward	trigger	FM_Observation	1000
+were	forward	trigger	FM_Observation	1000
+underwent	forward	trigger	FM_Observation	1000
+#passed away subsequent to a blood clot
+passed away \w+ to	forward	trigger	FM_Observation	1000
+died \w+ to	forward	trigger	FM_Observation	1000
+passed away at \w+ \w+ to	forward	trigger	FM_Observation	1000
+died at \w+ \w+ to	forward	trigger	FM_Observation	1000
+because of	forward	trigger	FM_Observation	1000
+with	forward	trigger	FM_Observation	15
+,	both	trigger	FM_Observation	15
+/	both	trigger	FM_Observation	8
+
+
+#Maternal side of the family with strong history of heart problems, malaria, and
+family history	forward	termination	FM_Observation	1000
+family with history	forward	termination	FM_Observation	1000
+family with \w+ history	forward	termination	FM_Observation	1000
+family with \w+ \w+ history	forward	termination	FM_Observation	1000
+
+<Observation> <FamilyMember>	forward	termination	FM_Observation	1000
+
+
+
+
+died of	forward	trigger	FM_Observation	1000
+died at \w+ of	forward	trigger	FM_Observation	1000
+died at \w+ with	forward	trigger	FM_Observation	1000
+died with	forward	trigger	FM_Observation	1000
+
+passed away from	forward	trigger	FM_Observation	1000
+passed away at \w+ from	forward	trigger	FM_Observation	1000
+
+suffers from	forward	trigger	FM_Observation	1000
+suffered from	forward	trigger	FM_Observation	1000
+diagnosed	forward	trigger	FM_Observation	1000

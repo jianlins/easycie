@@ -1,0 +1,10 @@
+.idea
+*.iml
+target
+classes
+data/output
+data/*.sqlite
+desc/type/pipeline*.xml
+edw*.*
+.DS_Store
+*.sqlite

@@ -1,0 +1,153 @@
+{"config": {
+    "server": "jdbc:mysql://localhost:3306?characterEncoding=utf-8&useUnicode=true&serverTimezone=CTT",
+    "databaseName": "myschema",
+    "updateStatements": {"item": {
+        "name": "LOG",
+        "sql": "UPDATE LOG SET ANNOTATOR=?,START_DTM=?, END_DTM=?, NUM_NOTES=?, COMMENTS=? WHERE RUN_ID=?"
+    }},
+    "templates": {"item": [
+        {
+            "drop": {"item": "DROP TABLE {tableName};"},
+            "query": "SELECT * FROM {tableName} WHERE ANNOTATOR=?;",
+            "name": "ANNOTATION_TABLE",
+            "insert": "INSERT INTO {tableName} (DOC_NAME,ANNOTATOR, RUN_ID,TYPE,BEGIN,END,SNIPPET_BEGIN, TEXT,\n                FEATURES,SNIPPET,COMMENTS)\n                VALUES (?,?,?,?,?,?,?,?,?,?,?);",
+            "returnKey": "ID",
+            "sql": {"item": [
+                "CREATE TABLE {tableName}(ID INTEGER PRIMARY KEY AUTOINCREMENT,\n                    DOC_NAME TEXT,\n                    ANNOTATOR TEXT,\n                    RUN_ID INT,\n                    TYPE TEXT,\n                    BEGIN INT,\n                    END INT,\n                    SNIPPET_BEGIN INT,\n                    TEXT TEXT,\n                    FEATURES TEXT,\n                    SNIPPET TEXT,\n                    COMMENTS TEXT,\n                    CREATE_DTM DATETIME DEFAULT CURRENT_TIMESTAMP);",
+                "CREATE INDEX IF NOT EXISTS {tableName}_RUN_IND ON {tableName} (RUN_ID);",
+                "CREATE INDEX IF NOT EXISTS {tableName}_TYPE_IND ON {tableName} (TYPE);",
+                "CREATE INDEX IF NOT EXISTS {tableName}_ANNO_IND ON {tableName} (ANNOTATOR);",
+                "CREATE INDEX IF NOT EXISTS {tableName}_DOC_IND ON {tableName} (DOC_NAME);"
+            ]}
+        },
+        {
+            "drop": {"item": "DROP TABLE {tableName};"},
+            "query": "SELECT * FROM {tableName} WHERE DOC_NAME=?;",
+            "name": "DOCUMENTS_TABLE",
+            "insert": "INSERT INTO {tableName} (DATASET_ID, BUNCH_ID,DOC_NAME, TEXT,DATE,REF_DATE,INSERT_DTM) VALUES\n                (?,?,?,?,?,?,CURRENT_TIMESTAMP);",
+            "sql": {"item": [
+                "CREATE TABLE {tableName} (\n                    DOC_ID INTEGER PRIMARY KEY AUTOINCREMENT,\n                    DATASET_ID CHAR(10),\n                    BUNCH_ID INTEGER,\n                    DOC_NAME TEXT,\n                    TEXT TEXT,\n                    DATE DATETIME,\n                    REF_DATE DATETIME,\n                    INSERT_DTM DATETIME);",
+                "CREATE INDEX IF NOT EXISTS {tableName}_DOC_IND ON {tableName} (DOC_NAME);",
+                "CREATE INDEX IF NOT EXISTS {tableName}_DATATSET_IND ON {tableName} (DATASET_ID);",
+                "CREATE INDEX IF NOT EXISTS {tableName}_BUNCH_IND ON {tableName} (BUNCH_ID);"
+            ]}
+        }
+    ]},
+    "createTables": {"item": [
+        {
+            "name": "LOG",
+            "sql": {"item": "CREATE TABLE LOG (\n                    RUN_ID INTEGER PRIMARY KEY AUTOINCREMENT,\n                    ANNOTATOR TEXT,\n                    START_DTM DATETIME,\n                    END_DTM DATETIME,\n                    NUM_NOTES NUMBER(22,0),\n                    COMMENTS TEXT);"}
+        },
+        {
+            "name": "ANNOTATORS",
+            "sql": {"item": [
+                "CREATE TABLE ANNOTATORS (\n                    ID INTEGER PRIMARY KEY AUTOINCREMENT,\n                    ANNOTATOR TEXT,\n                    ADD_DTM DATETIME);",
+                "CREATE INDEX IF NOT EXISTS ANNOTATORS_INX ON ANNOTATORS (ANNOTATOR);"
+            ]}
+        }
+    ]},
+    "queryStatements": {"item": [
+        {
+            "name": "queryDocs",
+            "sql": "SELECT DOC_ID,DATASET_ID, DOC_NAME, BUNCH_ID, TEXT SNIPPET,TEXT DOC_TEXT, DATE,REF_DATE, INSERT_DTM FROM {tableName}"
+        },
+        {
+            "name": "queryAnnos",
+            "sql": "SELECT ID,DOC_NAME,TYPE,SNIPPET,BEGIN,END,SNIPPET_BEGIN,TEXT,FEATURES,COMMENTS,ANNOTATOR,RUN_ID FROM\n                {tableName} RS"
+        },
+        {
+            "name": "querySnippetAnnos",
+            "sql": "SELECT RS.ID,RS.DOC_NAME, RS.TYPE,RS.SNIPPET, RS.BEGIN,RS.END,RS.SNIPPET_BEGIN,IT.TEXT DOC_TEXT,\n                RS.FEATURES,IT.DATE, IT.REF_DATE,RS.COMMENTS,RS.ANNOTATOR,RS.RUN_ID FROM\n                {tableName} RS JOIN {inputTable} IT ON RS.DOC_NAME=IT.DOC_NAME"
+        },
+        {
+            "name": "queryDocSnippetAnnos",
+            "sql": "SELECT RD.ID,IT.BUNCH_ID,RD.DOC_NAME,RD.TYPE DOC_TYPE, RS.ID RSID, RS.TYPE,RS.SNIPPET,RS.BEGIN,RS.END,RS.SNIPPET_BEGIN,IT.TEXT DOC_TEXT,\n                RS.FEATURES,IT.DATE, IT.REF_DATE,RS.COMMENTS,RD.ANNOTATOR,RD.RUN_ID\n                FROM\n                {docResultTable} RD LEFT OUTER JOIN {tableName} RS ON RD.DOC_NAME=RS.DOC_NAME JOIN {inputTable} IT ON RD.DOC_NAME=IT.DOC_NAME"
+        },
+        {
+            "name": "queryBunchDocSnippetAnnos",
+            "sql": "SELECT RD.ID ,IT.BUNCH_ID,RD.DOC_NAME,RB.TYPE BUNCH_TYPE, RD.TYPE DOC_TYPE, RS.TYPE,RS.SNIPPET,RS.BEGIN,RS.END,RS.SNIPPET_BEGIN,\n                RS.FEATURES,IT.DATE, IT.REF_DATE,RS.COMMENTS,RS.ANNOTATOR,RB.RUN_ID\n                FROM {bunchResultTable} RB JOIN {inputTable} IT ON RB.DOC_NAME=IT.BUNCH_ID\n                JOIN {docResultTable} RD ON IT.DOC_NAME=RD.DOC_NAME\n                LEFT OUTER JOIN {tableName} RS ON RD.DOC_NAME=RS.DOC_NAME"
+        },
+        {
+            "name": "exportExcel",
+            "sql": "SELECT ID,{tableName}.DOC_NAME,TYPE,SNIPPET,BEGIN,END,FEATURES FROM {tableName}"
+        },
+        {
+            "name": "queryCount",
+            "sql": "SELECT COUNT(*) FROM {tableName}"
+        },
+        {
+            "name": "queryAnnotators",
+            "sql": "SELECT ANNOTATOR FROM ANNOTATORS;"
+        },
+        {
+            "name": "checkAnnotatorExist",
+            "sql": "SELECT COUNT(*) FROM ANNOTATORS WHERE ANNOTATOR=?"
+        },
+        {
+            "name": "getColumnsInfo",
+            "sql": "PRAGMA table_info({tableName});"
+        },
+        {
+            "name": "checkTableExists",
+            "sql": "select count(*) from sqlite_master where type='table' and name=?;"
+        },
+        {
+            "name": "lastIdofLOG",
+            "sql": "SELECT RUN_ID FROM LOG ORDER BY RUN_ID DESC LIMIT 1;"
+        },
+        {
+            "name": "masterInputQuery",
+            "sql": "SELECT DOC_ID, DATASET_ID,BUNCH_ID,DOC_NAME,TEXT,DATE,REF_DATE FROM {tableName} WHERE DATASET_ID = ?;"
+        },
+        {
+            "name": "masterCountQuery",
+            "sql": "SELECT COUNT(*) FROM {tableName} WHERE DATASET_ID = ?;"
+        },
+        {
+            "name": "maxRunIDofAnnotator",
+            "sql": "SELECT MAX(RUN_ID) FROM {tableName} WHERE ANNOTATOR=?"
+        },
+        {
+            "name": "lastLogRunID",
+            "sql": "SELECT MAX(RUN_ID) FROM LOG WHERE ANNOTATOR=?"
+        },
+        {
+            "name": "logQuery",
+            "sql": "SELECT RUN_ID, START_DTM, END_DTM, NUM_NOTES, COMMENTS FROM LOG WHERE RUN_ID=?;"
+        },
+        {
+            "name": "maxRunID",
+            "sql": "SELECT MAX(RUN_ID) FROM {tableName} WHERE ANNOTATOR=?"
+        }
+    ]},
+    "password": "ENC(EIMtQMT2RspjLDgbrMq3Dg==)",
+    "driver": "com.mysql.cj.jdbc.Driver",
+    "dropTables": {"item": [
+        {
+            "name": "LOG",
+            "sql": {"item": "DROP TABLE LOG"}
+        },
+        {
+            "name": "ANNOTATORS",
+            "sql": {"item": "DROP TABLE ANNOTATORS"}
+        }
+    ]},
+    "insertStatements": {"item": [
+        {
+            "name": "LOG",
+            "returnKey": "RUN_ID",
+            "sql": "INSERT INTO LOG (ANNOTATOR, START_DTM, END_DTM, NUM_NOTES, COMMENTS) VALUES (?,?,?,?,?)"
+        },
+        {
+            "name": "ANNOTATORS",
+            "returnKey": "ID",
+            "sql": "INSERT INTO ANNOTATORS (ANNOTATOR, ADD_DTM) VALUES (?,CURRENT_TIMESTAMP)"
+        }
+    ]},
+    "concurUpdatable": false,
+    "syntax": {"item": {
+        "name": "limit",
+        "sql": "LIMIT"
+    }},
+    "username": "mysql"
+}}

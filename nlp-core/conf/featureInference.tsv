@@ -1,0 +1,20 @@
+@processer:	featureinferencer
+@splitter:
+@casesensitive:	true
+#keep this comment for documentation purpose
+#The following inference rules will follow this format:
+#To define a conclusion annotation with features and corresponding default values:
+#@ConclusionConcept	SuperTypeName	Feature1:defaultValue1	Feature2:defaultValue2...
+#To define an inference rule:
+#ConclusionConcept	Feature1:value1,Feature2:value2	EvidenceConcept	FeatureA:valueB, FeatureB:valueB
+#ConclusionConcept	Feature1:$FeatureA,Feature2:$FeatureB	EvidenceConcept	FeatureA:valueB, FeatureB:valueB
+
+#Define types
+@Encephalopathy	Concept	Negation:affirmed	Certainty:certain	Temporality:present
+@Negated_Encephalopathy	Concept	Certainty:certain	Temporality:present
+@Possible_Encephalopathy	Concept	Certainty:certain	Temporality:present
+@Historical_Encephalopathy	Concept	Certainty:certain	Temporality:historical
+Encephalopathy	Negation:affirmed,Certainty:$Certainty,Temporality:$Temporality	Concept	Negation:affirmed,Certainty:certain,Temporality:present	DocumentAnnotation
+Negated_Encephalopathy	Certainty:$Certainty,Temporality:$Temporality	Concept	Negation:negated	DocumentAnnotation
+Possible_Encephalopathy	Certainty:$Certainty,Temporality:$Temporality	Concept	Negation:affirmed,Certainty:uncertain,Temporality:present	DocumentAnnotation
+Historical_Encephalopathy	Certainty:$Certainty	Concept	Negation:affirmed,Temporality:historical	DocumentAnnotation

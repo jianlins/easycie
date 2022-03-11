@@ -1,0 +1,11 @@
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+export CLASSPATH=./classes$(find "$PWD" -name '*.jar' -type f -printf ':%p\n' | sort -u | tr -d '\n');
+PARA="$@"
+#echo $CLASSPATH
+if [[ -z $PARA ]]
+then
+	echo "use \"./run classname parameters\"" to execute classes.
+else
+	java -cp $CLASSPATH edu.utah.bmi.runner."$@"
+#	java -cp preannotator.jar edu.utah.bmi.runner."$@"
+fi
