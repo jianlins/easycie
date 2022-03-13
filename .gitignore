@@ -8,3 +8,5 @@ desc/type/pipeline*.xml
 edw*.*
 .DS_Store
 *.sqlite
+data/test*
+conf/test*
