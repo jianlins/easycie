@@ -20,23 +20,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.utah.bmi.nlp</groupId>
-    <artifactId>fastner</artifactId>
-    <properties>
-        <ctakes.version>4.0.0</ctakes.version>
-    </properties>
+    <artifactId>fastner-jdk${maven.compiler.target}</artifactId>
+    <parent>
+        <groupId>edu.utah.bmi.nlp</groupId>
+        <artifactId>easycie-jdk${maven.compiler.target}</artifactId>
+        <version>${revision}</version>
+    </parent>
     <name>FastNER (Fast Name Entity Recognition)</name>
     <description>FastNER is a fast implementation of rule-based named entity recognition using hashed rule processing
         engine. There are two versions: FastNER supports token-based rules, FastCNER supports character-based rules.
     </description>
-    <parent>
-        <groupId>edu.utah.bmi.nlp</groupId>
-        <artifactId>easycie</artifactId>
-        <version>1.4.0.8-SNAPSHOT</version>
-    </parent>
+    <properties>
+        <ctakes.version>4.0.0</ctakes.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
-            <artifactId>nlp-core</artifactId>
+            <artifactId>nlp-core-jdk${maven.compiler.target}</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

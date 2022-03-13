@@ -18,7 +18,7 @@ class TestPipeline {
     @Test
     @Order(1)
     fun testImport() {
-        println("set configs")
+        kotlin.io.println("set configs")
         val settingOper = SettingOper(easycieXML.path)
         tasks = settingOper.readSettings()
         val importer = Import(tasks, "txt")
