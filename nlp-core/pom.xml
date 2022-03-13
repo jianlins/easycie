@@ -20,15 +20,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.utah.bmi.nlp</groupId>
-    <artifactId>nlp-core</artifactId>
-    <name>NLP Core Class Project</name>
-    <description>The core classes for easycie</description>
+    <artifactId>nlp-core-jdk${maven.compiler.target}</artifactId>
     <parent>
         <groupId>edu.utah.bmi.nlp</groupId>
-        <artifactId>easycie</artifactId>
-        <version>1.4.0.8-SNAPSHOT</version>
+        <artifactId>easycie-jdk${maven.compiler.target}</artifactId>
+        <version>${revision}</version>
     </parent>
-
+    <name>NLP Core Class Project</name>
+    <description>The core classes for easycie</description>
     <dependencies>
         <dependency>
             <groupId>org.json</groupId>

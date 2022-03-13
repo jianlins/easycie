@@ -17,8 +17,6 @@
 package edu.utah.bmi.nlp.easycie.entry;
 
 import edu.utah.bmi.nlp.core.IOUtil;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
@@ -101,7 +99,7 @@ public class EasyCIETask<V>  implements RunnableFuture<V> {
     }
 
     @Override
-    public V get(long timeout, @NotNull TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+    public V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         return null;
     }
 }

@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>edu.utah.bmi.nlp</groupId>
-    <artifactId>easycie</artifactId>
-    <version>1.4.0.8-SNAPSHOT</version>
+    <artifactId>easycie-jdk${maven.compiler.target}</artifactId>
+    <version>${revision}</version>
 
     <packaging>pom</packaging>
     <properties>
@@ -16,6 +16,7 @@
         <kotlin.version>1.6.10</kotlin.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <revision>1.4.0.11-SNAPSHOT</revision>
     </properties>
     <scm>
         <connection>https://github.com/jianlins/easycie.git</connection>
@@ -273,6 +274,16 @@
             <version>5.8.2</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
