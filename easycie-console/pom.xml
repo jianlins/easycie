@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>edu.utah.bmi.nlp</groupId>
-    <artifactId>easycie-console-jdk${maven.compiler.target}</artifactId>
+    <artifactId>easycie-console</artifactId>
     <parent>
         <groupId>edu.utah.bmi.nlp</groupId>
-        <artifactId>easycie-jdk${maven.compiler.target}</artifactId>
+        <artifactId>easycie</artifactId>
         <version>${revision}</version>
     </parent>
 
@@ -45,27 +45,27 @@
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
-            <artifactId>nlp-core-jdk${maven.compiler.target}</artifactId>
+            <artifactId>nlp-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
-            <artifactId>rush-jdk${maven.compiler.target}</artifactId>
+            <artifactId>rush</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
-            <artifactId>fastner-jdk${maven.compiler.target}</artifactId>
+            <artifactId>fastner</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
-            <artifactId>fastcontext-jdk${maven.compiler.target}</artifactId>
+            <artifactId>fastcontext</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
-            <artifactId>section-detector-r-jdk${maven.compiler.target}</artifactId>
+            <artifactId>section-detector-r</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <!--<dependency>-->

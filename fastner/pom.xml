@@ -20,10 +20,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.utah.bmi.nlp</groupId>
-    <artifactId>fastner-jdk${maven.compiler.target}</artifactId>
+    <artifactId>fastner</artifactId>
     <parent>
         <groupId>edu.utah.bmi.nlp</groupId>
-        <artifactId>easycie-jdk${maven.compiler.target}</artifactId>
+        <artifactId>easycie</artifactId>
         <version>${revision}</version>
     </parent>
     <name>FastNER (Fast Name Entity Recognition)</name>
@@ -37,7 +37,7 @@
     <dependencies>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
-            <artifactId>nlp-core-jdk${maven.compiler.target}</artifactId>
+            <artifactId>nlp-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
