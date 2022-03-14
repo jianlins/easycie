@@ -9,7 +9,7 @@
     <parent>
         <groupId>edu.utah.bmi.nlp</groupId>
         <artifactId>easycie</artifactId>
-        <version>1.4.1.4-jdk1.8</version>
+        <version>1.4.1.5-jdk1.8</version>
     </parent>
 
     <name>EasyCIE(Easy Clinical Information Extractor-console)</name>

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.utah.bmi.nlp</groupId>
     <artifactId>easycie</artifactId>
-    <version>1.4.1.4-jdk1.8</version>
+    <version>1.4.1.5-jdk1.8</version>
     <packaging>pom</packaging>
     <properties>
         <uimaversion>2.10.0</uimaversion>
@@ -14,7 +14,7 @@
         <kotlin.version>1.6.10</kotlin.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <revision>1.4.1.4-jdk1.8</revision>
+        <revision>1.4.1.5-jdk1.8</revision>
     </properties>
     <scm>
         <connection>https://github.com/jianlins/easycie.git</connection>
