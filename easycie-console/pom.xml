@@ -9,7 +9,7 @@
     <parent>
         <groupId>edu.utah.bmi.nlp</groupId>
         <artifactId>easycie</artifactId>
-        <version>1.4.1.0-jdk1.8-SNAPSHOT</version>
+        <version>1.4.1.1-jdk1.8-SNAPSHOT</version>
     </parent>
 
     <name>EasyCIE(Easy Clinical Information Extractor-console)</name>
@@ -113,7 +113,6 @@
     </dependencies>
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>

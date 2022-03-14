@@ -24,7 +24,7 @@
     <parent>
         <groupId>edu.utah.bmi.nlp</groupId>
         <artifactId>easycie</artifactId>
-        <version>1.4.1.0-jdk1.8-SNAPSHOT</version>
+        <version>1.4.1.1-jdk1.8-SNAPSHOT</version>
     </parent>
     <name>NLP Core Class Project</name>
     <description>The core classes for easycie</description>
@@ -84,7 +84,7 @@
                 <version>3.0.0</version>
                 <executions>
                     <execution>
-                        <id>compile-jfx</id>
+                        <id>update-version</id>
                         <phase>pre-clean</phase>
                         <configuration>
                             <target>

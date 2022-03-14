@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.utah.bmi.nlp</groupId>
     <artifactId>easycie</artifactId>
-    <version>1.4.1.0-jdk1.8-SNAPSHOT</version>
+    <version>1.4.1.1-jdk1.8-SNAPSHOT</version>
     <packaging>pom</packaging>
     <properties>
         <uimaversion>2.10.0</uimaversion>
@@ -14,7 +14,7 @@
         <kotlin.version>1.6.10</kotlin.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <revision>1.4.1.0-jdk1.8-SNAPSHOT</revision>
+        <revision>1.4.1.1-jdk1.8-SNAPSHOT</revision>
     </properties>
     <scm>
         <connection>https://github.com/jianlins/easycie.git</connection>
@@ -75,6 +75,24 @@
                 <configuration>
                     <skipTests>false</skipTests>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>update-version</id>
+                        <phase>pre-clean</phase>
+                        <configuration>
+                            <target>
+                                <exec executable="bash">
+                                    <arg value="cd nlp-core;mvn -Dtest=UpdatePOMVersions test"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <!--            <plugin>-->
             <!--                <groupId>org.apache.maven.plugins</groupId>-->
