@@ -168,6 +168,10 @@ public class RecordRowIterator implements Iterator<RecordRow> {
                         else
                             record.addCell(col.getKey(), clob.getSubString(1, (int) clob.length()));
                         break;
+                    case "numeric":
+//                        sqlite PRAGMA table_info return type for dflt_value column
+                        record.addCell(col.getKey(), resultSet.getString(col.getKey()));
+                        break;
                     default:
                         System.err.println("Data type: '" + col.getValue() + "' for column '" + col.getValue() + "' has not been fully supported, read it as string instead.");
                         record.addCell(col.getKey(), resultSet.getString(col.getKey()));

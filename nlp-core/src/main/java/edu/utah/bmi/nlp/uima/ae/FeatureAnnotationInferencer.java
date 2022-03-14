@@ -60,7 +60,7 @@ public class FeatureAnnotationInferencer implements FeatureInferencerInf {
     private HashMap<String, Class<? extends Annotation>> scopeIndex = new HashMap<>();
     private HashMap<Class, IntervalST<Annotation>> scopes = new HashMap<>();
     private boolean removeEvidenceConcept = true;
-    private boolean noteRuleId=false;
+    private boolean noteRuleId = false;
     private ArrayList<ArrayList<String>> ruleCells = new ArrayList<>();
     @Deprecated
     public boolean debug = false;
@@ -76,18 +76,18 @@ public class FeatureAnnotationInferencer implements FeatureInferencerInf {
 
     }
 
-    public FeatureAnnotationInferencer(String ruleStr, boolean removeEvidenceConcept, boolean strictNameMatch,boolean noteRuleId) {
+    public FeatureAnnotationInferencer(String ruleStr, boolean removeEvidenceConcept, boolean strictNameMatch, boolean noteRuleId) {
         typeDefinitions = getTypeDefinitions(ruleStr);
         this.removeEvidenceConcept = removeEvidenceConcept;
         this.strictNameMatch = strictNameMatch;
-        this.noteRuleId=noteRuleId;
+        this.noteRuleId = noteRuleId;
     }
 
-    public FeatureAnnotationInferencer(IOUtil ioUtil, boolean removeEvidenceConcept, boolean strictNameMatch,boolean noteRuleId) {
+    public FeatureAnnotationInferencer(IOUtil ioUtil, boolean removeEvidenceConcept, boolean strictNameMatch, boolean noteRuleId) {
         typeDefinitions = getTypeDefinitions(ioUtil);
         this.removeEvidenceConcept = removeEvidenceConcept;
         this.strictNameMatch = strictNameMatch;
-        this.noteRuleId=noteRuleId;
+        this.noteRuleId = noteRuleId;
     }
 
     public LinkedHashMap<String, TypeDefinition> getTypeDefinitions() {
@@ -376,7 +376,7 @@ public class FeatureAnnotationInferencer implements FeatureInferencerInf {
         scopes.clear();
         for (Class<? extends Annotation> scopeClass : scopeIndex.values()) {
             IntervalST<Annotation> scopeTree = new IntervalST<>();
-            for( Annotation scopeAnnotation: JCasUtil.select(jCas, scopeClass)) {
+            for (Annotation scopeAnnotation : JCasUtil.select(jCas, scopeClass)) {
                 scopeTree.put(new Interval1D(scopeAnnotation.getBegin(), scopeAnnotation.getEnd()), scopeAnnotation);
             }
             scopes.put(scopeClass, scopeTree);
@@ -387,7 +387,7 @@ public class FeatureAnnotationInferencer implements FeatureInferencerInf {
     public void findNAddMatches(JCas jcas, Class<? extends Annotation> evidenceTypeClass, String evidenceTypeShortName) {
         ArrayList<Annotation> scheduledRemoval = new ArrayList<>();
         ArrayList<Annotation> scheduledSaving = new ArrayList<>();
-        for( Annotation evidenceAnnotation: JCasUtil.select(jcas, evidenceTypeClass)) {
+        for (Annotation evidenceAnnotation : JCasUtil.select(jcas, evidenceTypeClass)) {
             if (strictNameMatch && !evidenceAnnotation.getClass().getSimpleName().equals(evidenceTypeShortName))
                 continue;
             HashMap<String, AnnotationDefinition> conclusions = findMatches(evidenceAnnotation, evidenceTypeClass,
@@ -414,13 +414,13 @@ public class FeatureAnnotationInferencer implements FeatureInferencerInf {
         for (AnnotationDefinition conclusionAnnotationDefinition : conclusions.values()) {
             AnnotationDefinition conclusionDef = AnnotationOper.createConclusionAnnotationDefinition(conclusionAnnotationDefinition,
                     evidenceConceptGetFeatures, uniqueFeatureClassMap, Arrays.asList(new Annotation[]{evidenceAnnotation}), typeDefinitions);
-            String resultTypeShortName = conclusionAnnotationDefinition.getShortTypeName();
-            anno = AnnotationOper.createAnnotation(jcas, conclusionDef, conceptTypeConstructors.get(resultTypeShortName),
-                    evidenceAnnotation.getBegin(), evidenceAnnotation.getEnd(), conclusionConceptSetFeatures.get(conceptClassMap.get(resultTypeShortName)));
+            Class<? extends Annotation> conceptCls = AnnotationOper.getTypeClass(conclusionAnnotationDefinition.getFullTypeName());
+            anno = AnnotationOper.createAnnotation(jcas, conclusionDef, conceptCls, evidenceAnnotation.getBegin(), evidenceAnnotation.getEnd());
 //            System.out.println(anno.getClass());
 //            System.out.println(conceptClassMap.get(resultTypeShortName).isInstance(anno));
 //            System.out.println(AnnotationOper.getTypeClass(DeterminantValueSet.checkNameSpace("ADE3")).isInstance(anno));
-            scheduledSaving.add(anno);
+            if (anno != null)
+                scheduledSaving.add(anno);
         }
     }
 

@@ -88,4 +88,31 @@ public class AdaptableUIMACPEDescriptorRunnerTest {
         }
         System.out.println("finish");
     }
+
+    @Test
+    @Order(2)
+    public void testRunPipe2() throws InterruptedException {
+        LinkedHashMap<String, String> configs = new LinkedHashMap<>();
+        configs.put("StringMetaReader/InputString", "The patient visited E.D. this morning with high fever. He was treated with abx.");
+        configs.put("StringMetaReader/Meta", "");
+        configs.put("FeatureInferencer/RuleFileOrStr","@processer:\tfeatureinferencer\t\t\t\t\t\t\t\t\t\t\n" +
+                "@splitter:\t\t\t\t\t\t\t\t\t\t\t\n" +
+                "@version:2\t\t\n" +
+                "@casesensitive:\ttrue\t\t\t\t\t\t\t\t\t\t\n" +
+                "&CONCEPT_FEATURES\tNewDoc\tConcept\tSection:DocumentAnnotation\n" +
+                "CONDITION\tNewDoc\tSection:WHOLE\tSourceDocumentInformation\t\tSourceDocumentInformation");
+        configs.put("AnnotationPrinter/TypeName","Annotation");
+//        configs.put("SQL_Meta_Text_Reader/MetaColumns", "Code,Label");
+        AdaptableCPEDescriptorRunner runner = AdaptableCPEDescriptorRunner.getInstance("src/test/resources/desc/test_featureinf_cpe.xml", "test", configs,
+                "target/generated-test-sources/test_cpe/pipe2/test_desc.xml","target/classes","target/generated-test-sources/");
+        runner.setUIMALogger(new ConsoleLogger());
+        Logger logger = UIMAFramework.getLogger();
+        System.out.println(logger.isLoggable(Level.FINEST));
+        runner.run();
+        SimpleStatusCallbackListenerImpl listener = runner.getStatCbL();
+        while (listener.isProcessing) {
+            Thread.sleep(5);
+        }
+        System.out.println("finish");
+    }
 }

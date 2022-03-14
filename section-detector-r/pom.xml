@@ -8,7 +8,7 @@
     <parent>
         <groupId>edu.utah.bmi.nlp</groupId>
         <artifactId>easycie</artifactId>
-        <version>1.4.1.1-jdk1.8</version>
+        <version>1.4.1.4-jdk1.8</version>
     </parent>
     <name>SectionDetectorR (Rule-Based Sectionetector)</name>
     <url>https://github.com/jianlins/SectionDetectorR</url>
