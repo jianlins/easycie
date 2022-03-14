@@ -32,7 +32,7 @@
     <parent>
         <groupId>edu.utah.bmi.nlp</groupId>
         <artifactId>easycie</artifactId>
-        <version>1.4.1.1-jdk1.8-SNAPSHOT</version>
+        <version>1.4.1.1-jdk1.8</version>
     </parent>
     <contributors>
         <contributor>
