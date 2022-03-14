@@ -24,7 +24,7 @@
     <parent>
         <groupId>edu.utah.bmi.nlp</groupId>
         <artifactId>easycie</artifactId>
-        <version>${revision}</version>
+        <version>1.4.1.0-jdk1.8-SNAPSHOT</version>
     </parent>
     <name>NLP Core Class Project</name>
     <description>The core classes for easycie</description>
@@ -69,5 +69,33 @@
             <artifactId>unirest-java</artifactId>
             <version>1.4.9</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>compile-jfx</id>
+                        <phase>pre-clean</phase>
+                        <configuration>
+                            <target>
+                                <exec executable="bash">
+                                    <arg value="mvn -Dtest=UpdatePOMVersions test"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

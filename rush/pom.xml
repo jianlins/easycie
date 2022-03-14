@@ -8,7 +8,7 @@
     <parent>
         <groupId>edu.utah.bmi.nlp</groupId>
         <artifactId>easycie</artifactId>
-        <version>${revision}</version>
+        <version>1.4.1.0-jdk1.8-SNAPSHOT</version>
     </parent>
     <name>RuSH (Rule-based sentence Segmenter using Hashing)</name>
     <description>RuSH is an efficient, reliable, and easy adaptable rule-based sentence segmentation solution. It is
@@ -46,7 +46,7 @@
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>fastner</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>com.github.cbismuth</groupId>

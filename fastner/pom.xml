@@ -24,7 +24,7 @@
     <parent>
         <groupId>edu.utah.bmi.nlp</groupId>
         <artifactId>easycie</artifactId>
-        <version>${revision}</version>
+        <version>1.4.1.0-jdk1.8-SNAPSHOT</version>
     </parent>
     <name>FastNER (Fast Name Entity Recognition)</name>
     <description>FastNER is a fast implementation of rule-based named entity recognition using hashed rule processing
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>nlp-core</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.blulab</groupId>

@@ -8,7 +8,7 @@
     <parent>
         <groupId>edu.utah.bmi.nlp</groupId>
         <artifactId>easycie</artifactId>
-        <version>${revision}</version>
+        <version>1.4.1.0-jdk1.8-SNAPSHOT</version>
     </parent>
     <name>SectionDetectorR (Rule-Based Sectionetector)</name>
     <url>https://github.com/jianlins/SectionDetectorR</url>
@@ -19,14 +19,13 @@
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>fastner</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>rush</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${revision}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

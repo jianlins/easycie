@@ -9,7 +9,7 @@
     <parent>
         <groupId>edu.utah.bmi.nlp</groupId>
         <artifactId>easycie</artifactId>
-        <version>${revision}</version>
+        <version>1.4.1.0-jdk1.8-SNAPSHOT</version>
     </parent>
 
     <name>EasyCIE(Easy Clinical Information Extractor-console)</name>
@@ -46,27 +46,27 @@
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>nlp-core</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>rush</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>fastner</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>fastcontext</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>section-detector-r</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${revision}</version>
         </dependency>
         <!--<dependency>-->
         <!--<groupId>edu.utah.bmi.blulab</groupId>-->
