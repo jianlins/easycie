@@ -8,7 +8,7 @@ FastNER is an speed-optimized rule-base name entity recognition solution. It use
 <dependency>
     <groupId>edu.utah.bmi.nlp</groupId>
     <artifactId>fastner</artifactId>
-    <version>2.0.0.0-jdk1.8-SNAPSHOT</version>
+    <version>2.0.0.0-jdk1.8</version>
 </dependency>
 ```
 
