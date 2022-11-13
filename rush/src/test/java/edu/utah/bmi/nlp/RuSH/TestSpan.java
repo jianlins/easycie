@@ -101,5 +101,12 @@ public class TestSpan {
         System.out.println(list);
         Collections.sort(list);
         System.out.println(list);
+        System.out.println((int)0.3);
+        System.out.println((int)0.5);
+        System.out.println((int)0.6);
+        System.out.println(Math.round(0.3));
+        System.out.println(Math.round(0.5));
+        System.out.println(Math.round(0.6));
+
     }
 }

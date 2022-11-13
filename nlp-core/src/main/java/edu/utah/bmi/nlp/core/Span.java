@@ -102,7 +102,11 @@ public class Span implements Comparable<Span> {
     }
 
     public String toString() {
-        return getText();
+        String text=getText();
+        if (text==null)
+        return String.format("Span(%s-%s)", getBegin(), getEnd());
+        else
+            return String.format("Span(%s-%s): '%s'", getBegin(), getEnd(), text);
     }
 
     public String serialize() {

@@ -55,7 +55,7 @@ public class Marker extends Span {
         this.fbegin = begin;
         this.begin = begin;
         this.end = end;
-        this.fend = (float) end + 0.5f;
+        this.fend = (float) end - 0.3f;
         if (width == -1)
             this.width = end - begin + 1;
         else
@@ -65,11 +65,11 @@ public class Marker extends Span {
     }
 
     public int getBegin() {
-        return (int) fbegin;
+        return this.begin;
     }
 
     public int getEnd() {
-        return (int) fend;
+        return this.end;
     }
 
     public void setBegin(int begin) {
@@ -77,11 +77,11 @@ public class Marker extends Span {
     }
 
     public void setEnd(int end) {
-        this.fend = end;
+        this.fend = end-0.3f;
     }
 
     public String toString() {
-        return fbegin + "-" + type;
+        return begin + "-" +end+"\t"+ type+"|"+text;
     }
 
 

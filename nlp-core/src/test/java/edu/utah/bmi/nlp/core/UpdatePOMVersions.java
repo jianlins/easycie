@@ -22,17 +22,16 @@ import java.util.regex.Pattern;
  * @author Jianlin Shi
  */
 public class UpdatePOMVersions {
-    Pattern p = Pattern.compile("<version>([^<]+)(?=</version>[\\s\\n\\r]+</parent>)");
-    Pattern vp=Pattern.compile("(?<=<revision>)[^<]+(?=</revision>)");
-//    public static void main(String[]args){
-//        new  UpdatePOMVersions().update();
-//    }
+    Pattern p = Pattern.compile("(?<=<version>)[^<]+(?=</version>[\\s\\n\\r]+</parent>)");
+    Pattern vp = Pattern.compile("(?<=<revision>)[^<]+(?=</revision>)");
+    Pattern rp = Pattern.compile("(?<=<version>)[^<]+(?=</version>)");
+    Pattern pp = Pattern.compile("(?<=<version>)[^<]+(?=</version>[\\s\\n\\r]+<packaging>pom)");
 
     @Test
     public void update() {
         System.out.println(new File("../").getAbsolutePath());
         Collection<File> poms = FileUtils.listFiles(new File("../"), new String[]{"xml"}, true);
-        String version=readVersion();
+        String version = readVersion();
 
 
         File[] subDir = new File("../").listFiles((FileFilter) FileFilterUtils.directoryFileFilter());
@@ -40,8 +39,12 @@ public class UpdatePOMVersions {
             File pom = new File(d, "pom.xml");
             if (pom.exists()) {
                 System.out.println(pom);
-                updateOne(pom, version);
+                updatePOM(pom, version);
             }
+        }
+        Collection<File> readmes = FileUtils.listFiles(new File("../"), new String[]{"md","MD"}, true);
+        for (File readme :readmes){
+            updateREADME(readme, version);
         }
 
     }
@@ -52,10 +55,10 @@ public class UpdatePOMVersions {
             try {
                 String content = FileUtils.readFileToString(parentpom, StandardCharsets.UTF_8);
                 Matcher m = vp.matcher(content);
-                if (m.find()){
-                    String version=m.group(0);
-                    System.out.println("Find revision: "+version+"\n\tfrom parent pom file: "+parentpom.getCanonicalPath());
-                    updateParen(parentpom, content, version);
+                if (m.find()) {
+                    String version = m.group(0);
+                    System.out.println("Find revision: " + version + "\n\tfrom parent pom file: " + parentpom.getCanonicalPath());
+                    updateParent(parentpom, version);
                     return version;
                 }
             } catch (IOException e) {
@@ -72,41 +75,47 @@ public class UpdatePOMVersions {
 
     }
 
-    public void updateParen(File parentpom, String content, String version){
-        Pattern pp = Pattern.compile("(?<=<version>)[^<]+(?=</version>[\\s\\n\\r]+<packaging>pom)");
-        Matcher m = pp.matcher(content);
-        if (m.find()){
-            int start=m.start();
-            int end=m.end();
-            String updatedContent=content.substring(0, start)+version+content.substring(end);
-            try {
-                FileUtils.write(parentpom, updatedContent, StandardCharsets.UTF_8);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else{
-            System.out.println("Parent pom file doesn't find a version specification.");
-        }
-
+    public void updateParent(File parentpom, String version) {
+        updateVersionInFile(parentpom, version, "", pp);
     }
 
-    public void updateOne(File pom, String version) {
+    public void updatePOM(File pom, String version) {
+        updateVersionInFile(pom, version, "<parent>", p);
+    }
+
+    public void updateREADME(File readme, String version) {
+        updateVersionInFile(readme, version, "<version>", rp);
+    }
+
+    /**
+     * Update the a file's content with up-to-date version
+     *
+     * @param file  java io File object
+     * @param version dependency version
+     */
+    public void updateVersionInFile(File file, String version, String filter, Pattern p) {
         String content = "";
         try {
-            content = FileUtils.readFileToString(pom, StandardCharsets.UTF_8);
+            content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (content.contains("<parent>")) {
+        if (filter.length()==0 || content.contains(filter)) {
+
             Matcher m = p.matcher(content);
             if (m.find()) {
-                System.out.println(m.start() + "\t" + m.end());
-                System.out.println(m.group(1));
-                int end = m.end();
-                int start = end - m.group(1).length();
-                String updatedContent=content.substring(0,start)+version+content.substring(end);
                 try {
-                    FileUtils.write(pom,  updatedContent, StandardCharsets.UTF_8);
+                    System.out.println("Update file: "+file.getCanonicalPath()+" "+m.start() + "\t" + m.end());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("from "+m.group()+" to "+version);
+
+                int end = m.end();
+                int start = m.start();
+                String updatedContent = content.substring(0, start) + version + content.substring(end);
+                try {
+                    FileUtils.write(file, updatedContent, StandardCharsets.UTF_8);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -114,6 +123,7 @@ public class UpdatePOMVersions {
                 System.out.println("not found");
             }
         }
+
 
     }
 }

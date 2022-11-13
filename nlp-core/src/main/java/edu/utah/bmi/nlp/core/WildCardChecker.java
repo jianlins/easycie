@@ -46,7 +46,7 @@ public class WildCardChecker {
                 || c == '<' || c == '=' || c == '>' || c == '?'
                 || c == '@' || c == '[' || c == '\\' || c == ']'
                 || c == '^' || c == '_' || c == '`' || c == '{'
-                || c == '|' || c == '}' || c == '~';
+                || c == '|' || c == '}' || c == '~' || c == '•';
     }
 
     public static boolean isSpecialChar(char c) {

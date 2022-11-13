@@ -31,18 +31,19 @@ public class TestRuSH2 {
     private RuSH rush2;
 
     public static void printDetails(ArrayList<Span> sentences, String input) {
+        ArrayList<String>sents=new ArrayList<>();
         for (int i = 0; i < sentences.size(); i++) {
             Span sentence = sentences.get(i);
-            System.out.println(">"+input.substring(sentence.begin,sentence.end)+"<");
+            sents.add(">"+input.substring(sentence.begin,sentence.end)+"<");
             System.out.println("assert (sentences.get(" + i + ").begin == " + sentence.begin + " &&" +
                     " sentences.get(" + i + ").end == " + sentence.end + ");");
         }
-
+        System.out.println(String.join("\n",sents));
     }
 
     @BeforeEach
     public void initiate() {
-        rush2 = new RuSH("conf/rush_rules_v3.xlsx");
+        rush2 = new RuSH("conf/rush_rules_py.tsv");
 
 //        rush2 = new RuSH(this.getClass().getClassLoader().getResource("mimic.tsv").getPath());
 //        rush2 = new RuSH("conf/rush_rules.xlsx");
@@ -120,7 +121,9 @@ public class TestRuSH2 {
         ArrayList<Span> sentences = rush2.segToSentenceSpans(input);
         input = input.replaceAll("\n", " ");
         printDetails(sentences, input);
-        System.out.println(sentences);
+        assert (sentences.get(0).begin == 0 && sentences.get(0).end == 36);
+        assert (sentences.get(1).begin == 40 && sentences.get(1).end == 57);
+        assert (sentences.get(2).begin == 58 && sentences.get(2).end == 85);
     }
 
     @Test
@@ -129,9 +132,35 @@ public class TestRuSH2 {
         ArrayList<Span> sentences = rush2.segToSentenceSpans(input);
         input = input.replaceAll("\n", " ");
         printDetails(sentences, input);
-        System.out.println(sentences);
+        assert (sentences.get(0).begin == 0 && sentences.get(0).end == 9);
+        assert (sentences.get(1).begin == 10 && sentences.get(1).end == 20);
     }
 
+    @Test
+    public void test7() {
+        String input = "The patient complained about the TIA \n\n No memory issues. I \n\nOrdered the MRI scan.- ";
+        ArrayList<Span> sentences = rush2.segToSentenceSpans(input);
+        input = input.replaceAll("\n", " ");
+        printDetails(sentences, input);
+        assert (sentences.get(0).begin == 0 && sentences.get(0).end == 36);
+        assert (sentences.get(1).begin == 40 && sentences.get(1).end == 57);
+        assert (sentences.get(2).begin == 58 && sentences.get(2).end == 84);
+    }
 
+    @Test
+    public void test8() {
+        String input = "9.  Advair b.i.d.\n" +
+                "10.  Xopenex q.i.d. and p.r.n.\n" +
+                "I will see her in a month to six weeks.  She is to follow up with Dr. X before that.";
+        rush2 = new RuSH("conf/rush_rules_py.tsv");
+        ArrayList<Span> sentences = rush2.segToSentenceSpans(input);
+
+        input = input.replaceAll("\n", " ");
+        printDetails(sentences, input);
+        assert (sentences.get(0).begin == 0 && sentences.get(0).end == 17);
+        assert (sentences.get(1).begin == 18 && sentences.get(1).end == 48);
+        assert (sentences.get(2).begin == 49 && sentences.get(2).end == 88);
+        assert (sentences.get(3).begin == 90 && sentences.get(3).end == 133);
+    }
 
 }

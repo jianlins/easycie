@@ -25,17 +25,23 @@ public class RuSH implements RuSHInf {
     protected Map<String, ArrayList<Marker>> result;
     public boolean tokenRuleEnabled;
     public String mLanguage = "en";
+
+    private int minSentChar=5;
     public static LinkedHashSet<Boundary> logs = new LinkedHashSet<>();
 
     public RuSH(String ruleStr) {
-        initiate(ruleStr);
+        initiate(ruleStr, 5);
+    }
+    public RuSH(String ruleStr, int minSentChar) {
+        initiate(ruleStr, 5);
     }
 
-    public void initiate(String ruleStr) {
+    public void initiate(String ruleStr, int minSentChar) {
         fcrp = FastRuSHFactory.createFastRuSHRule(ruleStr);
         if (fcrp instanceof FastRuSHRule_HCN) {
             mLanguage = "cn";
         }
+        this.minSentChar=minSentChar;
         this.tokenRuleEnabled = fcrp.tokenRuleEnabled;
     }
 
@@ -44,13 +50,11 @@ public class RuSH implements RuSHInf {
         char[] gapChars = text.substring(previousEnd, thisBegin).toCharArray();
         for (int i = 0; i < thisBegin - previousEnd; i++) {
             char thisChar = gapChars[i];
-            if (isAlphabetic(thisChar) || isDigit(thisChar)) {
+            if (isAlphabetic(thisChar) || isDigit(thisChar) || WildCardChecker.isPunctuation(thisChar)) {
                 end = i;
                 counter++;
                 if (begin == 0)
                     begin = i;
-            } else if (WildCardChecker.isPunctuation(thisChar)) {
-                end = i;
             }
         }
 //      An arbitrary number to decide whether the gap is likely to be a sentence or not
@@ -83,34 +87,110 @@ public class RuSH implements RuSHInf {
         }
         ArrayList<Marker> stbegins = result.getOrDefault(STBEGIN, new ArrayList<>());
         ArrayList<Marker> stends = result.getOrDefault(STEND, new ArrayList<>());
-        if (stbegins.size() == 0) {
-            stbegins.add(new Marker(0, Marker.MARKERTYPE.BEGIN));
+
+        if (stbegins.size() == 0 || stbegins.get(0).fbegin>0) {
+            stbegins.add(0, new Marker(0, Marker.MARKERTYPE.BEGIN));
         }
-        if (stends.size() == 0) {
-            stends.add(new Marker(text.length()-1, Marker.MARKERTYPE.END));
+        if (stends.size() == 0 || stends.get(stends.size()-1).fend<text.length()) {
+            stends.add(stends.size(), new Marker(text.length()-1, Marker.MARKERTYPE.END));
         }
 
-        float fpos = 0;
+        ArrayList<Marker>sortedMarkers=new ArrayList<>();
+        int b=0, e=0;
+        while(b<stbegins.size() && e<stends.size()) {
+            if(stbegins.get(b).fbegin<stends.get(e).fend){
+                sortedMarkers.add(stbegins.get(b++));
+            }else{
+                sortedMarkers.add(stends.get(e++));
+            }
+        }
+        if (b<stbegins.size()){
+            sortedMarkers.addAll(stbegins.subList(b,stbegins.size()));
+        }
+        if (e<stends.size()){
+            sortedMarkers.addAll(stends.subList(e,stends.size()));
+        }
+
+        int begin=0, end=0;
         boolean sentStarted = false;
-        for (int b = 0; b < stbegins.size(); b++) {
-            if (autofixGap && stbegins.get(b).fbegin >fpos){
-                fixGap(text, sentences, (int)fpos, stbegins.get(b).getBegin());
-            }
-            if (stbegins.get(b).fbegin >= fpos && !sentStarted) {
-                fpos = stbegins.get(b).fbegin;
-                sentStarted = true;
-            }
-            if (sentStarted) {
-                for (int e = 0; e < stends.size(); e++) {
-                    if (stends.get(e).fbegin >= fpos) {
-                        sentences.add(new Span((int) fpos, stends.get(e).getBegin()+1));
-                        fpos=stends.get(e).getBegin()+1;
-                        sentStarted = false;
-                        break;
+        for (int m = 0; m< sortedMarkers.size(); m++) {
+            Marker current=sortedMarkers.get(m);
+            if(!sentStarted){
+                if (current.type==MARKERTYPE.BEGIN){
+                    begin=current.getBegin();
+                    sentStarted=true;
+                }else{
+                    if (sentences.size()>0){
+                        end=current.getEnd();
+                        sentences.set(sentences.size() - 1, new Span(begin, end));
                     }
+                }
+            }else{
+                if(current.type==MARKERTYPE.BEGIN)
+                    continue;
+                else{
+                    end=current.getEnd();
+                    if ((end-begin)<minSentChar)
+                        continue;
+                    sentences.add(new Span(begin, end));
+                    sentStarted=false;
                 }
             }
         }
+        ArrayList<Span>gapFixed=new ArrayList<>();
+        for (int i=0;i<sentences.size()-1;i++){
+            gapFixed.add(sentences.get(i));
+            int preEnd=sentences.get(i).getEnd();
+            int nextBegin=sentences.get(i+1).getBegin();
+            fixGap(text, gapFixed, preEnd, nextBegin);
+        }
+
+        gapFixed.add(sentences.get(sentences.size()-1));
+
+        for (Span sent: gapFixed){
+            int stEnd=sent.getEnd();
+            int stBegin=sent.getBegin();
+            boolean rtrimmed=false, ltrimmed=false;
+            while (stEnd >= stBegin && (Character.isWhitespace(text.charAt(stEnd - 1)) || (int) text.charAt(stEnd - 1) == 160)) {
+                        stEnd--;
+                        rtrimmed=true;
+            }
+            if (rtrimmed){
+                sent.setEnd(stEnd);
+            }
+            while(stBegin<stEnd && (Character.isWhitespace(text.charAt(stBegin)) || (int) text.charAt(stBegin) == 160)){
+                stBegin++;
+                ltrimmed=true;
+            }
+            if (ltrimmed){
+                sent.setBegin(stBegin);
+            }
+
+        }
+
+
+//        float fpos = 0;
+//        boolean sentStarted = false;
+
+//        for (int b = 0; b < stbegins.size(); b++) {
+//            if (autofixGap && stbegins.get(b).fbegin >fpos){
+//                fixGap(text, sentences, (int)fpos, stbegins.get(b).getBegin());
+//            }
+//            if (stbegins.get(b).fbegin >= fpos && !sentStarted) {
+//                fpos = stbegins.get(b).fbegin;
+//                sentStarted = true;
+//            }
+//            if (sentStarted) {
+//                for (int e = 0; e < stends.size(); e++) {
+//                    if (stends.get(e).fbegin >= fpos) {
+//                        sentences.add(new Span((int) fpos, stends.get(e).getBegin()+1));
+//                        fpos=stends.get(e).getBegin()+1;
+//                        sentStarted = false;
+//                        break;
+//                    }
+//                }
+//            }
+//        }
 //
 //
 //        ArrayList<Marker> markers = createMarkers(stbegins, stends, text);
