@@ -120,7 +120,7 @@
             "sql": "SELECT MAX(RUN_ID) FROM {tableName} WHERE ANNOTATOR=?"
         }
     ]},
-    "password": "ENC(EIMtQMT2RspjLDgbrMq3Dg==)",
+    "password": "test",
     "driver": "com.mysql.cj.jdbc.Driver",
     "dropTables": {"item": [
         {

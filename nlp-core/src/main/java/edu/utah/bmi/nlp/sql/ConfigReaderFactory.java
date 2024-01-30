@@ -35,14 +35,14 @@ public class ConfigReaderFactory {
 	}
 
 	public static ConfigReader createConfigReader(Reader inputReader, String typeName) {
-		if (typeName.toLowerCase().equals("xml"))
+		if (typeName.equalsIgnoreCase("xml"))
 			return new XmlConfigReader(inputReader);
 		else
 			return new JsonConfigReader(inputReader);
 	}
 
 	public static ConfigReader createConfigReader(InputStream inputStream, String typeName) {
-		if (typeName.toLowerCase().equals("xml"))
+		if (typeName.equalsIgnoreCase("xml"))
 			return new XmlConfigReader(new InputStreamReader(inputStream));
 		else
 			return new JsonConfigReader(new InputStreamReader(inputStream));

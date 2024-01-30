@@ -56,7 +56,7 @@ public class AnnotationFeatureMergerAnnotator extends JCasAnnotator_ImplBase imp
     //   whether place the merged annotation in the 1st original annotation.
 
     @Deprecated
-    private boolean debug = false;
+    private final boolean debug = false;
     private AnnotationFeatureMerger annotationFeatureMerger;
 
 

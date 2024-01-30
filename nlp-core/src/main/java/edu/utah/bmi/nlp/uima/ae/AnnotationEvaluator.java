@@ -92,9 +92,7 @@ public class AnnotationEvaluator extends JCasAnnotator_ImplBase {
         while (iter.hasNext() && i <= ind) {
             anno = iter.next();
         }
-        pass = true;
-        if (anno == null)
-            pass = false;
+        pass = anno != null;
         Feature fObj = type.getFeatureByBaseName(featureName);
         if (fObj == null)
             pass = false;

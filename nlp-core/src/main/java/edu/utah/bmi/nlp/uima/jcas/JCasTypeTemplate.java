@@ -202,13 +202,10 @@ public class JCasTypeTemplate implements JcasGen.IJCasTypeTemplate {
                 stringBuffer.append(JcasGen.setArrayFeatureValue(fd, td));
                 stringBuffer.append(";}\n  ");
             } /* of hasArray */
-            stringBuffer.append("");
         } /* of Features iteration */
-        stringBuffer.append("");
         if (td.getName().equals("uima.cas.Annotation")) {
             stringBuffer.append("  ");
             stringBuffer.append("  /** Constructor with begin and end passed as arguments \n    * generated\n    * @param jcas JCas this Annotation is in\n    * @param begin the begin offset\n    * @param end the end offset\n    */\n  public Annotation(JCas jcas, int begin, int end) { \n	  this(jcas); // forward to constructor \n	  this.setBegin(begin); \n	  this.setEnd(end); \n  } \n  \n  /** @see org.apache.uima.cas.text.AnnotationFS#getCoveredText() \n    * generated\n    * @return the covered Text \n    */ \n  public String getCoveredText() { \n    final CAS casView = this.getView();\n    final String text = casView.getDocumentText();\n    if (text == null) {\n      return null;\n    }\n    return text.substring(getBegin(), getEnd());\n  } \n  \n  /** @deprecated \n    * generated\n    * @return the begin offset \n    */\n  public int getStart() {return getBegin();}\n");
-            stringBuffer.append("");
         } /* of Annotation if-statement */
         stringBuffer.append("}\n\n    ");
         return stringBuffer.toString();

@@ -44,7 +44,6 @@ public class JCas_TypeTemplate implements JcasGen.IJCasTypeTemplate {
         if (td.getFeatures().length > 0) {
             stringBuffer.append("import org.apache.uima.cas.impl.FeatureImpl;\nimport org.apache.uima.cas.Feature;\n");
         }
-        stringBuffer.append("");
         for(Iterator i = jg.collectImports(td, true).iterator(); i.hasNext();) {
             String imp = (String)i.next();
             if (!imp.equals(jg.getJavaNameWithPkg(td.getName()+"_Type"))) {
@@ -108,9 +107,8 @@ public class JCas_TypeTemplate implements JcasGen.IJCasTypeTemplate {
             stringBuffer.append(" get");
             stringBuffer.append(featUName);
             stringBuffer.append("(int addr) {\n    ");
-            stringBuffer.append("");
-  
-/* checks to insure that cas has the feature */
+
+            /* checks to insure that cas has the feature */
 
             stringBuffer.append("    if (featOkTst && casFeat_");
             stringBuffer.append(featName);
@@ -128,9 +126,8 @@ public class JCas_TypeTemplate implements JcasGen.IJCasTypeTemplate {
             stringBuffer.append("(int addr, ");
             stringBuffer.append(returnType);
             stringBuffer.append(" v) {\n    ");
-            stringBuffer.append("");
-  
-/* checks to insure that cas has the feature */
+
+            /* checks to insure that cas has the feature */
 
             stringBuffer.append("    if (featOkTst && casFeat_");
             stringBuffer.append(featName);
@@ -150,9 +147,8 @@ public class JCas_TypeTemplate implements JcasGen.IJCasTypeTemplate {
                 stringBuffer.append(" get");
                 stringBuffer.append(featUName);
                 stringBuffer.append("(int addr, int i) {\n    ");
-                stringBuffer.append("");
-  
-/* checks to insure that cas has the feature */
+
+                /* checks to insure that cas has the feature */
 
                 stringBuffer.append("    if (featOkTst && casFeat_");
                 stringBuffer.append(featName);
@@ -176,9 +172,8 @@ public class JCas_TypeTemplate implements JcasGen.IJCasTypeTemplate {
                 stringBuffer.append("(int addr, int i, ");
                 stringBuffer.append(elemType);
                 stringBuffer.append(" v) {\n    ");
-                stringBuffer.append("");
-  
-/* checks to insure that cas has the feature */
+
+                /* checks to insure that cas has the feature */
 
                 stringBuffer.append("    if (featOkTst && casFeat_");
                 stringBuffer.append(featName);
@@ -205,7 +200,6 @@ public class JCas_TypeTemplate implements JcasGen.IJCasTypeTemplate {
         if (td.getName().equals("uima.cas.Annotation")) {
             stringBuffer.append("  ");
             stringBuffer.append("  /** @see org.apache.uima.cas.text.AnnotationFS#getCoveredText() \n    * generated\n    * @param inst the low level Feature Structure reference \n    * @return the covered text \n    */ \n  public String getCoveredText(int inst) { \n    final CASImpl casView = ll_cas.ll_getSofaCasView(inst);\n    final String text = casView.getDocumentText();\n    if (text == null) {\n      return null;\n    }\n    return text.substring(getBegin(inst), getEnd(inst)); \n  }\n");
-            stringBuffer.append("");
         } /* of Annotation if-statement */
         stringBuffer.append("\n\n  /** initialize variables to correspond with Cas Type and Features\n	 * generated\n	 * @param jcas JCas\n	 * @param casType Type \n	 */\n  public ");
         stringBuffer.append(typeName_Type);

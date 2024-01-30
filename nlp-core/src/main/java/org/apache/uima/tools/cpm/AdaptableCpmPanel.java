@@ -120,9 +120,9 @@ public class AdaptableCpmPanel extends JPanel implements ActionListener, FileSel
 
     private JTabbedPaneWithCloseIcons consumerTabbedPane;
 
-    private Vector aeSpecifiers = new Vector();
+    private final Vector aeSpecifiers = new Vector();
 
-    private Vector consumerSpecifiers = new Vector();
+    private final Vector consumerSpecifiers = new Vector();
 
     // private static LogDialog logDialog;
     private JProgressBar progressBar;
@@ -168,7 +168,7 @@ public class AdaptableCpmPanel extends JPanel implements ActionListener, FileSel
     /**
      * Stores user preferences
      */
-    private Preferences prefs = Preferences.userRoot().node("org/apache/uima/tools/CPE_GUI");
+    private final Preferences prefs = Preferences.userRoot().node("org/apache/uima/tools/CPE_GUI");
 
     private boolean mShuttingDown;
 
@@ -1047,7 +1047,7 @@ public class AdaptableCpmPanel extends JPanel implements ActionListener, FileSel
         if (componentNames.length() > 0) {
             int rv = JOptionPane.showConfirmDialog(this,
                     "The following descriptor(s) have changed on the file system:\n"
-                            + componentNames.toString() + "\n\nDo you want to refresh them?",
+                            + componentNames + "\n\nDo you want to refresh them?",
                     "Descriptors Changed On File System", JOptionPane.YES_NO_OPTION);
             if (rv == JOptionPane.YES_OPTION) {
                 refreshOutOfSyncFiles();
@@ -1159,7 +1159,7 @@ public class AdaptableCpmPanel extends JPanel implements ActionListener, FileSel
             }
 
             if (aThrowable != null) {
-                message += ("\nCausedBy: " + aThrowable.toString());
+                message += ("\nCausedBy: " + aThrowable);
             }
         }
 
@@ -1175,7 +1175,7 @@ public class AdaptableCpmPanel extends JPanel implements ActionListener, FileSel
                 specifierUrl = cpeColRdr.getDescriptor().findAbsoluteUrl(defaultResourceManager);
                 //CPE GUI only supports file URLs
                 if (!"file".equals(specifierUrl.getProtocol())) {
-                    displayError("Could not load descriptor from URL " + specifierUrl.toString() +
+                    displayError("Could not load descriptor from URL " + specifierUrl +
                             ".  CPE Configurator only supports file: URLs");
                     return false;
                 }
@@ -1235,7 +1235,7 @@ public class AdaptableCpmPanel extends JPanel implements ActionListener, FileSel
                 specifierUrl = cpeCasIni.getDescriptor().findAbsoluteUrl(defaultResourceManager);
                 //CPE GUI only supports file URLs
                 if (!"file".equals(specifierUrl.getProtocol())) {
-                    displayError("Could not load descriptor from URL " + specifierUrl.toString() +
+                    displayError("Could not load descriptor from URL " + specifierUrl +
                             ".  CPE Configurator only supports file: URLs");
                     return false;
                 }
@@ -1308,7 +1308,7 @@ public class AdaptableCpmPanel extends JPanel implements ActionListener, FileSel
         URL aeSpecifierUrl = cpeCasProc.getCpeComponentDescriptor().findAbsoluteUrl(defaultResourceManager);
         //CPE GUI only supports file URLs
         if (!"file".equals(aeSpecifierUrl.getProtocol())) {
-            displayError("Could not load descriptor from URL " + aeSpecifierUrl.toString() +
+            displayError("Could not load descriptor from URL " + aeSpecifierUrl +
                     ".  CPE Configurator only supports file: URLs");
             return false;
         }
@@ -1364,7 +1364,7 @@ public class AdaptableCpmPanel extends JPanel implements ActionListener, FileSel
                 defaultResourceManager);
         //CPE GUI only supports file URLs
         if (!"file".equals(consumerSpecifierUrl.getProtocol())) {
-            displayError("Could not load descriptor from URL " + consumerSpecifierUrl.toString() +
+            displayError("Could not load descriptor from URL " + consumerSpecifierUrl +
                     ".  CPE Configurator only supports file: URLs");
             return false;
         }
@@ -1839,7 +1839,7 @@ public class AdaptableCpmPanel extends JPanel implements ActionListener, FileSel
          * Clears all but the first 2 components from the panel.
          */
         public void reset() {
-            Component components[] = gridBagPanel.getComponents();
+            Component[] components = gridBagPanel.getComponents();
             if (components.length > 2) {
                 for (int i = (components.length - 1); i >= 2; i--)
                     gridBagPanel.remove(i);
@@ -1854,7 +1854,7 @@ public class AdaptableCpmPanel extends JPanel implements ActionListener, FileSel
     private void displayProgress() {
         if (mCPE != null) {
             try {
-                Progress progress[] = mCPE.getProgress();
+                Progress[] progress = mCPE.getProgress();
                 if (progress != null && progress.length > 0) {
                     int FILE_ENTITY_PROGRESS_INDEX = -1;
 

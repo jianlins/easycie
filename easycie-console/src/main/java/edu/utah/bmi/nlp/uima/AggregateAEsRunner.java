@@ -42,7 +42,7 @@ import static org.apache.commons.io.comparator.NameFileComparator.NAME_COMPARATO
  * @author Jianlin Shi on 6/11/18.
  */
 public class AggregateAEsRunner {
-    private static Logger logger = IOUtil.getLogger(AggregateAEsRunner.class);
+    private static final Logger logger = IOUtil.getLogger(AggregateAEsRunner.class);
     protected static HashMap<String, AggregateAEsRunner> AESRunners = new HashMap<>();
     protected TasksFX tasks;
     protected String customTypeDescriptor;

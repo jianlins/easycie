@@ -32,11 +32,11 @@ import java.util.Map;
  * Simple interface to Java compiler using JSR 199 Compiler API.
  */
 public class MemoryJavaCompiler {
-    private JavaCompiler tool;
-    private StandardJavaFileManager stdManager;
+    private final JavaCompiler tool;
+    private final StandardJavaFileManager stdManager;
     private File outputDir = null;
-    private MemoryJavaFileManager fileManager;
-    private List<JavaFileObject> compUnits;
+    private final MemoryJavaFileManager fileManager;
+    private final List<JavaFileObject> compUnits;
     private Map<String, Class> compiledClasses;
 
     /**
@@ -234,7 +234,7 @@ public class MemoryJavaCompiler {
                 tool.getTask(err, fileManager, diagnostics,
                         options, null, compUnits);
 
-        if (task.call() == false) {
+        if (!task.call()) {
             PrintWriter perr = new PrintWriter(err);
             for (Diagnostic diagnostic : diagnostics.getDiagnostics()) {
                 perr.println(diagnostic);

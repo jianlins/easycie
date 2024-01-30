@@ -33,9 +33,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MemoryClassLoader extends URLClassLoader {
     public static String CURRENT_LOADER_NAME = "uima";
     public static final String DEFAULT_LOADER_NAME = "uima";
-    private Map<String, byte[]> classBytes;
+    private final Map<String, byte[]> classBytes;
     private static final ConcurrentHashMap<String, MemoryClassLoader> mcLoaders = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<String, Class> classCache=new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Class> classCache=new ConcurrentHashMap<>();
 
 
     public static MemoryClassLoader getInstance(String name) {

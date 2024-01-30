@@ -50,11 +50,11 @@ public class RuSHTest_AE extends JCasAnnotator_ImplBase {
         sentenceTypeName = RuSH_AE.checkTypeDomain(sentenceTypeName);
 
         obj = cont.getConfigParameterValue(PARAM_PRINT_SPAN);
-        if (obj != null && obj instanceof Boolean && (Boolean) obj == false)
+        if (obj != null && obj instanceof Boolean && !((Boolean) obj))
             printSpan = false;
 
         obj = cont.getConfigParameterValue(PARAM_PRINT_TEXT);
-        if (obj != null && obj instanceof Boolean && (Boolean) obj != false)
+        if (obj != null && obj instanceof Boolean && (Boolean) obj)
             printText = true;
 
         try {

@@ -201,7 +201,7 @@ public class ConsoleLogger implements UIMALogger {
             }
 
             if (aThrowable != null) {
-                message += ("\nCausedBy: " + aThrowable.toString());
+                message += ("\nCausedBy: " + aThrowable);
             }
         }
 

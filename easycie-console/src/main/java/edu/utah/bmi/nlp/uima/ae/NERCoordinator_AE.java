@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  * Created on 7/6/16.
  */
 public class NERCoordinator_AE extends JCasAnnotator_ImplBase implements RuleBasedAEInf {
-	private static Logger logger = IOUtil.getLogger(NERCoordinator_AE.class);
+	private static final Logger logger = IOUtil.getLogger(NERCoordinator_AE.class);
 	public static final String PARAM_RULE_STR = DeterminantValueSet.PARAM_RULE_STR;
 	protected LinkedHashSet<Class> inclusions = new LinkedHashSet<>();
 	public void initialize(UimaContext cont) {

@@ -50,7 +50,7 @@ import java.util.logging.Logger;
  */
 public class OpenNLPSentDetector extends JCasAnnotator_ImplBase {
 
-	private static Logger logger = IOUtil.getLogger(OpenNLPSentDetector.class);
+	private static final Logger logger = IOUtil.getLogger(OpenNLPSentDetector.class);
 
 
 	//	a list of section names that limit the scope of sentence detection
@@ -78,7 +78,7 @@ public class OpenNLPSentDetector extends JCasAnnotator_ImplBase {
 	private SentenceDetectorME sdetector = null;
 	private String mLanguage;
 
-	private LinkedHashSet<Class> sectionClasses = new LinkedHashSet<>();
+	private final LinkedHashSet<Class> sectionClasses = new LinkedHashSet<>();
 
 	public void initialize(UimaContext cont) {
 		String modelLoc = "src/main/resources/en-sent.bin";
@@ -124,7 +124,7 @@ public class OpenNLPSentDetector extends JCasAnnotator_ImplBase {
 				differentColoring = true;
 		}
 		obj = cont.getConfigParameterValue(PARAM_INCLUDE_PUNCTUATION);
-		if (obj != null && obj instanceof Boolean && (Boolean) obj != false)
+		if (obj != null && obj instanceof Boolean && (Boolean) obj)
 			includePunctuation = true;
 
 		obj = cont.getConfigParameterValue(PARAM_LANGUAGE);

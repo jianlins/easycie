@@ -189,7 +189,7 @@ public class CPMEngine extends Thread {
 
     private boolean hardKill = false;
 
-    private Hashtable skippedDocs = new Hashtable();
+    private final Hashtable skippedDocs = new Hashtable();
 
     private Capability[] definedCapabilities = null;
 
@@ -207,7 +207,7 @@ public class CPMEngine extends Thread {
 
     private NonThreadedProcessingUnit nonThreadedCasConsumerProcessingUnit = null;
 
-    private LinkedList initial_cp_list = new LinkedList(); // this list is used to hold Cas
+    private final LinkedList initial_cp_list = new LinkedList(); // this list is used to hold Cas
 
     // Processors
 
@@ -874,10 +874,8 @@ public class CPMEngine extends Thread {
                 op = ((ProcessingResourceMetaData) md).getOperationalProperties();
                 if (op == null) {
                     // Operational Properties not defined, so use defaults
-                    if (isConsumer) {
-                        return false; // the default for CasConsumer
-                    }
-                    return true; // default for AEs
+                    return !isConsumer; // the default for CasConsumer
+// default for AEs
                 }
                 return op.isMultipleDeploymentAllowed();
             }
@@ -900,10 +898,7 @@ public class CPMEngine extends Thread {
      * @throws Exception -all exceptions
      */
     public boolean isParallizable(CasProcessor aProcessor, String aCpName) throws Exception {
-        boolean isConsumer = false;
-        if (aProcessor instanceof CasConsumer || aProcessor instanceof CasDataConsumer) {
-            isConsumer = true;
-        }
+        boolean isConsumer = aProcessor instanceof CasConsumer || aProcessor instanceof CasDataConsumer;
 
         // casProcessingConfigMap may not contain configuration for this Cas Processor if this CP has
         // been
@@ -923,10 +918,8 @@ public class CPMEngine extends Thread {
                         new Object[]{Thread.currentThread().getName(), aCpName});
 
             }
-            if (isConsumer) {
-                return false; // by default the CasConsumer is not parallizable
-            }
-            return true; // by dafault AEs are parallizable
+            return !isConsumer; // by default the CasConsumer is not parallizable
+// by dafault AEs are parallizable
         }
         // Retrieve Cas Processor's CPE descriptor configuration.
         CpeCasProcessor casProcessorCPEConfig = (CpeCasProcessor) cpeFactory.casProcessorConfigMap
@@ -946,10 +939,8 @@ public class CPMEngine extends Thread {
                 .getDeployment())) {
             // If OperationalProperties are not defined use defaults based on CasProcessor type
             if (aProcessor.getProcessingResourceMetaData().getOperationalProperties() == null) {
-                if (isConsumer) {
-                    return false; // default for CasConsumer
-                }
-                return true; // default for AEs
+                return !isConsumer; // default for CasConsumer
+// default for AEs
             }
 
             return aProcessor.getProcessingResourceMetaData().getOperationalProperties()
@@ -1246,7 +1237,7 @@ public class CPMEngine extends Thread {
         // The number of instances is determined based on number of processing
         // threads and CP property setting that determines if the CP is able
         // to run in parallel.
-        if (casProcessorsDeployed == false) {
+        if (!casProcessorsDeployed) {
             CasProcessor[] casprocessorList = new CasProcessor[initial_cp_list.size()];
             ArrayList list;
             for (int i = 0; i < initial_cp_list.size(); i++) {
@@ -1541,7 +1532,7 @@ public class CPMEngine extends Thread {
      */
     public boolean isPaused() {
         synchronized (lockForPause) {
-            return (pause == true);
+            return (pause);
         }
     }
 
@@ -1845,7 +1836,7 @@ public class CPMEngine extends Thread {
             }
             // CAS[] casList = null;
 
-            if (mixedCasProcessorTypeSupport == false && collectionReader instanceof CollectionReader) {
+            if (!mixedCasProcessorTypeSupport && collectionReader instanceof CollectionReader) {
                 mixedCasProcessorTypeSupport = true;
             }
 
@@ -2919,11 +2910,7 @@ public class CPMEngine extends Thread {
      * Check if the CASProcessor status is available for processing
      */
     private boolean isProcessorReady(int aStatus) {
-        if (aStatus == Constants.CAS_PROCESSOR_READY || aStatus == Constants.CAS_PROCESSOR_RUNNING) {
-            return true;
-        }
-
-        return false;
+        return aStatus == Constants.CAS_PROCESSOR_READY || aStatus == Constants.CAS_PROCESSOR_RUNNING;
     }
 
     public void invalidateCASes(CAS[] aCASList) {
@@ -2931,7 +2918,7 @@ public class CPMEngine extends Thread {
             producer.invalidate(aCASList);
         } else {
             ChunkMetadata meta = CPMUtils.getChunkMetadata(aCASList[0]);
-            if (meta != null && meta.isOneOfMany() && skippedDocs.containsKey(meta.getDocId()) == false) {
+            if (meta != null && meta.isOneOfMany() && !skippedDocs.containsKey(meta.getDocId())) {
                 skippedDocs.put(meta.getDocId(), meta.getDocId());
             }
         }
@@ -3060,7 +3047,7 @@ public class CPMEngine extends Thread {
                             new Object[]{Thread.currentThread().getName(),
                                     String.valueOf((casList[0] == null))});
                 }
-                if (this.isRunning() == false) {
+                if (!this.isRunning()) {
                     readerState = 1009;
                     casPool.releaseCas(casList[0]);
 //          synchronized (casPool) { // redundant - the above releaseCas call does this
@@ -3134,7 +3121,7 @@ public class CPMEngine extends Thread {
                         "process", CPMUtils.CPM_LOG_RESOURCE_BUNDLE, "UIMA_CPM_exception__FINER",
                         new Object[]{Thread.currentThread().getName(), e.getMessage()});
                 UIMAFramework.getLogger(this.getClass()).log(Level.WARNING,
-                        Thread.currentThread().getName() + "" + e);
+                        Thread.currentThread().getName() + e);
             }
             handleException(e, casList, pTrTemp);
             releaseCASes(casList);
@@ -3154,7 +3141,7 @@ public class CPMEngine extends Thread {
             if (casIni != null) {
                 definedCapabilities = casIni.getProcessingResourceMetaData().getCapabilities();
             } else {
-                definedCapabilities = ((CollectionReader) collectionReader).getProcessingResourceMetaData()
+                definedCapabilities = collectionReader.getProcessingResourceMetaData()
                         .getCapabilities();
             }
 
@@ -3253,9 +3240,7 @@ public class CPMEngine extends Thread {
     private boolean skipDroppedDocument(Object[] entity) {
         if (entity instanceof CAS[]) {
             ChunkMetadata meta = CPMUtils.getChunkMetadata((CAS) entity[0]);
-            if (meta != null && skippedDocs.containsKey(meta.getDocId())) {
-                return true;
-            }
+            return meta != null && skippedDocs.containsKey(meta.getDocId());
         }
         return false;
     }

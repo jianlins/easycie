@@ -77,7 +77,7 @@ public class FeatureInferenceAnnotator extends JCasAnnotator_ImplBase implements
     public static final String PARAM_DEBUG = "EnableDebug";
 
     @Deprecated
-    private boolean debug = false;
+    private final boolean debug = false;
     private FeatureInferencerInf featureAnnotationInferencer;
 
 

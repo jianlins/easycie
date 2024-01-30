@@ -19,6 +19,7 @@ import edu.utah.bmi.nlp.rush.uima.RuSH_AE;
 import edu.utah.bmi.nlp.rush.uima.RuSHTest_AE;
 import edu.utah.bmi.nlp.type.system.SectionBody;
 import edu.utah.bmi.nlp.type.system.Sentence;
+import edu.utah.bmi.nlp.type.system.Token;
 import org.apache.uima.UIMAException;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
@@ -137,4 +138,33 @@ public class TestRuSH_AE {
 		analysisEngine.process(jCas);
 		testAnalysisEngine.process(jCas);
 	}
+
+
+	@Test
+	public void test5() throws AnalysisEngineProcessException, ResourceInitializationException {
+		String text =
+				"[]WFL [x]Impaired: per chart review, not visualized on this \n\ndate.";
+		jCas.reset();
+		jCas.setDocumentText(text);
+		SourceDocumentInformation sourceDocumentInformation = new SourceDocumentInformation(jCas, 0, text.length());
+		sourceDocumentInformation.addToIndexes();
+		SectionBody sectionBody = new SectionBody(jCas, 0, text.length());
+		sectionBody.addToIndexes();
+		analysisEngine = AnalysisEngineFactory.createEngine(
+				RuSH_AE.class,
+				RuSH_AE.PARAM_INSIDE_SECTIONS, "SectionBody",
+				RuSH_AE.PARAM_SENTENCE_TYPE_NAME, "Sentence",
+				RuSH_AE.PARAM_TOKEN_TYPE_NAME, "Token",
+				RuSH_AE.PARAM_RULE_STR, "conf/rush_rules.tsv",
+				RuSH_AE.PARAM_INCLUDE_PUNCTUATION,true,
+				RuSH_AE.PARAM_FIX_GAPS, true);
+		testAnalysisEngine = AnalysisEngineFactory.createEngine(
+				RuSHTest_AE.class,
+				RuSHTest_AE.PARAM_SENTENCE_TYPE, Token.class.getCanonicalName(),
+				RuSHTest_AE.PARAM_PRINT_SPAN, true,
+				RuSHTest_AE.PARAM_PRINT_TEXT, true);
+		analysisEngine.process(jCas);
+		testAnalysisEngine.process(jCas);
+	}
+
 }

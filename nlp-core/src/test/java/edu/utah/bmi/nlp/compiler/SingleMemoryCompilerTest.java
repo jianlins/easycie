@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class SingleMemoryCompilerTest {
-    private String defaultSuperTypeName = "edu.utah.bmi.nlp.type.system.Concept";
+    private final String defaultSuperTypeName = "edu.utah.bmi.nlp.type.system.Concept";
     private static MemoryJavaCompiler compiler;
 
     @BeforeEach
@@ -78,7 +78,7 @@ public class SingleMemoryCompilerTest {
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            assertFalse(true);
+            fail();
         }
         assertTrue(true);
     }

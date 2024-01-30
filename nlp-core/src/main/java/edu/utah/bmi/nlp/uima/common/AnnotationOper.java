@@ -465,7 +465,7 @@ public class AnnotationOper {
                             AnnotationOper.getDefaultSetMethod(typeClass, setMethodName));
                 }
             } catch (NoSuchMethodException e) {
-                logger.fine(e.toString() + "\n\t" + typeDefinition);
+                logger.fine(e + "\n\t" + typeDefinition);
             }
         }
     }

@@ -137,7 +137,7 @@ public class TemporalContext_AE_General2 extends FastCNER_AE_General {
 			saveDateAnnotations = true;
 
 		obj = cont.getConfigParameterValue(PARAM_SAVE_DATE_DIFF);
-		if (obj != null && obj instanceof Boolean && (Boolean) obj == true)
+		if (obj != null && obj instanceof Boolean && (Boolean) obj)
 			saveDateDifference = true;
 
 		obj = cont.getConfigParameterValue(PARAM_DATE_PRIORITY);
@@ -283,7 +283,7 @@ public class TemporalContext_AE_General2 extends FastCNER_AE_General {
 		int[] distance = new int[]{1000000};
 		String text = jcas.getDocumentText();
 		if (inferAll && (dates.size() == 0) || !hasDateMentions(dates)) {
-			return (long) (recordDate.getMillis() - referenceDate.getMillis()) / 3600000;
+			return (recordDate.getMillis() - referenceDate.getMillis()) / 3600000;
 		}
 		for (Map.Entry<String, ArrayList<Span>> entry : dates.entrySet()) {
 			String typeOfDate = entry.getKey();
@@ -303,10 +303,10 @@ public class TemporalContext_AE_General2 extends FastCNER_AE_General {
 						if (dt == null) {
 							dt = handleAmbiguousCase(dateMention, recordDate, referenceDate);
 						}
-						logger.finest("Parse '" + dateMention + "' as: '" + dt.toString() + "'");
+						logger.finest("Parse '" + dateMention + "' as: '" + dt + "'");
 						int currentDistance = getDistance(span, concept);
 						temporalStatus = updateTemporalStatus(dt, referenceDate, temporalStatus, distance, currentDistance);
-						saveDateConcept(jcas, ConceptTypeConstructors, typeOfDate, span, temporalStatus, "ParsedDate:\t" + dt.toString(), getRuleInfo(span));
+						saveDateConcept(jcas, ConceptTypeConstructors, typeOfDate, span, temporalStatus, "ParsedDate:\t" + dt, getRuleInfo(span));
 					}
 					break;
 				case "Yeard":
@@ -363,7 +363,7 @@ public class TemporalContext_AE_General2 extends FastCNER_AE_General {
 				DateTime dt = recordDate.minusDays(interval * unit);
 				int currentDistance=getDistance(span, concept);
 				temporalStatus = updateTemporalStatus(dt, referenceDate, temporalStatus, distance, currentDistance);
-				saveDateConcept(jcas, ConceptTypeConstructors, typeName, span, temporalStatus, "ParsedDate:\t" + dt.toString(), getRuleInfo(span));
+				saveDateConcept(jcas, ConceptTypeConstructors, typeName, span, temporalStatus, "ParsedDate:\t" + dt, getRuleInfo(span));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -381,7 +381,7 @@ public class TemporalContext_AE_General2 extends FastCNER_AE_General {
 					DateTime dt = recordDate.minusDays(interval * unit);
 					int currentDistance=getDistance(span, concept);
 					temporalStatus = updateTemporalStatus(dt, referenceDate, temporalStatus, distance, currentDistance);
-					saveDateConcept(jcas, ConceptTypeConstructors, typeName, span, temporalStatus, "ParsedDate:\t" + dt.toString(), getRuleInfo(span));
+					saveDateConcept(jcas, ConceptTypeConstructors, typeName, span, temporalStatus, "ParsedDate:\t" + dt, getRuleInfo(span));
 
 
 				}

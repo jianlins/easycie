@@ -44,7 +44,7 @@ public class AnnotationCountEvaluator extends JCasAnnotator_ImplBase {
     private String typeName;
     public static boolean pass = true;
     private int count;
-    private LinkedHashMap<String, String> featureValues = new LinkedHashMap<>();
+    private final LinkedHashMap<String, String> featureValues = new LinkedHashMap<>();
 
     public void initialize(UimaContext cont) {
         typeName = "";
@@ -75,10 +75,7 @@ public class AnnotationCountEvaluator extends JCasAnnotator_ImplBase {
             if (checkFeatureValues(type, anno))
                 counter++;
         }
-        if (counter != count)
-            pass = false;
-        else
-            pass = true;
+        pass = counter == count;
     }
 
     private boolean checkFeatureValues(Type type, AnnotationFS anno) {

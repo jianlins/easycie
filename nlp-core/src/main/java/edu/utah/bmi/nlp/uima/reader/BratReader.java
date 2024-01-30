@@ -45,7 +45,7 @@ public class BratReader extends AbFileCollectionReader {
     protected static final String endOffset = "<end>";
     protected static final String typeName = "<typeName>";
     private String readTypes = "";
-    private LinkedHashMap<String, String> unconfiguredAnnotationTypes = new LinkedHashMap<>();
+    private final LinkedHashMap<String, String> unconfiguredAnnotationTypes = new LinkedHashMap<>();
     private String currentFileName = "";
 
 

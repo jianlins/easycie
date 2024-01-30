@@ -28,9 +28,9 @@ import java.util.Map;
  * Created on 12/11/16.
  */
 public class RecordRowIterator implements Iterator<RecordRow> {
-    private ResultSet resultSet;
-    private ColumnInfo columninfo;
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private final ResultSet resultSet;
+    private final ColumnInfo columninfo;
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private boolean nextRetrieved = false;
 
     public RecordRowIterator(ResultSet resultSet, ColumnInfo columninfo) {

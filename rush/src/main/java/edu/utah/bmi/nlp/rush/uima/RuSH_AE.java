@@ -44,7 +44,7 @@ import static java.lang.Character.isDigit;
  */
 public class RuSH_AE extends JCasAnnotator_ImplBase {
 
-    private static Logger logger = IOUtil.getLogger(RuSH_AE.class);
+    private static final Logger logger = IOUtil.getLogger(RuSH_AE.class);
     private RuSH rush;
     private boolean autoFixGaps = true;
 
@@ -77,7 +77,7 @@ public class RuSH_AE extends JCasAnnotator_ImplBase {
 
     private String mLanguage;
 
-    private LinkedHashSet<Class> sectionClasses = new LinkedHashSet<>();
+    private final LinkedHashSet<Class> sectionClasses = new LinkedHashSet<>();
 
     public void initialize(UimaContext cont) {
         String ruleFileName = (String) (cont
@@ -113,7 +113,7 @@ public class RuSH_AE extends JCasAnnotator_ImplBase {
                 differentColoring = true;
         }
         obj = cont.getConfigParameterValue(PARAM_INCLUDE_PUNCTUATION);
-        if (obj != null && obj instanceof Boolean && (Boolean) obj != false)
+        if (obj != null && obj instanceof Boolean && (Boolean) obj)
             includePunctuation = true;
 
         obj = cont.getConfigParameterValue(PARAM_LANGUAGE);
@@ -138,11 +138,11 @@ public class RuSH_AE extends JCasAnnotator_ImplBase {
         try {
             SentenceType = Class.forName(sentenceTypeName).asSubclass(Annotation.class);
             TokenType = Class.forName(tokenTypeName).asSubclass(Annotation.class);
-            SentenceTypeConstructor = SentenceType.getConstructor(new Class[]{JCas.class, int.class, int.class});
-            TokenTypeConstructor = TokenType.getConstructor(new Class[]{JCas.class, int.class, int.class});
+            SentenceTypeConstructor = SentenceType.getConstructor(JCas.class, int.class, int.class);
+            TokenTypeConstructor = TokenType.getConstructor(JCas.class, int.class, int.class);
             if (differentColoring) {
                 AlterSentenceType = Class.forName(alterSentenceTypeName).asSubclass(Annotation.class);
-                AlterSentenceTypeConstructor = AlterSentenceType.getConstructor(new Class[]{JCas.class, int.class, int.class});
+                AlterSentenceTypeConstructor = AlterSentenceType.getConstructor(JCas.class, int.class, int.class);
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

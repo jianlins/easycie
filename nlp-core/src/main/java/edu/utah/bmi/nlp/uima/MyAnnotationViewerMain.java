@@ -65,22 +65,22 @@ public class MyAnnotationViewerMain extends JFrame {
             + "or XML.  The Java annotation viewer is recommended.\n\n"
             + "5) Double-click on a document to view it.\n";
 
-    private File uimaHomeDir;
+    private final File uimaHomeDir;
 
-    private FileSelector inputFileSelector;
+    private final FileSelector inputFileSelector;
 
-    private FileSelector taeDescriptorFileSelector;
+    private final FileSelector taeDescriptorFileSelector;
 
-    private JButton viewButton;
+    private final JButton viewButton;
 
-    private JDialog aboutDialog;
+    private final JDialog aboutDialog;
 
     private File inputDir, descriptorFile;
 
     /**
      * Stores user preferences
      */
-    private Preferences prefs = Preferences.userRoot().node("org/apache/uima/tools/AnnotationViewer");
+    private final Preferences prefs = Preferences.userRoot().node("org/apache/uima/tools/AnnotationViewer");
 
     /**
      * Constructor. Sets up the GUI.
@@ -443,7 +443,7 @@ public class MyAnnotationViewerMain extends JFrame {
             }
 
             if (aThrowable != null) {
-                message += ("\nCausedBy: " + aThrowable.toString());
+                message += ("\nCausedBy: " + aThrowable);
             }
         }
 

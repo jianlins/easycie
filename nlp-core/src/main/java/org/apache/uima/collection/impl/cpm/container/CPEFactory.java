@@ -73,17 +73,17 @@ public class CPEFactory {
     public static org.apache.uima.collection.impl.cpm.container.CPEFactory lastCpeFactory = null;
     public static CpeDescription lastCpeDescriptor;
     public static String lastCpeDescriptorUrl = "";
-    public static long lastModifiedTime = 0l;
+    public static long lastModifiedTime = 0L;
     private CasProcessor[] aeList = null;
-    private CpeCasProcessor[] casProcessorList = null;
-    private ArrayList<Integer> writerIds = new ArrayList<>();
-    private Hashtable namesMap = new Hashtable();
+    private final CpeCasProcessor[] casProcessorList = null;
+    private final ArrayList<Integer> writerIds = new ArrayList<>();
+    private final Hashtable namesMap = new Hashtable();
     private BaseCollectionReader reader = null;
 
 
     private int processorCount = 0;
 
-    private String DEFAULT_CONFIG_FILE = "defaultCpeDescriptor.xml";
+    private final String DEFAULT_CONFIG_FILE = "defaultCpeDescriptor.xml";
 
     private boolean defaultConfig = true;
 
@@ -93,11 +93,11 @@ public class CPEFactory {
 
     private boolean initialized = false;
 
-    private UimaContextAdmin uimaContext;
+    private final UimaContextAdmin uimaContext;
 
     private boolean firstTime = true;
 
-    private HashMap cpMap = new HashMap();
+    private final HashMap cpMap = new HashMap();
 
     public static void reset() {
         lastCpeFactory = null;
@@ -634,14 +634,14 @@ public class CPEFactory {
             }
         }
 
-        if (Constants.DEPLOYMENT_LOCAL.equals(deploymentType.toLowerCase())) {
+        if (Constants.DEPLOYMENT_LOCAL.equalsIgnoreCase(deploymentType)) {
             casProcessor = produceLocalCasProcessor(processorType);
             deployModel = Constants.DEPLOYMENT_LOCAL;
-        } else if (Constants.DEPLOYMENT_INTEGRATED.equals(deploymentType.toLowerCase())) {
+        } else if (Constants.DEPLOYMENT_INTEGRATED.equalsIgnoreCase(deploymentType)) {
 
             casProcessor = produceIntegratedCasProcessor(processorType);
             deployModel = Constants.DEPLOYMENT_INTEGRATED;
-        } else if (Constants.DEPLOYMENT_REMOTE.equals(deploymentType.toLowerCase())) {
+        } else if (Constants.DEPLOYMENT_REMOTE.equalsIgnoreCase(deploymentType)) {
             casProcessor = produceRemoteCasProcessor(processorType);
             deployModel = Constants.DEPLOYMENT_REMOTE;
         } else {

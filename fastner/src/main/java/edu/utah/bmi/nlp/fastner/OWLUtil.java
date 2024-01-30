@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.logging.Logger;
 
 public class OWLUtil {
@@ -36,7 +37,7 @@ public class OWLUtil {
                         for (Anchor term : logicExpression) {
                             String preferredTerm = term.getPrefTerm();
                             if (preferredTerm == null || preferredTerm.trim().length() == 0) {
-                                System.err.println("Error in owl file at: " + logicExpression.toString());
+                                System.err.println("Error in owl file at: " + logicExpression);
                                 continue;
                             }
 //                            TODO enable annotating at variable name level and/or semantic type level
@@ -86,9 +87,7 @@ public class OWLUtil {
 
     private static void addRow(ArrayList<ArrayList<String>> cells, String[] newRow) {
         ArrayList<String> row = new ArrayList<>();
-        for (String cell : newRow) {
-            row.add(cell);
-        }
+        Collections.addAll(row, newRow);
         cells.add(row);
     }
 }

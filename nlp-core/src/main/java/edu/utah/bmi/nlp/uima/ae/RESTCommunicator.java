@@ -82,7 +82,7 @@ public class RESTCommunicator extends JCasAnnotator_ImplBase implements RuleBase
                         for (ArrayList<String> inputDefRow : new IOUtil(inputTypeString).getRuleCells()) {
                             includeTypes.put(inputDefRow.get(1), new ArrayList<>());
                             if (inputDefRow.size() > 2 && inputDefRow.get(2) != null && inputDefRow.get(2).trim().length() > 1) {
-                                if (inputDefRow.get(2).toLowerCase().equals("null"))
+                                if (inputDefRow.get(2).equalsIgnoreCase("null"))
                                     includeTypes.put(inputDefRow.get(1), null);
                                 else
                                     includeTypes.get(inputDefRow.get(1)).addAll(Arrays.asList(inputDefRow.get(2).trim().split("\\s*[,;\\|]\\s*")));

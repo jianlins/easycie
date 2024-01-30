@@ -33,17 +33,17 @@ public interface UIMALogger {
 
     void setUnit(String unit);
 
-    public void initializationComplete(int totalDocs);
+    void initializationComplete(int totalDocs);
 
-    public void entityProcessComplete(CAS aCas, EntityProcessStatus aStatus);
+    void entityProcessComplete(CAS aCas, EntityProcessStatus aStatus);
 
-    public void batchProcessComplete();
+    void batchProcessComplete();
 
-    public void collectionProcessComplete(String reportContent);
+    void collectionProcessComplete(String reportContent);
 
-    public void paused();
+    void paused();
 
-    public void resumed();
+    void resumed();
 
-    public void aborted();
+    void aborted();
 }

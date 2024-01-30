@@ -25,19 +25,19 @@ public class SentenceInferenceAnnotator extends JCasAnnotator_ImplBase implement
 
     public LinkedHashMap<String, ArrayList<ArrayList<Object>>> inferenceMap = new LinkedHashMap<>();
 
-    private HashMap<String, HashMap<String, Method>> evidenceConceptGetFeatures = new LinkedHashMap<>();
+    private final HashMap<String, HashMap<String, Method>> evidenceConceptGetFeatures = new LinkedHashMap<>();
 
-    private HashMap<String, Class<? extends Annotation>> conceptClassMap = new HashMap<>();
+    private final HashMap<String, Class<? extends Annotation>> conceptClassMap = new HashMap<>();
 
-    private HashMap<String, Constructor<? extends Concept>> sentenceTypeConstructorMap = new HashMap<>();
+    private final HashMap<String, Constructor<? extends Concept>> sentenceTypeConstructorMap = new HashMap<>();
 
-    private HashMap<Class, IntervalST<Annotation>> evidenceAnnotationTree = new HashMap<>();
+    private final HashMap<Class, IntervalST<Annotation>> evidenceAnnotationTree = new HashMap<>();
 
     private IntervalST<Annotation> sentenceTree = new IntervalST<>();
 
 
     //    record current document answers, Key for topic, value for document type
-    private HashMap<Integer, String> currentDocTypes = new HashMap<>();
+    private final HashMap<Integer, String> currentDocTypes = new HashMap<>();
     private LinkedHashMap<String, TypeDefinition> typeDefinitions;
 
     public void initialize(UimaContext cont) {

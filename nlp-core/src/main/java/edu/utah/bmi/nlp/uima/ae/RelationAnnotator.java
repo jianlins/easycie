@@ -584,9 +584,9 @@ public class RelationAnnotator extends JCasAnnotator_ImplBase implements RuleBas
             }
             HashSet<List<Integer>> addedInterval = new HashSet<>();
             for (Annotation anno : JCasUtil.select(jCas, cls)) {
-                if (!addedInterval.contains(Arrays.asList(new Integer[]{anno.getBegin(), anno.getEnd()}))) {
+                if (!addedInterval.contains(Arrays.asList(anno.getBegin(), anno.getEnd()))) {
                     annoIdx.get(typeName).put(new Interval1D(anno.getBegin(), anno.getEnd() - 1), new LinkedHashSet<>());
-                    addedInterval.add(Arrays.asList(new Integer[]{anno.getBegin(), anno.getEnd()}));
+                    addedInterval.add(Arrays.asList(anno.getBegin(), anno.getEnd()));
                 }
                 annoIdx.get(typeName).get(new Interval1D(anno.getBegin(), anno.getEnd() - 1)).add(annos.get(typeName).size());
                 annos.get(typeName).add(anno);

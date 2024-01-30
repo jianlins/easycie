@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -27,8 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Created by Jianlin Shi on 4/20/16.
  */
 public class SimpleParserTest2 {
-    private boolean printout = true;
-    private ArrayList<String> testCases = new ArrayList<String>();
+    private final boolean printout = true;
+    private final ArrayList<String> testCases = new ArrayList<String>();
 
     @BeforeEach
     public void initiateTestCases() {
@@ -61,12 +62,12 @@ public class SimpleParserTest2 {
         if (printout)
             System.out.println("Include punctuations");
         ArrayList<ArrayList<Span>> paragraphs = SimpleParser.tokenizeWParagraphs(input, true);
-        assertTrue(paragraphs.size() == 2,"Didn't get correct number of paragraphs. ");
+        assertEquals(2, paragraphs.size(), "Didn't get correct number of paragraphs. ");
         printParagraphs(input, paragraphs);
         if (printout)
             System.out.println("Exclude punctuations");
         paragraphs = SimpleParser.tokenizeWParagraphs(input, false);
-        assertTrue(paragraphs.size() == 2,"Didn't get correct number of paragraphs. ");
+        assertEquals(2, paragraphs.size(), "Didn't get correct number of paragraphs. ");
         printParagraphs(input, paragraphs);
     }
 

@@ -26,7 +26,7 @@ import java.util.Set;
  * Created on 12/11/16.
  */
 public class ColumnInfo {
-    private LinkedHashMap<String, String> columnInfo;
+    private final LinkedHashMap<String, String> columnInfo;
     private HashMap<String, Integer> columnName2Id;
     private HashMap<Integer, String> columnId2Name;
     private int currentColumnid = 1;

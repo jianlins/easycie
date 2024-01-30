@@ -6,7 +6,6 @@ import edu.utah.bmi.nlp.core.Span;
 public class Marker extends Span {
     public enum MARKERTYPE {BEGIN, END}
 
-    ;
     //    use integer float to represent begin, integer+0.5 to represent end.
 //     So that begins and ends won't overwrite
     public float fbegin, fend;

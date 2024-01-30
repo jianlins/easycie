@@ -51,7 +51,7 @@ public class FastContext_General_AETest {
     private JCas jCas;
     private AdaptableUIMACPERunner runner;
     private AnalysisEngine simpleParser_AE;
-    private String typeDescriptor = "desc/type/All_Types";
+    private final String typeDescriptor = "desc/type/All_Types";
 
     @BeforeEach
     public void setUp() {
@@ -66,7 +66,7 @@ public class FastContext_General_AETest {
         try {
             fastContext_AE = createEngine(FastContext_General_AE.class,
                     configurationData);
-            simpleParser_AE = createEngine(SimpleParser_AE.class, new Object[]{SimpleParser_AE.PARAM_INCLUDE_PUNCTUATION, true});
+            simpleParser_AE = createEngine(SimpleParser_AE.class, SimpleParser_AE.PARAM_INCLUDE_PUNCTUATION, true);
         } catch (ResourceInitializationException e) {
             e.printStackTrace();
         }
@@ -95,7 +95,6 @@ public class FastContext_General_AETest {
     @Test
     public void test2() throws AnalysisEngineProcessException {
         String text = "He history of smoking: no .";
-        ;
         String targetWords = "smoking";
         jCas.setDocumentText(text);
         simpleParser_AE.process(jCas);

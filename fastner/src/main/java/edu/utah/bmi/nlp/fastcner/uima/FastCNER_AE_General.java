@@ -100,12 +100,9 @@ public class FastCNER_AE_General extends FastNER_AE_General {
         }
         if (totalSentences > 0) {
             for (String sectionName : sentences.keySet()) {
-                boolean outsiders = true;
-                if ((includeSections.size() == 0 && excludeSections.size() > 0 && !excludeSections.contains(sectionName))
-                        || (includeSections.size() > 0 && includeSections.contains(sectionName))
-                        || (includeSections.size() == 0 && excludeSections.size() == 0)) {
-                    outsiders = false;
-                }
+                boolean outsiders = (includeSections.size() != 0 || excludeSections.size() <= 0 || excludeSections.contains(sectionName))
+                        && (includeSections.size() <= 0 || !includeSections.contains(sectionName))
+                        && (includeSections.size() != 0 || excludeSections.size() != 0);
 
                 for (Annotation sentence : sentences.get(sectionName)) {
                     HashMap<String, ArrayList<Span>> concepts = ((FastCNER) fastNER).processAnnotation(sentence);

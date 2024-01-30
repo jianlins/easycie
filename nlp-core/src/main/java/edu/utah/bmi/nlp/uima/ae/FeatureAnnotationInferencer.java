@@ -46,26 +46,26 @@ import static java.lang.Character.isUpperCase;
  */
 public class FeatureAnnotationInferencer implements FeatureInferencerInf {
     public static Logger logger = IOUtil.getLogger(FeatureInferenceAnnotator.class);
-    private LinkedHashMap<Class<? extends Annotation>, Object> ruleMap = new LinkedHashMap<>();
-    private HashMap<String, HashMap<String, Method>> evidenceConceptGetFeatures = new HashMap<>();
-    private HashMap<Class, HashMap<String, Method>> conclusionConceptSetFeatures = new HashMap<>();
-    private HashMap<String, Class<? extends Annotation>> conceptClassMap = new HashMap<>();
-    private HashMap<String, Constructor<? extends Annotation>> conceptTypeConstructors = new HashMap<>();
+    private final LinkedHashMap<Class<? extends Annotation>, Object> ruleMap = new LinkedHashMap<>();
+    private final HashMap<String, HashMap<String, Method>> evidenceConceptGetFeatures = new HashMap<>();
+    private final HashMap<Class, HashMap<String, Method>> conclusionConceptSetFeatures = new HashMap<>();
+    private final HashMap<String, Class<? extends Annotation>> conceptClassMap = new HashMap<>();
+    private final HashMap<String, Constructor<? extends Annotation>> conceptTypeConstructors = new HashMap<>();
     private LinkedHashMap<String, TypeDefinition> typeDefinitions = new LinkedHashMap<>();
-    private HashMap<String, AnnotationDefinition> conclusionAnnotationDefinitions = new HashMap<>();
-    private HashMap<String, String> uniqueFeatureClassMap = new HashMap<>();
+    private final HashMap<String, AnnotationDefinition> conclusionAnnotationDefinitions = new HashMap<>();
+    private final HashMap<String, String> uniqueFeatureClassMap = new HashMap<>();
     //  save this map to support short form specification of evidence feature values
-    private HashMap<String, String> valueFeatureMap = new HashMap<>();
+    private final HashMap<String, String> valueFeatureMap = new HashMap<>();
     //	lineNumber -- scope type name
-    private HashMap<String, Class<? extends Annotation>> scopeIndex = new HashMap<>();
-    private HashMap<Class, IntervalST<Annotation>> scopes = new HashMap<>();
+    private final HashMap<String, Class<? extends Annotation>> scopeIndex = new HashMap<>();
+    private final HashMap<Class, IntervalST<Annotation>> scopes = new HashMap<>();
     private boolean removeEvidenceConcept = true;
     private boolean noteRuleId = false;
-    private ArrayList<ArrayList<String>> ruleCells = new ArrayList<>();
+    private final ArrayList<ArrayList<String>> ruleCells = new ArrayList<>();
     @Deprecated
     public boolean debug = false;
     private boolean strictNameMatch = false;
-    private static String END = "<END>";
+    private static final String END = "<END>";
 
 
     /**
@@ -277,7 +277,6 @@ public class FeatureAnnotationInferencer implements FeatureInferencerInf {
                              String evidenceTypeShortName, AnnotationDefinition annotationDefinition,
                              ArrayList<String> needEvidenceFeatures) {
         if (featureValues.trim().length() == 0) {
-            return;
         } else {
             String[] featureValuePairs = featureValues.split(",");
             switch (featureValuePairs[0]) {
@@ -404,7 +403,6 @@ public class FeatureAnnotationInferencer implements FeatureInferencerInf {
         for (Annotation annotation : scheduledSaving) {
             annotation.addToIndexes();
         }
-        return;
     }
 
     private void addToScheduledSaving(JCas jcas, String evidenceTypeShortName, HashMap<String, AnnotationDefinition> conclusions,
@@ -413,7 +411,7 @@ public class FeatureAnnotationInferencer implements FeatureInferencerInf {
 
         for (AnnotationDefinition conclusionAnnotationDefinition : conclusions.values()) {
             AnnotationDefinition conclusionDef = AnnotationOper.createConclusionAnnotationDefinition(conclusionAnnotationDefinition,
-                    evidenceConceptGetFeatures, uniqueFeatureClassMap, Arrays.asList(new Annotation[]{evidenceAnnotation}), typeDefinitions);
+                    evidenceConceptGetFeatures, uniqueFeatureClassMap, Arrays.asList(evidenceAnnotation), typeDefinitions);
             Class<? extends Annotation> conceptCls = AnnotationOper.getTypeClass(conclusionAnnotationDefinition.getFullTypeName());
             anno = AnnotationOper.createAnnotation(jcas, conclusionDef, conceptCls, evidenceAnnotation.getBegin(), evidenceAnnotation.getEnd());
 //            System.out.println(anno.getClass());

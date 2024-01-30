@@ -65,7 +65,7 @@ public class AnnotationPrinter extends JCasAnnotator_ImplBase {
         for (AnnotationFS annotation : annotations) {
             System.out.println(indication + "\n Here is a list of annotation '" + printTypeName + "':");
             System.out.println(annotation.getClass());
-            System.out.println(annotation.toString() + "   Covered Text: \"" + annotation.getCoveredText() + "\"".replaceAll("\n",""));
+            System.out.println(annotation + "   Covered Text: \"" + annotation.getCoveredText() + "\"".replaceAll("\n",""));
 
         }
     }

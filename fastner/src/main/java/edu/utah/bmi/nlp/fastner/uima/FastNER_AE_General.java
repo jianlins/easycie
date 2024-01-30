@@ -152,18 +152,18 @@ public class FastNER_AE_General extends JCasAnnotator_ImplBase implements RuleBa
         }
 
         obj = cont.getConfigParameterValue(PARAM_MARK_PSEUDO);
-        if (obj != null && obj instanceof Boolean && (Boolean) obj != false)
+        if (obj != null && obj instanceof Boolean && (Boolean) obj)
             markPseudo = true;
         obj = cont.getConfigParameterValue(PARAM_LOG_RULE_INFO);
-        if (obj != null && obj instanceof Boolean && (Boolean) obj != false)
+        if (obj != null && obj instanceof Boolean && (Boolean) obj)
             logRuleInfo = true;
 
         obj = cont.getConfigParameterValue(PARAM_CASE_SENSITIVE);
-        if (obj != null && obj instanceof Boolean && (Boolean) obj != true)
+        if (obj != null && obj instanceof Boolean && !((Boolean) obj))
             caseSenstive = false;
 
         obj = cont.getConfigParameterValue(PARAM_ASSIGN_SECTIONS);
-        if (obj != null && obj instanceof Boolean && (Boolean) obj != true)
+        if (obj != null && obj instanceof Boolean && !((Boolean) obj))
             forceAssignSections = false;
 
         obj = cont.getConfigParameterValue(ADV_PARAM_SPAN_COMPARE_METHOD);
@@ -180,8 +180,8 @@ public class FastNER_AE_General extends JCasAnnotator_ImplBase implements RuleBa
         try {
             SentenceType = Class.forName(sentenceTypeName).asSubclass(Annotation.class);
             TokenType = Class.forName(tokenTypeName).asSubclass(Annotation.class);
-            TokenTypeConstructor = TokenType.getConstructor(new Class[]{JCas.class, int.class, int.class});
-            SentenceTypeConstructor = SentenceType.getConstructor(new Class[]{JCas.class, int.class, int.class});
+            TokenTypeConstructor = TokenType.getConstructor(JCas.class, int.class, int.class);
+            SentenceTypeConstructor = SentenceType.getConstructor(JCas.class, int.class, int.class);
             LinkedHashMap<String, TypeDefinition> conceptNames = initFastNER(cont, ruleStr);
             for (Map.Entry<String, TypeDefinition> conceptTypeDefPair : conceptNames.entrySet()) {
                 String shortTypeName = conceptTypeDefPair.getKey();
@@ -199,7 +199,7 @@ public class FastNER_AE_General extends JCasAnnotator_ImplBase implements RuleBa
                 }
                 ConceptTypes.put(conceptTypeDefPair.getKey(), conceptTypeClass);
                 ConceptTypeConstructors.put(shortTypeName, ConceptTypes.get(shortTypeName).
-                        getConstructor(new Class[]{JCas.class, int.class, int.class}));
+                        getConstructor(JCas.class, int.class, int.class));
                 setMethods.put(shortTypeName, new LinkedHashMap<>());
                 for (String featureName : typeDefinition.getFeatureValuePairs().keySet()) {
                     Method setFeature = AnnotationOper.getDefaultSetMethod(conceptTypeClass, featureName);

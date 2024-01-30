@@ -45,22 +45,22 @@ public class SimpleRunCPEReporter extends Thread {
     /**
      * The CPE instance.
      */
-    private CollectionProcessingEngine mCPE;
+    private final CollectionProcessingEngine mCPE;
 
     /**
      * Start time of CPE initialization
      */
-    private long mStartTime;
+    private final long mStartTime;
 
     /**
      * Start time of the processing
      */
     private long mInitCompleteTime;
 
-    private String logFile;
+    private final String logFile;
 
 
-    public SimpleRunCPEReporter(String args[]) throws Exception {
+    public SimpleRunCPEReporter(String[] args) throws Exception {
         mStartTime = System.currentTimeMillis();
 
         // check command line args

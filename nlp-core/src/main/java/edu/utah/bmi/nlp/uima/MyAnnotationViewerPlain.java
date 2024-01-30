@@ -52,6 +52,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class MyAnnotationViewerPlain extends JFrame {
 
     private static final long serialVersionUID = -7259891069111863433L;
 
-    private File tempDir = createTempDir();
+    private final File tempDir = createTempDir();
 
     protected AnnotationViewGenerator annotationViewGenerator; // JMP
 
@@ -465,7 +466,7 @@ public class MyAnnotationViewerPlain extends JFrame {
                 casToInlineXml.setFormattedOutput(false);
                 String xmlAnnotations = casToInlineXml.generateXML(defaultView);
                 FileOutputStream outStream = new FileOutputStream(inlineXmlFile);
-                outStream.write(xmlAnnotations.getBytes("UTF-8"));
+                outStream.write(xmlAnnotations.getBytes(StandardCharsets.UTF_8));
                 outStream.close();
 
                 if (xmlRBisSelected) // JMP passed in
@@ -656,7 +657,7 @@ public class MyAnnotationViewerPlain extends JFrame {
             }
 
             if (aThrowable != null) {
-                message += ("\nCausedBy: " + aThrowable.toString());
+                message += ("\nCausedBy: " + aThrowable);
             }
         }
 
@@ -722,7 +723,7 @@ public class MyAnnotationViewerPlain extends JFrame {
             setIcon(xmlIcon);
             setText(value.toString());
             setBackground(isSelected ? Color.orange : Color.white);
-            setForeground(isSelected ? Color.black : Color.black);
+            setForeground(Color.black);
             return this;
         }
     }

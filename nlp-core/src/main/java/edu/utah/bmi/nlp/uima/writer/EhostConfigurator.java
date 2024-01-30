@@ -31,7 +31,7 @@ import java.util.*;
  * Created by Jianlin Shi on 9/26/16.
  */
 public class EhostConfigurator {
-    private static int seed = 1234;
+    private static final int seed = 1234;
     private static FileOutputStream outputStream;
 
 

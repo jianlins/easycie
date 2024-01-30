@@ -50,19 +50,18 @@ public class Rule implements Cloneable {
     }
 
     public String toString() {
-        StringBuilder serialized = new StringBuilder();
-        serialized.append("Rule ");
-        serialized.append(id);
-        serialized.append(":\n");
-        serialized.append("\trule content:\t");
-        serialized.append(rule);
-        serialized.append("\trule name:\t");
-        serialized.append(ruleName);
-        serialized.append("\trule score:\t");
-        serialized.append(score);
-        serialized.append("\trule type:\t");
-        serialized.append(type);
-        return serialized.toString();
+        String serialized = "Rule " +
+                id +
+                ":\n" +
+                "\trule content:\t" +
+                rule +
+                "\trule name:\t" +
+                ruleName +
+                "\trule score:\t" +
+                score +
+                "\trule type:\t" +
+                type;
+        return serialized;
     }
 
 

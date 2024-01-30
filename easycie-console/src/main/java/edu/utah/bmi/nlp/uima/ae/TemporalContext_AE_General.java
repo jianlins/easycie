@@ -78,11 +78,11 @@ public class TemporalContext_AE_General extends FastCNER_AE_General {
 	protected boolean inferAll = false, saveDateAnnotations = false;
 
 
-	private HashMap<String, IntervalST<Span>> dateAnnos = new HashMap();
+	private final HashMap<String, IntervalST<Span>> dateAnnos = new HashMap();
 
 	protected HashMap<String, Integer> numberMap = new HashMap<>();
 
-	private Pattern[] patterns = new Pattern[5];
+	private final Pattern[] patterns = new Pattern[5];
 
 	private DateTime referenceDate;
 
@@ -119,10 +119,10 @@ public class TemporalContext_AE_General extends FastCNER_AE_General {
 		targetConceptId = AnnotationOper.getTypeId(targetConceptTypeName);
 
 		obj = cont.getConfigParameterValue(PARAM_INFER_ALL);
-		if (obj != null && obj instanceof Boolean && (Boolean) obj == true)
+		if (obj != null && obj instanceof Boolean && (Boolean) obj)
 			inferAll = true;
 		obj = cont.getConfigParameterValue(PARAM_SAVE_DATE_ANNO);
-		if (obj != null && obj instanceof Boolean && (Boolean) obj == true)
+		if (obj != null && obj instanceof Boolean && (Boolean) obj)
 			saveDateAnnotations = true;
 	}
 
@@ -267,9 +267,9 @@ public class TemporalContext_AE_General extends FastCNER_AE_General {
 						if (dt == null) {
 							dt = handleAmbiguousCase(dateMention, recordDate, referenceDate);
 						}
-						logger.finest("Parse '" + dateMention + "' as: '" + dt.toString() + "'");
+						logger.finest("Parse '" + dateMention + "' as: '" + dt + "'");
 						temporalStatus = updateTemporalStatus(dt, referenceDate, temporalStatus);
-						saveDateConcept(jcas, ConceptTypeConstructors, typeOfDate, span, temporalStatus, "ParsedDate:\t" + dt.toString(), getRuleInfo(span));
+						saveDateConcept(jcas, ConceptTypeConstructors, typeOfDate, span, temporalStatus, "ParsedDate:\t" + dt, getRuleInfo(span));
 					}
 					break;
 				case "Yeard":
@@ -316,7 +316,7 @@ public class TemporalContext_AE_General extends FastCNER_AE_General {
 				int interval = Integer.parseInt(text.substring(span.begin, span.end).trim());
 				DateTime dt = recordDate.minusDays(interval * unit);
 				temporalStatus = updateTemporalStatus(dt, referenceDate, temporalStatus);
-				saveDateConcept(jcas, ConceptTypeConstructors, typeName, span, temporalStatus, "ParsedDate:\t" + dt.toString(), getRuleInfo(span));
+				saveDateConcept(jcas, ConceptTypeConstructors, typeName, span, temporalStatus, "ParsedDate:\t" + dt, getRuleInfo(span));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -333,7 +333,7 @@ public class TemporalContext_AE_General extends FastCNER_AE_General {
 					int interval = numberMap.get(numWord);
 					DateTime dt = recordDate.minusDays(interval * unit);
 					temporalStatus = updateTemporalStatus(dt, referenceDate, temporalStatus);
-					saveDateConcept(jcas, ConceptTypeConstructors, typeName, span, temporalStatus, "ParsedDate:\t" + dt.toString(), getRuleInfo(span));
+					saveDateConcept(jcas, ConceptTypeConstructors, typeName, span, temporalStatus, "ParsedDate:\t" + dt, getRuleInfo(span));
 
 
 				}

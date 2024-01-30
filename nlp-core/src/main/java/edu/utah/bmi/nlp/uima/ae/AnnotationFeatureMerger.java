@@ -47,13 +47,13 @@ import static edu.utah.bmi.nlp.core.DeterminantValueSet.*;
  */
 public class AnnotationFeatureMerger {
     public static Logger logger = IOUtil.getLogger(AnnotationFeatureMergerAnnotator.class);
-    private LinkedHashMap<String, ArrayList<String>> conceptFeaturesRuleMap = new LinkedHashMap<>();
-    private LinkedHashMap<Type, ArrayList<Feature>> conceptFeaturesMap = new LinkedHashMap<>();
-    private LinkedHashMap<String, HashMap<String, Integer>> featureValuesRulePriorities = new LinkedHashMap<>();
-    private LinkedHashMap<Feature, HashMap<String, Integer>> featureValuesPriorities = new LinkedHashMap<>();
-    private HashMap<String, Class> conceptMergedConceptMap = new HashMap<>();
+    private final LinkedHashMap<String, ArrayList<String>> conceptFeaturesRuleMap = new LinkedHashMap<>();
+    private final LinkedHashMap<Type, ArrayList<Feature>> conceptFeaturesMap = new LinkedHashMap<>();
+    private final LinkedHashMap<String, HashMap<String, Integer>> featureValuesRulePriorities = new LinkedHashMap<>();
+    private final LinkedHashMap<Feature, HashMap<String, Integer>> featureValuesPriorities = new LinkedHashMap<>();
+    private final HashMap<String, Class> conceptMergedConceptMap = new HashMap<>();
     @Deprecated
-    private boolean debug = false;
+    private final boolean debug = false;
     private boolean insitu = false;
 
     @Deprecated

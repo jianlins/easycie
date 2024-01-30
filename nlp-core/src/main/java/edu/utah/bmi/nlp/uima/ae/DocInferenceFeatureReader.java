@@ -36,7 +36,7 @@ import java.util.logging.Logger;
  */
 public class DocInferenceFeatureReader {
     public static Logger logger = IOUtil.getLogger(DocInferenceAnnotator.class);
-    private LinkedHashMap<String, String> featureEvidenceConceptPair = new LinkedHashMap<>();
+    private final LinkedHashMap<String, String> featureEvidenceConceptPair = new LinkedHashMap<>();
 
     public DocInferenceFeatureReader(String featureReadRule,
                                      HashMap<String, Class<? extends Annotation>> conceptClassMap,

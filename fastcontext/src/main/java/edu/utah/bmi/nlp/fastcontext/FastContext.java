@@ -131,7 +131,7 @@ public class FastContext implements ConTextAdvancedInterface {
     public LinkedHashMap<String, ConTextSpan> processContextWEvidence(String sentence, int conceptBeginOffset, int conceptEndOffset, int windowSize) {
         String preContextString = sentence.substring(0, conceptBeginOffset);
         String conceptString = sentence.substring(conceptBeginOffset, conceptEndOffset);
-        String postContextString = sentence.substring(conceptEndOffset, sentence.length());
+        String postContextString = sentence.substring(conceptEndOffset);
         ArrayList<Span> preContextTokens = SimpleParser.tokenizeOnWhitespaces(preContextString);
         ArrayList<Span> conceptTokens = SimpleParser.tokenizeOnWhitespaces(conceptString, conceptBeginOffset);
         ArrayList<Span> postContextTokens = SimpleParser.tokenizeOnWhitespaces(postContextString, conceptEndOffset);

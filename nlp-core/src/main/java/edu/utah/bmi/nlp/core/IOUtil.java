@@ -541,15 +541,15 @@ public class IOUtil {
     @Deprecated
     private static boolean[] addRule(HashMap<Integer, Rule> rules, LinkedHashMap<String, TypeDefinition> typeDefinition, Rule rule, boolean[] ruleSupports) {
 //        support grouping
-        if (ruleSupports[1] == false && rule.rule.indexOf("(") != -1) {
+        if (!ruleSupports[1] && rule.rule.indexOf("(") != -1) {
             ruleSupports[1] = true;
         }
 //        support square bracket
-        if (ruleSupports[2] == false && rule.rule.indexOf("[") != -1) {
+        if (!ruleSupports[2] && rule.rule.indexOf("[") != -1) {
             ruleSupports[2] = true;
         }
 //        support replication grammar '+'
-        if (ruleSupports[3] == false && rule.rule.indexOf("+") != -1) {
+        if (!ruleSupports[3] && rule.rule.indexOf("+") != -1) {
             ruleSupports[3] = true;
         }
 

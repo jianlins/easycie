@@ -8,11 +8,11 @@ import java.util.LinkedHashMap;
 
 public interface FeatureInferencerInf {
 
-    public void init();
+    void init();
 
-    public void processInferences(JCas jcas);
+    void processInferences(JCas jcas);
 
-    public LinkedHashMap<String, TypeDefinition> getTypeDefinitions(IOUtil ioUtil);
+    LinkedHashMap<String, TypeDefinition> getTypeDefinitions(IOUtil ioUtil);
 
-    public LinkedHashMap<String, TypeDefinition> getTypeDefinitions();
+    LinkedHashMap<String, TypeDefinition> getTypeDefinitions();
 }

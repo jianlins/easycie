@@ -49,13 +49,13 @@ import static edu.utah.bmi.nlp.core.DeterminantValueSet.defaultSuperTypeName;
  * @author Jianlin Shi on 9/28/16.
  */
 public class DynamicTypeGenerator {
-    private static Logger logger = IOUtil.getLogger(DynamicTypeGenerator.class);
+    private static final Logger logger = IOUtil.getLogger(DynamicTypeGenerator.class);
     protected TypeSystemDescription typeSystemDescription;
     protected HashSet<String> compiledTypes = new HashSet<>();
     protected HashSet<String> toBeCompiledTypes;
     public File compiledRootPath = new File("classes");
     private MemoryJavaCompiler compiler = new MemoryJavaCompiler(compiledRootPath);
-    private HashMap<String, HashSet<String>> superTypefeatureNamesCache = new HashMap<>();
+    private final HashMap<String, HashSet<String>> superTypefeatureNamesCache = new HashMap<>();
     @Deprecated
     public boolean debug = false;
 

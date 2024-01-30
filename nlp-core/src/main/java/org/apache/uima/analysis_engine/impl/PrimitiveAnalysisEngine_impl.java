@@ -578,8 +578,8 @@ public class PrimitiveAnalysisEngine_impl extends AnalysisEngineImplBase impleme
      * Implements the iterator that steps through all outputs from an AnalysisComponent.
      */
     class AnalysisComponentCasIterator implements CasIterator {
-        private AnalysisComponent mMyAnalysisComponent;
-        private CAS mInputCas;
+        private final AnalysisComponent mMyAnalysisComponent;
+        private final CAS mInputCas;
         private boolean casAvailable;
 
         AnalysisComponentCasIterator(AnalysisComponent aAnalysisComponent, CAS aInputCas) {

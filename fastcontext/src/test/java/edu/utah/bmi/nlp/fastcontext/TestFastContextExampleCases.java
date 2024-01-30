@@ -286,10 +286,7 @@ public class TestFastContextExampleCases {
             String contextStr = inputString.substring(conTextSpan.begin, conTextSpan.end);
             System.out.println(contextStr);
             return contextStr.equals(contextString);
-        } else if (contextString == null) {
-            return true;
-        }
-        return false;
+        } else return contextString == null;
     }
 
 

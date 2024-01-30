@@ -802,7 +802,7 @@ public abstract class UimaContext_ImplBase implements UimaContextAdmin {
             ConfigurationManager_impl configManagerImpl = (ConfigurationManager_impl) configManager;
             configManagerImpl.setSharedParam(parameterName, value);
         } else {
-            getLogger().log(Level.CONFIG, "" + getComponentInfo() + " doesn't support modify parameters after initialization.");
+            getLogger().log(Level.CONFIG, getComponentInfo() + " doesn't support modify parameters after initialization.");
         }
 
     }

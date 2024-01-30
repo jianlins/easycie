@@ -48,9 +48,9 @@ public class RelationAnnotatorTest {
         String ruleStr = "src/test/resources/source/Test_Relation_AE.tsv";
         runner = new AdaptableUIMACPERunner(typeDescriptor, "target/generated-test-sources/");
         LinkedHashMap<String, TypeDefinition> typeDefinitions = new RelationAnnotator().getTypeDefs(ruleStr);
-        runner.addConceptType(new TypeDefinition("Observation", "Concept", Arrays.asList(new String[]{"FMObservation"})));
-        runner.addConceptType(new TypeDefinition("FamilyMember", "Concept", Arrays.asList(new String[]{"FMRelation"})));
-        runner.addConceptType(new TypeDefinition("LivingStatus", "Concept", Arrays.asList(new String[]{"FMLivingStatus"})));
+        runner.addConceptType(new TypeDefinition("Observation", "Concept", Arrays.asList("FMObservation")));
+        runner.addConceptType(new TypeDefinition("FamilyMember", "Concept", Arrays.asList("FMRelation")));
+        runner.addConceptType(new TypeDefinition("LivingStatus", "Concept", Arrays.asList("FMLivingStatus")));
         runner.addConceptTypes(typeDefinitions.values());
         runner.reInitTypeSystem("target/generated-test-sources/customized.xml");
         jCas = runner.initJCas();
@@ -99,7 +99,7 @@ public class RelationAnnotatorTest {
     private void print(JCas jCas, String type, boolean brief) {
         for (Annotation anno : JCasUtil.select(jCas, AnnotationOper.getTypeClass(DeterminantValueSet.checkNameSpace(type)))) {
             if (brief)
-                System.out.println(String.format("%s (%d-%d):\t%s", anno.getType().getShortName(), anno.getBegin(), anno.getEnd(), anno.getCoveredText()));
+                System.out.printf("%s (%d-%d):\t%s%n", anno.getType().getShortName(), anno.getBegin(), anno.getEnd(), anno.getCoveredText());
             else
                 System.out.println(anno);
         }

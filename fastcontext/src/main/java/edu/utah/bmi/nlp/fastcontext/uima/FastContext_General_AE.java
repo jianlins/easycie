@@ -66,8 +66,8 @@ public class FastContext_General_AE
     private FastContextUIMA cp;
     private String sentenceTypeName = "", tokenTypeName = "";
     private int sentenceTypeId = 0, tokenTypeId = 0;
-    private HashMap<String, HashMap<String, Method>> conceptFeatures = new HashMap<>();
-    private HashMap<String, Class> conceptClassMap = new HashMap<>();
+    private final HashMap<String, HashMap<String, Method>> conceptFeatures = new HashMap<>();
+    private final HashMap<String, Class> conceptClassMap = new HashMap<>();
     @Deprecated
     private boolean debug;
     //  if the sentence is happened to segmented too short. Expand cp to  one sentence backwards and one sentence forwards.

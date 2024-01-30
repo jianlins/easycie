@@ -54,7 +54,7 @@ public class FeatureInferenceAnnotatorTest {
     private JCas jCas;
     private AnalysisEngine featureInferencer, printer;
     private String typeDescriptor;
-    private static boolean printAnnos = false;
+    private static final boolean printAnnos = false;
 
     @BeforeEach
     public void init() {
@@ -363,11 +363,11 @@ public class FeatureInferenceAnnotatorTest {
         }
 
         evaluater1.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
         evaluater2.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
         evaluater3.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
 
         assert (JCasUtil.select(jCas, Concept.class).size() == 2);
 //		assert (JCasUtil.select(jCas, AnnotationOper.getTypeClass(DeterminantValueSet.checkNameSpace("NegatedConcept"))).size() == 1);
@@ -684,11 +684,11 @@ public class FeatureInferenceAnnotatorTest {
         if (printAnnos)
             printer.process(jCas);
         evaluater1.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
         evaluater2.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
         evaluater3.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
         printer.process(jCas);
     }
 
@@ -749,11 +749,11 @@ public class FeatureInferenceAnnotatorTest {
 //        printer.process(jCas);
 //        System.out.println("\n\n\n\n");
         evaluater1.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
         evaluater2.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
         evaluater3.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
         section.removeFromIndexes();
 
         Sentence sentence = new SentenceOdd(jCas, 0, text.length());
@@ -762,9 +762,9 @@ public class FeatureInferenceAnnotatorTest {
         featureInferencer.process(jCas);
         evaluater1.process(jCas);
         evaluater2.process(jCas);
-        assert (AnnotationCountEvaluator.pass == false);
+        assert (!AnnotationCountEvaluator.pass);
         evaluater3.process(jCas);
-        assert (AnnotationCountEvaluator.pass == false);
+        assert (!AnnotationCountEvaluator.pass);
     }
 
     @Test
@@ -823,11 +823,11 @@ public class FeatureInferenceAnnotatorTest {
 //        printer.process(jCas);
 //        System.out.println("\n\n\n\n");
         evaluater1.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
         evaluater2.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
         evaluater3.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
         section.removeFromIndexes();
 
         Sentence sentence = new SentenceOdd(jCas, 0, text.length());
@@ -836,9 +836,9 @@ public class FeatureInferenceAnnotatorTest {
         featureInferencer.process(jCas);
         evaluater1.process(jCas);
         evaluater2.process(jCas);
-        assert (AnnotationCountEvaluator.pass == false);
+        assert (!AnnotationCountEvaluator.pass);
         evaluater3.process(jCas);
-        assert (AnnotationCountEvaluator.pass == false);
+        assert (!AnnotationCountEvaluator.pass);
 
 
     }
@@ -909,11 +909,11 @@ public class FeatureInferenceAnnotatorTest {
         if (printAnnos)
             printer.process(jCas);
         evaluater1.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
         evaluater2.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
         evaluater3.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
 
         if (printAnnos)
             printer.process(jCas);
@@ -942,6 +942,8 @@ public class FeatureInferenceAnnotatorTest {
         int begin = text.indexOf(targetWords);
         int end = begin + targetWords.length();
         try {
+
+
             Class<? extends Concept> conceptDClass = AnnotationOper.getTypeClass(DeterminantValueSet.checkNameSpace("ConceptD")).asSubclass(Concept.class);
             System.out.println(conceptDClass);
             Constructor<? extends Concept> constructor = conceptDClass.getConstructor(JCas.class, int.class, int.class);
@@ -998,11 +1000,11 @@ public class FeatureInferenceAnnotatorTest {
         if (printAnnos)
             printer.process(jCas);
         evaluater1.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
         evaluater2.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
         evaluater3.process(jCas);
-        assert (AnnotationCountEvaluator.pass == true);
+        assert (AnnotationCountEvaluator.pass);
 
         if (printAnnos)
             printer.process(jCas);
@@ -1136,14 +1138,13 @@ public class FeatureInferenceAnnotatorTest {
 
 
         System.out.println(ade);
-        System.out.println(Concept.class.isInstance(ade));
+        System.out.println(ade instanceof Concept);
         System.out.println(cls.isInstance(ade));
         System.out.println(ade.getClass());
         System.out.println(ade.getClass().getClassLoader());
 //        System.out.println(ade.getType());
 
-        ;
-//        ModuleFinder finder = ModuleFinder.of(new File("classes").toPath(),
+        //        ModuleFinder finder = ModuleFinder.of(new File("classes").toPath(),
 //                new File("src/main/java").toPath(),
 //                new File("src/test/java").toPath(),
 //                new File("target/generated-test-sources").toPath());
@@ -1597,8 +1598,8 @@ public class FeatureInferenceAnnotatorTest {
         map.put(new Integer[]{31, 52}, "31,52");
         System.out.println(map.get(new Integer[]{100, 200}));
         HashMap<List<Integer>, String> map2 = new HashMap<>();
-        map2.put(Arrays.asList(new Integer[]{1, 2}), "1,2");
-        System.out.println(map2.get(Arrays.asList(new Integer[]{1, 2})));
+        map2.put(Arrays.asList(1, 2), "1,2");
+        System.out.println(map2.get(Arrays.asList(1, 2)));
     }
 
     @Test

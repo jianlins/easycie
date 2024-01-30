@@ -78,7 +78,7 @@ public class RuSH implements RuSHInf {
                     if (logger.isLoggable(Level.FINE)) {
                         String rulestr = "Rule " + rule.id + ":\t" + rule.rule + "\t" + rule.ruleName + "\t" + rule.score + "\t" + rule.type;
                         logger.finer("\t" + span.begin + "-" + span.end + ":" + span.score + "\t" +
-                                text.substring(0, span.begin) + "<" + text.substring(span.begin, span.begin + 1)
+                                text.substring(0, span.begin) + "<" + text.charAt(span.begin)
                                 + ">\t[" + rulestr + "]");
                         logs.add(new Boundary(span.begin, span.end, rulestr, rule.ruleName, rule.type));
                     }

@@ -47,6 +47,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
 
@@ -59,13 +60,13 @@ public class MyAnnotationViewerDialog extends JDialog implements ActionListener 
 
     private static final long serialVersionUID = -7259891069111863433L;
 
-    private File tempDir = createTempDir();
+    private final File tempDir = createTempDir();
 
     protected AnnotationViewGenerator annotationViewGenerator; // JMP
 
     private StyleMapEditor styleMapEditor;
 
-    private PrefsMediator med1;
+    private final PrefsMediator med1;
 
     private File styleMapFile;
 
@@ -85,7 +86,7 @@ public class MyAnnotationViewerDialog extends JDialog implements ActionListener 
 
     JRadioButton xmlRB = null;
 
-    private CAS cas;
+    private final CAS cas;
 
     private boolean processedStyleMap = false;
 
@@ -409,7 +410,7 @@ public class MyAnnotationViewerDialog extends JDialog implements ActionListener 
                 casToInlineXml.setFormattedOutput(false);
                 String xmlAnnotations = casToInlineXml.generateXML(defaultView);
                 FileOutputStream outStream = new FileOutputStream(inlineXmlFile);
-                outStream.write(xmlAnnotations.getBytes("UTF-8"));
+                outStream.write(xmlAnnotations.getBytes(StandardCharsets.UTF_8));
                 outStream.close();
 
                 if (xmlRBisSelected) // JMP passed in
@@ -609,7 +610,7 @@ public class MyAnnotationViewerDialog extends JDialog implements ActionListener 
             }
 
             if (aThrowable != null) {
-                message += ("\nCausedBy: " + aThrowable.toString());
+                message += ("\nCausedBy: " + aThrowable);
             }
         }
 
@@ -675,7 +676,7 @@ public class MyAnnotationViewerDialog extends JDialog implements ActionListener 
             setIcon(xmlIcon);
             setText(value.toString());
             setBackground(isSelected ? Color.orange : Color.white);
-            setForeground(isSelected ? Color.black : Color.black);
+            setForeground(Color.black);
             return this;
         }
     }

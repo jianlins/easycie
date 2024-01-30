@@ -75,7 +75,7 @@ public class MyCasAnnotationViewer extends JPanel {
     private static final short MODE_ENTITIES = 1;
     private static final short MODE_FEATURES = 2;
 
-    private static String[] DEFAULT_HIDDEN_FEATURES = {"sofa"};
+    private static final String[] DEFAULT_HIDDEN_FEATURES = {"sofa"};
     // colors to use for highlighting annotations
     // (use high brightness for best contrast against black text)
     private static final float BRIGHT = 0.95f;
@@ -119,32 +119,32 @@ public class MyCasAnnotationViewer extends JPanel {
     private Type stringType;
     private Type fsArrayType;
     private boolean useConsistentColors = true;
-    private List<String> highFrequencyTypes = new ArrayList<String>();
+    private final List<String> highFrequencyTypes = new ArrayList<String>();
     private String[] boldFaceKeyWords = new String[0];
     private int[] boldFaceSpans = new int[0];
-    private Set<String> hiddenFeatureNames = new HashSet<String>();
-    private Set<String> hiddenTypeNames = new HashSet<String>();
+    private final Set<String> hiddenFeatureNames = new HashSet<String>();
+    private final Set<String> hiddenTypeNames = new HashSet<String>();
     private Set<String> displayedTypeNames;
     private Set<String> initiallySelectedTypeNames;
     private boolean hideUnselectedCheckBoxes;
     private List<String> userTypes = new ArrayList<String>();
-    private Set<String> typesNotChecked = new HashSet<String>();
-    private Map<String, Color> typeColorMap = new HashMap<String, Color>();
-    private Map<String, Color> featureColorMap = new HashMap<String, Color>();
+    private final Set<String> typesNotChecked = new HashSet<String>();
+    private final Map<String, Color> typeColorMap = new HashMap<String, Color>();
+    private final Map<String, Color> featureColorMap = new HashMap<String, Color>();
     private EntityResolver entityResolver = new DefaultEntityResolver();
 
     private short viewMode = MODE_ANNOTATIONS;
     // GUI components
-    private Map<Type, JCheckBox> typeToCheckBoxMap = new HashMap<Type, JCheckBox>();
-    private Map<Entity, JCheckBox> entityToCheckBoxMap = new HashMap<Entity, JCheckBox>();
+    private final Map<Type, JCheckBox> typeToCheckBoxMap = new HashMap<Type, JCheckBox>();
+    private final Map<Entity, JCheckBox> entityToCheckBoxMap = new HashMap<Entity, JCheckBox>();
     private JSplitPane horizontalSplitPane;
     private JSplitPane verticalSplitPane;
     private JTextPane textPane;
     private JScrollPane textScrollPane;
-    private Map<Type, JRadioButton> typeRadioButtonMap = new HashMap<Type, JRadioButton>();
-    private Map<String, JRadioButton> featureRadioButtonMap = new HashMap<String, JRadioButton>();
-    private Map<String, JCheckBox> featureValueCheckBoxMap = new HashMap<String, JCheckBox>();
-    private Map<String, Color> featureValueColorMap = new HashMap<String, Color>();
+    private final Map<Type, JRadioButton> typeRadioButtonMap = new HashMap<Type, JRadioButton>();
+    private final Map<String, JRadioButton> featureRadioButtonMap = new HashMap<String, JRadioButton>();
+    private final Map<String, JCheckBox> featureValueCheckBoxMap = new HashMap<String, JCheckBox>();
+    private final Map<String, Color> featureValueColorMap = new HashMap<String, Color>();
     private JButton showHideUnselectedButton;
     private JTree selectedAnnotationTree;
     private DefaultTreeModel selectedAnnotationTreeModel;
@@ -860,9 +860,7 @@ public class MyCasAnnotationViewer extends JPanel {
      */
     public void setInitiallySelectedTypes(String[] aTypeNames) {
         this.initiallySelectedTypeNames = new HashSet<String>();
-        for (int i = 0; i < aTypeNames.length; i++) {
-                this.initiallySelectedTypeNames.add(aTypeNames[i]);
-        }
+        Collections.addAll(this.initiallySelectedTypeNames, aTypeNames);
         // apply to existing checkboxes
         Iterator<Map.Entry<Type, JCheckBox>> iterator = this.typeToCheckBoxMap.entrySet().iterator();
         while (iterator.hasNext()) {
@@ -2336,7 +2334,7 @@ public class MyCasAnnotationViewer extends JPanel {
      * Inner class containing data for a tree node representing a Type
      */
     private static class TypeTreeNodeObject {
-        private Type type;
+        private final Type type;
 
         public TypeTreeNodeObject(Type inType) {
             this.type = inType;
@@ -2356,8 +2354,8 @@ public class MyCasAnnotationViewer extends JPanel {
      * Inner class containing data for a tree node representing a FeatureStructure
      */
     private static class FsTreeNodeObject {
-        private FeatureStructure featureStructure;
-        private String featureName;
+        private final FeatureStructure featureStructure;
+        private final String featureName;
         private String caption;
 
         public FsTreeNodeObject(FeatureStructure inFeatureStructure, String inFeatureName) {

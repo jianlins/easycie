@@ -251,7 +251,7 @@ public class AdaptableUIMACPEDescriptorRunner implements StatusSetable{
                 defaultResourceManager);
         //CPE GUI only supports file URLs
         if (!"file".equals(consumerSpecifierUrl.getProtocol())) {
-            displayError("Could not load descriptor from URL " + consumerSpecifierUrl.toString() +
+            displayError("Could not load descriptor from URL " + consumerSpecifierUrl +
                     ".  CPE Configurator only supports file: URLs");
             return false;
         }
@@ -285,7 +285,7 @@ public class AdaptableUIMACPEDescriptorRunner implements StatusSetable{
         URL aeSpecifierUrl = cpeCasProc.getCpeComponentDescriptor().findAbsoluteUrl(defaultResourceManager);
         //CPE GUI only supports file URLs
         if (!"file".equals(aeSpecifierUrl.getProtocol())) {
-            displayError("Could not load descriptor from URL " + aeSpecifierUrl.toString() +
+            displayError("Could not load descriptor from URL " + aeSpecifierUrl +
                     ".  CPE Configurator only supports file: URLs");
             return false;
         }

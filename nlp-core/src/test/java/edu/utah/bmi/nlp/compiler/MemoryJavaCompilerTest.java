@@ -29,12 +29,11 @@ import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class MemoryJavaCompilerTest {
-    private String defaultSuperTypeName = "edu.utah.bmi.nlp.type.system.Concept";
+    private final String defaultSuperTypeName = "edu.utah.bmi.nlp.type.system.Concept";
     private static MemoryJavaCompiler compiler;
 
     @BeforeAll
@@ -105,7 +104,7 @@ public class MemoryJavaCompilerTest {
             System.out.println(cls);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            assertFalse(true);
+            fail();
         }
     }
 
@@ -125,7 +124,7 @@ public class MemoryJavaCompilerTest {
             System.out.println(digit2Class);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            assertFalse(true);
+            fail();
         }
     }
 }

@@ -37,7 +37,7 @@ import java.util.logging.Logger;
 
 
 public class IntervalST<Value> {
-    private static Logger logger = IOUtil.getLogger(IntervalST.class);
+    private static final Logger logger = IOUtil.getLogger(IntervalST.class);
 
     private Node root;   // root of the BST
     @Deprecated

@@ -63,7 +63,7 @@ public class BaseCPMImpl implements BaseCPM, Runnable {
 
 
     private String cpeDescriptionLocation;
-    private boolean defaultProcessTrace;
+    private final boolean defaultProcessTrace;
 
 
     private CPMEngine cpEngine = null;
@@ -920,7 +920,7 @@ public class BaseCPMImpl implements BaseCPM, Runnable {
         if (System.getProperty("DEBUG") != null)
             UIMAFramework.getLogger(this.getClass()).log(
                     Level.FINEST,
-                    "" + pct + "% (" + duration + "ms) - " + aEvent.getComponentName() + " (" + type
+                    pct + "% (" + duration + "ms) - " + aEvent.getComponentName() + " (" + type
                             + ")");
         Iterator it = aEvent.getSubEvents().iterator();
         while (it.hasNext()) {
@@ -982,7 +982,7 @@ public class BaseCPMImpl implements BaseCPM, Runnable {
                         // and will use the separator to extract nvp.
                         sb.append(",");
                     }
-                    sb.append(nvp[i].getName() + "=" + (String) nvp[i].getValue());
+                    sb.append(nvp[i].getName() + "=" + nvp[i].getValue());
                 }
                 processTrace.addEvent("CPM", "CPM_LAST_CAS_METADATA", sb.toString(), 0, null);
             }
@@ -1072,7 +1072,7 @@ public class BaseCPMImpl implements BaseCPM, Runnable {
                                 processTrace.addEvent(container.getName(), key, (String) o, 0, null);
                                 if (System.getProperty("SHOW_CUSTOM_STATS") != null)
                                     UIMAFramework.getLogger(this.getClass()).log(Level.FINEST,
-                                            "Custom String Stat-" + key + " Value=" + (String) o);
+                                            "Custom String Stat-" + key + " Value=" + o);
                             } else if (o instanceof Integer) {
                                 processTrace.addEvent(container.getName(), key, String.valueOf(((Integer) o)
                                         .intValue()), 0, null);

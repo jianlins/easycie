@@ -69,7 +69,7 @@ public class SimpleParser_AE extends JCasAnnotator_ImplBase {
 		}
 
 		obj = cont.getConfigParameterValue(PARAM_INCLUDE_PUNCTUATION);
-		if (obj != null && obj instanceof Boolean && (Boolean) obj != false)
+		if (obj != null && obj instanceof Boolean && (Boolean) obj)
 			includePunctuation = true;
 
 		try {

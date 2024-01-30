@@ -25,7 +25,7 @@ conn = sqlite3.connect('n2c2fmx.sqlite')
 df = pd.read_sql_query("select * from RESULT_SNIPPET limit 5;", conn)
  */
 public class AnnotationCleaner extends JCasAnnotator_ImplBase implements RuleBasedAEInf {
-	private static Logger logger = IOUtil.getLogger(AnnotationCleaner.class);
+	private static final Logger logger = IOUtil.getLogger(AnnotationCleaner.class);
 	public static final String PARAM_RULE_STR = DeterminantValueSet.PARAM_RULE_STR;
 	public static final String PARAM_INCLUDE_SUBTYPES = "IncludeSubtypes";
 	private boolean includeSubType=true;
@@ -36,7 +36,7 @@ public class AnnotationCleaner extends JCasAnnotator_ImplBase implements RuleBas
 		String ruleStr = (String) (cont
 				.getConfigParameterValue(PARAM_RULE_STR));
 		Object value=cont.getConfigParameterValue(PARAM_INCLUDE_SUBTYPES);
-		if(value instanceof Boolean && (Boolean)value==false){
+		if(value instanceof Boolean && !((Boolean) value)){
 			includeSubType=false;
 		}
 		IOUtil ioUtil = new IOUtil(ruleStr, true);

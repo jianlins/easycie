@@ -838,7 +838,7 @@ public class DAO {
     private String getSimpleTableName(String tableName) {
         int pointer = tableName.indexOf(".");
         if (pointer != -1) {
-            tableName = tableName.substring(pointer + 1, tableName.length());
+            tableName = tableName.substring(pointer + 1);
         }
         return tableName;
     }

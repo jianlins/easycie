@@ -56,8 +56,8 @@ public abstract class MetaDataObject_impl implements MetaDataObject {
 
     static final long serialVersionUID = 5876728533863334480L;
 
-    private static String PROP_NAME_SOURCE_URL = "sourceUrl";
-    private static String PROP_NAME_INFOSET = "infoset";
+    private static final String PROP_NAME_SOURCE_URL = "sourceUrl";
+    private static final String PROP_NAME_INFOSET = "infoset";
 
     // note: AttributesImpl is just a "getter" for attributes, has no setter methods,
     // see javadocs for Attributes (sax)
@@ -99,11 +99,8 @@ public abstract class MetaDataObject_impl implements MetaDataObject {
             } else if (!clazz.equals(other.clazz))
                 return false;
             if (name == null) {
-                if (other.name != null)
-                    return false;
-            } else if (!name.equals(other.name))
-                return false;
-            return true;
+                return other.name == null;
+            } else return name.equals(other.name);
         }
 
         final String name;
@@ -124,11 +121,11 @@ public abstract class MetaDataObject_impl implements MetaDataObject {
     // Cache for Java Bean info lookup
     // Class level cache (static) for introspection - 30x speedup in CDE for large descriptor
     // holds "filtered" set of Java Bean Info
-    private static final transient ConcurrentHashMapWithProducer<Class<? extends org.apache.uima.resource.metadata.impl.MetaDataObject_impl>, MetaDataAttr[]>
+    private static final ConcurrentHashMapWithProducer<Class<? extends org.apache.uima.resource.metadata.impl.MetaDataObject_impl>, MetaDataAttr[]>
             class2attrsMap =
             new ConcurrentHashMapWithProducer<Class<? extends org.apache.uima.resource.metadata.impl.MetaDataObject_impl>, MetaDataAttr[]>();
     // holds the unfiltered set of Java Bean Info
-    private static final transient ConcurrentHashMapWithProducer<Class<? extends org.apache.uima.resource.metadata.impl.MetaDataObject_impl>, MetaDataAttr[]>
+    private static final ConcurrentHashMapWithProducer<Class<? extends org.apache.uima.resource.metadata.impl.MetaDataObject_impl>, MetaDataAttr[]>
             class2attrsMapUnfiltered =
             new ConcurrentHashMapWithProducer<Class<? extends org.apache.uima.resource.metadata.impl.MetaDataObject_impl>, MetaDataAttr[]>();
 
@@ -438,7 +435,7 @@ public abstract class MetaDataObject_impl implements MetaDataObject {
                     Method writer = attr.writer;
                     if (writer != null) {
                         try {
-                            writer.invoke(this, new Object[]{aValue});
+                            writer.invoke(this, aValue);
                         } catch (IllegalArgumentException e) {
                             throw new UIMA_IllegalArgumentException(
                                     UIMA_IllegalArgumentException.METADATA_ATTRIBUTE_TYPE_MISMATCH, new Object[]{
@@ -616,7 +613,7 @@ public abstract class MetaDataObject_impl implements MetaDataObject {
                 }
                 buf.append("}\n");
             } else
-                buf.append(val.toString());
+                buf.append(val);
             buf.append('\n');
         }
         return buf.toString();
@@ -1276,9 +1273,9 @@ public abstract class MetaDataObject_impl implements MetaDataObject {
                     try {
                         // not null - attempt to construct an appropriate object from this String
                         // class must have a constructor that takes a String parameter
-                        Constructor constructor = propClass.getConstructor(new Class[]{String.class});
+                        Constructor constructor = propClass.getConstructor(String.class);
                         // construct the object
-                        Object val = constructor.newInstance(new Object[]{text});
+                        Object val = constructor.newInstance(text);
                         setAttributeValue(propName, val);
                     } catch (Exception e) {
                         throw new InvalidXMLException(InvalidXMLException.UNKNOWN_ELEMENT,
@@ -1328,11 +1325,11 @@ public abstract class MetaDataObject_impl implements MetaDataObject {
                             // must have a constructor that takes a String parameter
                             if (primitiveElementStringConstructor == null) {
                                 primitiveElementStringConstructor = aPropClass.getComponentType().getConstructor(
-                                        new Class[]{String.class});
+                                        String.class);
                             }
                             // construct the object and add to list
                             valueList.add(primitiveElementStringConstructor
-                                    .newInstance(new Object[]{elemText}));
+                                    .newInstance(elemText));
                         } catch (Exception e) {
                             throw new InvalidXMLException(e);
                         }

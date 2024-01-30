@@ -64,7 +64,7 @@ public class BunchInferencer extends JCasAnnotator_ImplBase implements RuleBased
         parameterObject = cont.getConfigParameterValue(PARAM_BUNCH_COLUMN_NAME);
         bunchColumnName = parameterObject != null ? (String) parameterObject : "BUNCH_ID";
         parameterObject = cont.getConfigParameterValue(PARAM_AUTO_ID_ENABLED);
-        if (parameterObject != null && parameterObject instanceof Boolean && (Boolean) parameterObject != true)
+        if (parameterObject != null && parameterObject instanceof Boolean && !((Boolean) parameterObject))
             autoIdEnabled = false;
         String inferenceStr = (String) cont.getConfigParameterValue(PARAM_RULE_STR);
         parameterObject = cont.getConfigParameterValue(PARAM_ANNOTATOR);

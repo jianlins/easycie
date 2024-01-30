@@ -38,7 +38,7 @@ import java.util.*;
  * @author Jianlin_Shi on 7/28/15.
  */
 public class IOUtil {
-    private static int defaultWindowSize = 8;
+    private static final int defaultWindowSize = 8;
 
 
     public static void readAgnosticRuleResource(String ruleFileOrString, String splitter, HashMap<Integer, ContextRule> rules,

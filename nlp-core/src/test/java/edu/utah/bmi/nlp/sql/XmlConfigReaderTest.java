@@ -26,8 +26,8 @@ import java.io.File;
 public class XmlConfigReaderTest {
 	@Test
 	public void testXmlConfigReader() {
-		XmlConfigReader xmlConfigReader=new XmlConfigReader(new File("conf/edw.xml"));
-		System.out.println(xmlConfigReader.getValue("username"));
+		XmlConfigReader xmlConfigReader=new XmlConfigReader(new File("conf/sqliteconfig.xml"));
+		assert(xmlConfigReader.getValue("username").equals("test"));
 
 	}
 

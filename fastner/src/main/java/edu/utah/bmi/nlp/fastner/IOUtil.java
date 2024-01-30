@@ -80,7 +80,7 @@ public class IOUtil {
                         for (Anchor term : logicExpression) {
                             String preferredTerm = term.getPrefTerm();
                             if (preferredTerm == null || preferredTerm.trim().length() == 0) {
-                                System.err.println("Error in owl file at: " + logicExpression.toString());
+                                System.err.println("Error in owl file at: " + logicExpression);
                                 continue;
                             }
 //                            TODO enable annotating at variable name level and/or semantic type level
@@ -305,24 +305,24 @@ public class IOUtil {
 
     private static boolean[] addRule(HashMap<Integer, Rule> rules, LinkedHashMap<String, TypeDefinition> typeDefinition, NERRule rule, boolean[] ruleSupports) {
 //        support grouping
-        if (ruleSupports[1] == false && rule.rule.indexOf("(") != -1) {
+        if (!ruleSupports[1] && rule.rule.indexOf("(") != -1) {
             ruleSupports[1] = true;
         }
 //        support square bracket
-        if (ruleSupports[2] == false && rule.rule.indexOf("[") != -1) {
+        if (!ruleSupports[2] && rule.rule.indexOf("[") != -1) {
             ruleSupports[2] = true;
         }
 //        support replication grammar '+'
-        if (ruleSupports[3] == false && rule.rule.indexOf("+") != -1) {
+        if (!ruleSupports[3] && rule.rule.indexOf("+") != -1) {
             ruleSupports[3] = true;
         }
 
 //        support numeric handler
-        if (ruleSupports[4] == false && ((rule.rule.indexOf("\\>") != -1) || (rule.rule.indexOf("\\<") != -1))) {
+        if (!ruleSupports[4] && ((rule.rule.indexOf("\\>") != -1) || (rule.rule.indexOf("\\<") != -1))) {
             ruleSupports[4] = true;
         }
 
-        if (ruleSupports[5] == false && isChinese(rule.rule.toCharArray()[0])) {
+        if (!ruleSupports[5] && isChinese(rule.rule.toCharArray()[0])) {
             ruleSupports[5] = true;
         }
 

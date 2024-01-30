@@ -35,70 +35,93 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 /**
  * @author Jianlin Shi on 6/14/17.
  */
 public class TestJsonXML {
+
+	private static final String PREFIX = "jdbc:sqlite:";
 	@Test
-	public void json2xml() throws IOException {
-		JSONObject json = new JSONObject(FileUtils.readFileToString(new File("conf/edw.json")));
-		String xml = "<xml>" + XML.toString(json) + "</xml>";
-		FileUtils.writeStringToFile(new File("conf/test2.xml"), xml);
+    public void json2xml() throws IOException {
+        String config="conf/edw.json";
+        JSONObject json = new JSONObject(FileUtils.readFileToString(new File(config)));
+        String xml = "<xml>" + XML.toString(json) + "</xml>";
+        FileUtils.writeStringToFile(new File("target/generated-test-sources/test2.xml"), xml);
 
-	}
+    }
 
-	@Test
-	public void xml2json() throws IOException {
+    @Test
+    public void xml2json() throws IOException {
 
-		JSONObject xmlJSONObj = XML.toJSONObject(FileUtils.readFileToString(new File("conf/edw.xml")));
+        JSONObject xmlJSONObj = XML.toJSONObject(FileUtils.readFileToString(new File("conf/edw.xml")));
 
-		String jsonPrettyPrintString = xmlJSONObj.toString(4);
-		FileUtils.writeStringToFile(new File("conf/test.json"), jsonPrettyPrintString);
+        String jsonPrettyPrintString = xmlJSONObj.toString(4);
+        FileUtils.writeStringToFile(new File("conf/test.json"), jsonPrettyPrintString);
 
-	}
+    }
 
-	@Disabled
-	@Test
-	public void testDAO2() {
-		DAO dao = new DAO(new File("conf/edw.xml"));
-		System.out.println(dao.databaseName);
-	}
+    @Test
+    public void testDAO2() {
+		String config="conf/sqliteconfig.xml";
+        DAO dao = new DAO(new File(config), true, true);
+        assertEquals("Database name did not match expected value", "sqlitetest", dao.databaseName);
+		removeSqlite(config);
+    }
 
-	@Test
-	public void testDom() throws IOException, SAXException, ParserConfigurationException {
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db = dbf.newDocumentBuilder();
-		Document doc = db.parse(new File("conf/edw.xml"));
-		NodeList nodes = doc.getChildNodes();
-		printNode(doc.getElementsByTagName("config").item(0), 0);
+    @Test
+    public void testDom() throws IOException, SAXException, ParserConfigurationException {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(new File("conf/edw.xml"));
+        NodeList nodes = doc.getChildNodes();
+        printNode(doc.getElementsByTagName("config").item(0), 0);
 
-	}
+    }
 
-	private void printNode(Node node, int offset) {
-		StringBuilder pad = new StringBuilder();
-		for (int i = 0; i <= offset; i++) {
-			pad.append("\t");
-		}
-		System.out.println(pad.toString() + node.getNodeName() + "\t=\t" + node.getNodeValue());
-		if (node.hasChildNodes()) {
-			NodeList nodes = node.getChildNodes();
-			for (int i = 0; i < nodes.getLength(); i++) {
-				printNode(nodes.item(i), offset + 1);
+    private void printNode(Node node, int offset) {
+        StringBuilder pad = new StringBuilder();
+        for (int i = 0; i <= offset; i++) {
+            pad.append("\t");
+        }
+        System.out.println(pad + node.getNodeName() + "\t=\t" + node.getNodeValue());
+        if (node.hasChildNodes()) {
+            NodeList nodes = node.getChildNodes();
+            for (int i = 0; i < nodes.getLength(); i++) {
+                printNode(nodes.item(i), offset + 1);
+            }
+        }
+    }
+
+    @Test
+    public void testXmlConfigReader() {
+        XmlConfigReader xmlConfigReader = new XmlConfigReader(new File("conf/edw.xml"));
+        System.out.println(xmlConfigReader.getValue("username"));
+        System.out.println(xmlConfigReader.getValue("queryStatements/getColumnsInfo/sql"));
+    }
+
+    @Test
+    public void testJsonConfigReader() {
+        JsonConfigReader xmlConfigReader = new JsonConfigReader(new File("conf/edw.json"));
+        System.out.println(xmlConfigReader.getValue("username"));
+        System.out.println(xmlConfigReader.getValue("queryStatements/getColumnsInfo/sql"));
+    }
+
+    public static void removeSqlite(String configFile) {
+		try {
+			DAO dao = new DAO(new File(configFile), false, false);
+			String server = dao.configReader.getValue("server").toString();
+			if (!server.isEmpty()) {
+				server = server.substring(server.indexOf(PREFIX) + PREFIX.length(),
+						(server.contains("?") ? server.indexOf("?") : server.length()));
+				File db = new File(server);
 			}
+		} catch (Exception e) {
+			// Log the exception instead of swallowing.
+			//Always remember to perform required action on receiving an exception.
+			// e.g: logger.error("An error occurred: ", e);
 		}
-	}
-
-	@Test
-	public void testXmlConfigReader() {
-		XmlConfigReader xmlConfigReader = new XmlConfigReader(new File("conf/edw.xml"));
-		System.out.println(xmlConfigReader.getValue("username"));
-		System.out.println(xmlConfigReader.getValue("queryStatements/getColumnsInfo/sql"));
-	}
-
-	@Test
-	public void testJsonConfigReader() {
-		JsonConfigReader xmlConfigReader = new JsonConfigReader(new File("conf/edw.json"));
-		System.out.println(xmlConfigReader.getValue("username"));
-		System.out.println(xmlConfigReader.getValue("queryStatements/getColumnsInfo/sql"));
-	}
+    }
 }

@@ -20,11 +20,11 @@ public class Setting implements SettingAb {
     }
 
     public void init(String settingName, String settingValue, String settingDesc, String doubleClick, String openClick) {
-        this.settingName = new String(settingName);
-        this.settingValue = new String(settingValue);
-        this.settingDesc = new String(settingDesc);
-        this.doubleClick = new String(doubleClick);
-        this.openClick = new String(openClick);
+        this.settingName = settingName;
+        this.settingValue = settingValue;
+        this.settingDesc = settingDesc;
+        this.doubleClick = doubleClick;
+        this.openClick = openClick;
     }
 
     public String getSettingName() {
@@ -57,7 +57,7 @@ public class Setting implements SettingAb {
     }
 
     public void setSettingValue(String settingValue){
-        this.settingValue=new String(settingValue);
+        this.settingValue= settingValue;
     }
 
     public String settingDescProperty() {
@@ -82,7 +82,7 @@ public class Setting implements SettingAb {
     }
 
     public void setSettingNameProperty(String settingName) {
-        this.settingName = new String(settingName);
+        this.settingName = settingName;
     }
 
 

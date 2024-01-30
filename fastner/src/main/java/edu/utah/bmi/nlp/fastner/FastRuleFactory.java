@@ -160,7 +160,7 @@ public class FastRuleFactory {
         Object[] output = buildRuleStore(ruleStr, typeDefinition, caseSensitive, constructRuleMap);
         String ruleType = (String) output[1];
         String concatenated = (String) output[2];
-        boolean supportReplication = concatenated.indexOf("+") != -1 ? true : false;
+        boolean supportReplication = concatenated.indexOf("+") != -1;
         if (constructRuleMap) {
             HashMap<Integer, Rule> rules = (HashMap<Integer, Rule>) output[0];
             switch (ruleType) {

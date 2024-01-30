@@ -521,7 +521,7 @@ public class FastCRule extends FastRuleWG {
                 sb.append("\n");
             }
             logger.warning("Rule definition error ----matched begin > matched end\n" +
-                    "check the following rules: \n" + sb.toString());
+                    "check the following rules: \n" + sb);
             int snippetBegin = matchBegin - 100;
             snippetBegin = snippetBegin < 0 ? 0 : snippetBegin;
             int snippetEnd = end + 100;
@@ -623,23 +623,16 @@ public class FastCRule extends FastRuleWG {
             return true;
         if (getScore(b) < 0)
             return false;
+        //                && getRule(b.ruleId).type != Determinants.PSEUDO
         if (getScore(a) > getScore(b)) {
             return true;
-        } else if (getScore(a) >= getScore(b) && a.width > b.width
-//                && getRule(b.ruleId).type != Determinants.PSEUDO
-                ) {
-            return true;
-        }
-        return false;
+        } else return getScore(a) >= getScore(b) && a.width > b.width;
     }
 
     protected boolean compareWidthPrior(Span a, Span b) {
         if (a.width > b.width) {
             return true;
-        } else if (a.width == b.width && getScore(a) > getScore(b)) {
-            return true;
-        }
-        return false;
+        } else return a.width == b.width && getScore(a) > getScore(b);
     }
 
     protected boolean compareSpan(Span a, Span b) {

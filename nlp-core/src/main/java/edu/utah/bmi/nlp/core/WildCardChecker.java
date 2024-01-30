@@ -50,7 +50,7 @@ public class WildCardChecker {
     }
 
     public static boolean isSpecialChar(char c) {
-        int d = (int) c;
+        int d = c;
         return d > 126 && d != 160;
     }
 

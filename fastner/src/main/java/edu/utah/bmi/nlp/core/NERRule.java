@@ -1,6 +1,7 @@
 package edu.utah.bmi.nlp.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Extend Rule to store additional attributes of rules
@@ -24,9 +25,7 @@ public class NERRule extends Rule {
 
     public NERRule(int id, String rule, String ruleName, double score, DeterminantValueSet.Determinants type, String... attributes) {
         super(id, rule, ruleName, score, type);
-        for (int i = 0; i < attributes.length; i++) {
-            this.attributes.add(attributes[i]);
-        }
+        Collections.addAll(this.attributes, attributes);
     }
 
 

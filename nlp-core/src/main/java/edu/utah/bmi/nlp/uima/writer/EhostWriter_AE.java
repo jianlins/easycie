@@ -74,13 +74,15 @@ public class EhostWriter_AE extends XMIWritter_AE {
     public static String PARAM_COLOR_POOL = "ColorPool";
     public static String PARMA_RANDOM_COLOR = "RandomColor";
 
-    private boolean keepSubDir = false;
+    private final boolean keepSubDir = false;
 
     private File xmlOutputDir, txtOutputDir, configDir;
 
-    private String annotator = "org/apache/uima";
+    private final String annotator = "org/apache/uima";
 
-    private int mDocNum, docCounter = 0, subCorpusCounter = 0;
+    private int mDocNum;
+    private final int docCounter = 0;
+    private final int subCorpusCounter = 0;
 
 
     private int elementId = 0, randomColor = 2;
@@ -89,7 +91,7 @@ public class EhostWriter_AE extends XMIWritter_AE {
 
     protected HashMap<Class, LinkedHashSet<Method>> typeMethods = new HashMap<>();
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat(
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat(
 // "EEE MMM dd HH:mm:ss zzz yyyy");
             "MM/dd/yy");
 

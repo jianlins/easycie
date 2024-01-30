@@ -62,6 +62,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1085,7 +1086,6 @@ public class AdaptableCPEDescriptorRunner implements StatusSetable {
                 UimaContext uimaContext = ae.getUimaContext();
                 AnalysisComponent aeEngine = ae.getAnalysisComponent();
                 ae.setmInitialized(false);
-                ;
                 ChildUimaContext_impl uimaContext_impl = (ChildUimaContext_impl) uimaContext;
                 uimaContext_impl.setSharedParam("/" + ae.getMetaData().getName() + "/" + param, value);
                 aeEngine.initialize(uimaContext_impl);
@@ -1321,7 +1321,7 @@ public class AdaptableCPEDescriptorRunner implements StatusSetable {
                 defaultResourceManager);
         //CPE GUI only supports file URLs
         if (!"file".equals(consumerSpecifierUrl.getProtocol())) {
-            displayError("Could not load descriptor from URL " + consumerSpecifierUrl.toString() +
+            displayError("Could not load descriptor from URL " + consumerSpecifierUrl +
                     ".  CPE Configurator only supports file: URLs");
             return false;
         }
@@ -1356,7 +1356,7 @@ public class AdaptableCPEDescriptorRunner implements StatusSetable {
         String name = cpeCasProc.getName();
         //CPE GUI only supports file URLs
         if (!"file".equals(aeSpecifierUrl.getProtocol())) {
-            displayError("Could not load descriptor from URL " + aeSpecifierUrl.toString() +
+            displayError("Could not load descriptor from URL " + aeSpecifierUrl +
                     ".  CPE Configurator only supports file: URLs");
             return false;
         }
@@ -1452,7 +1452,7 @@ public class AdaptableCPEDescriptorRunner implements StatusSetable {
         // tempDesc.deleteOnExit();
 
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(tempDesc), "UTF-8"));
+                new FileOutputStream(tempDesc), StandardCharsets.UTF_8));
         resource.toXML(out);
         out.close();
 

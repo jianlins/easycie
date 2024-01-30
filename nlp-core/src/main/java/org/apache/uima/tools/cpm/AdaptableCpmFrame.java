@@ -36,7 +36,7 @@ import java.util.List;
 public class AdaptableCpmFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = 756368351780483658L;
 
-    private AdaptableCpmPanel cpmPanel;
+    private final AdaptableCpmPanel cpmPanel;
 
     private JMenuBar menuBar;
 
@@ -46,7 +46,7 @@ public class AdaptableCpmFrame extends JFrame implements ActionListener {
 
     private JMenuItem helpMenuItem;
 
-    private JDialog aboutDialog;
+    private final JDialog aboutDialog;
 
     public AdaptableCpmFrame(String[] args) {
         super("Collection Processing Engine Configurator");

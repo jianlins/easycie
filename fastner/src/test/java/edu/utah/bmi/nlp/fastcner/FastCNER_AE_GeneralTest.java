@@ -46,6 +46,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngine;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -84,8 +85,8 @@ public class FastCNER_AE_GeneralTest {
         try {
             fastCNER_AE = createEngine(FastCNER_AE_General.class,
                     configurationData);
-            simpleParser_AE = createEngine(SimpleParser_AE.class, new Object[]{});
-            annoprinter = createEngine(AnnotationPrinter.class, new Object[]{AnnotationPrinter.PARAM_TYPE_NAME, Sentence.class.getCanonicalName()});
+            simpleParser_AE = createEngine(SimpleParser_AE.class);
+            annoprinter = createEngine(AnnotationPrinter.class, AnnotationPrinter.PARAM_TYPE_NAME, Sentence.class.getCanonicalName());
         } catch (ResourceInitializationException e) {
             e.printStackTrace();
         }
@@ -110,10 +111,9 @@ public class FastCNER_AE_GeneralTest {
             concepts.add((Annotation) anno);
             logger.finest(concepts.get(concepts.size() - 1).getCoveredText());
         }
-        assertTrue(concepts.size() == 1,"Didn't get the right number of concepts");
-        assertTrue(concepts.get(0).getCoveredText().equals("hearing"),"Didn't get the right concept: 'hearing'");
-        assertTrue(
-                concepts.get(0).getType().getName().equals("edu.utah.bmi.nlp.type.system.HEARING"),"Didn't get the right concept type: 'hearing'");
+        assertEquals(1, concepts.size(), "Didn't get the right number of concepts");
+        assertEquals("hearing", concepts.get(0).getCoveredText(), "Didn't get the right concept: 'hearing'");
+        assertEquals("edu.utah.bmi.nlp.type.system.HEARING", concepts.get(0).getType().getName(), "Didn't get the right concept type: 'hearing'");
 
         annoIndex = jCas.getAnnotationIndex(ConceptBASE.type);
         annoIter = annoIndex.iterator();
@@ -126,10 +126,9 @@ public class FastCNER_AE_GeneralTest {
             logger.finest(concepts.get(concepts.size() - 1).getCoveredText());
         }
 
-        assertTrue(concepts.size() == 3,"Didn't get the right number of concepts");
-        assertTrue(concepts.get(0).getCoveredText().equals("pa"),"Didn't get the right concept: 'pa'");
-        assertTrue(
-                concepts.get(0).getType().getName().equals("edu.utah.bmi.nlp.type.system.PROBLEM"),"Didn't get the right concept type: 'pa'");
+        assertEquals(3, concepts.size(), "Didn't get the right number of concepts");
+        assertEquals("pa", concepts.get(0).getCoveredText(), "Didn't get the right concept: 'pa'");
+        assertEquals("edu.utah.bmi.nlp.type.system.PROBLEM", concepts.get(0).getType().getName(), "Didn't get the right concept type: 'pa'");
 
         annoIndex = jCas.getAnnotationIndex(Token.type);
         annoIter = annoIndex.iterator();
@@ -138,7 +137,7 @@ public class FastCNER_AE_GeneralTest {
             tokens.add((Token) annoIter.next());
             logger.finest(tokens.get(tokens.size() - 1).getCoveredText());
         }
-        assertTrue(tokens.size() == 11,"Didn't get the right number of concepts");
+        assertEquals(11, tokens.size(), "Didn't get the right number of concepts");
         assertTrue(tokens.get(0).getBegin() == 0 && tokens.get(0).getEnd() == 3 && text.substring(0, 3).equals(tokens.get(0).getCoveredText()),"Didn't get the right token: 'The'");
         assertTrue(tokens.get(1).getBegin() == 4 && tokens.get(1).getEnd() == 11 && text.substring(4, 11).equals(tokens.get(1).getCoveredText()),"Didn't get the right token: 'patient'");
         assertTrue(tokens.get(2).getBegin() == 12 && tokens.get(2).getEnd() == 18 && text.substring(12, 18).equals(tokens.get(2).getCoveredText()),"Didn't get the right token: 'denies'");
@@ -178,10 +177,10 @@ public class FastCNER_AE_GeneralTest {
             Object anno = annoIter.next();
             concepts.add((Annotation) anno);
         }
-        assertTrue(concepts.size() == 1);
+        assertEquals(1, concepts.size());
         assertTrue(concepts.get(0).toString().contains("C009273"));
         assertTrue(concepts.get(0).toString().contains("preferred any"));
-        assertTrue(concepts.get(0).getCoveredText().equals("problem"));
+        assertEquals("problem", concepts.get(0).getCoveredText());
     }
 
     @Test
@@ -196,7 +195,7 @@ public class FastCNER_AE_GeneralTest {
         String ruleStr="[\\w|\\p|\\b]([\\d|0\\d|10|11|12]/[\\d|0\\d|1\\d|2\\d|30|31]/[19|20|21]\\d\\d)[\\e|\\w|\\p|\\c|\\C]\t1\tConcept";
         fastCNER_AE = createEngine(FastCNER_AE_General.class,
                 FastCNER_AE_General.PARAM_RULE_STR,ruleStr);
-        annoprinter = createEngine(AnnotationPrinter.class, new Object[]{AnnotationPrinter.PARAM_TYPE_NAME, Concept.class.getCanonicalName()});
+        annoprinter = createEngine(AnnotationPrinter.class, AnnotationPrinter.PARAM_TYPE_NAME, Concept.class.getCanonicalName());
         jCas.setDocumentText(text);
         simpleParser_AE.process(jCas);
         fastCNER_AE.process(jCas);
@@ -214,7 +213,7 @@ public class FastCNER_AE_GeneralTest {
         String ruleStr="[\\w|\\p|\\b]([\\d|0\\d|10|11|12]/[\\d|0\\d|1\\d|2\\d|30|31]/\\d\\d)[\\e|\\w|\\p|\\c|\\C]\t1\tConcept";
         fastCNER_AE = createEngine(FastCNER_AE_General.class,
                 FastCNER_AE_General.PARAM_RULE_STR,ruleStr);
-        annoprinter = createEngine(AnnotationPrinter.class, new Object[]{AnnotationPrinter.PARAM_TYPE_NAME, Concept.class.getCanonicalName()});
+        annoprinter = createEngine(AnnotationPrinter.class, AnnotationPrinter.PARAM_TYPE_NAME, Concept.class.getCanonicalName());
         jCas.setDocumentText(text);
         simpleParser_AE.process(jCas);
         fastCNER_AE.process(jCas);

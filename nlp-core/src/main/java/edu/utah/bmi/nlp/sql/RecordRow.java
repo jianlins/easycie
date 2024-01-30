@@ -16,10 +16,7 @@
 
 package edu.utah.bmi.nlp.sql;
 
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.*;
 import java.util.Map.Entry;
 
 /**
@@ -87,7 +84,7 @@ public class RecordRow implements Cloneable {
         String columnName = "";
         Object value = null;
         for (Object keyValue : keyValuePairs) {
-            if (key == true) {
+            if (key) {
                 columnName = (String) keyValue;
             } else {
                 value = keyValue;
@@ -133,8 +130,7 @@ public class RecordRow implements Cloneable {
 
         HashSet<String> excludedColumns = new HashSet<>();
         if (excludes != null) {
-            for (String exc : excludes)
-                excludedColumns.add(exc);
+            Collections.addAll(excludedColumns, excludes);
         }
         for (Entry<String, Object> entry : name_cells.entrySet()) {
             String columnName = entry.getKey();
@@ -193,7 +189,7 @@ public class RecordRow implements Cloneable {
     }
 
     public void print() {
-        System.out.println(toString());
+        System.out.println(this);
     }
 
     public RecordRow clone() {

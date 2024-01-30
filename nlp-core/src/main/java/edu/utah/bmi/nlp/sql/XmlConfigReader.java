@@ -30,9 +30,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
- * Read configuration file in xml format
- * @author Jianlin Shi
- *         Created on 12/11/16.
+ * XmlConfigReader is a class that implements the ConfigReader interface. It reads XML configuration files and provides methods to retrieve configuration values.
  */
 public class XmlConfigReader implements ConfigReader {
 	private LinkedHashMap<String, Object> configs;
@@ -90,6 +88,13 @@ public class XmlConfigReader implements ConfigReader {
 	}
 
 
+	/**
+	 * Parses a NodeList recursively and populates a configuration map.
+	 *
+	 * @param children the NodeList to parse
+	 * @param mapKey the key to use in the configuration map
+	 * @param configs the configuration map to populate
+	 */
 	private void parse(NodeList children, String mapKey, Object configs) {
 		for (int i = 0; i < children.getLength(); i++) {
 			Node child = children.item(i);
@@ -138,6 +143,12 @@ public class XmlConfigReader implements ConfigReader {
 		return configs;
 	}
 
+	/**
+	 * Retrieves the value associated with the given key string from the configuration map.
+	 *
+	 * @param keyString the key string with the format "key1/key2/key3"
+	 * @return the value associated with the key string, or null if the key is not found
+	 */
 	public Object getValue(String keyString) {
 		String[] keys = keyString.split("/");
 		Object result = configs;

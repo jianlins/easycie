@@ -18,10 +18,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -32,11 +29,11 @@ public class MetaDataAnnotator extends JCasAnnotator_ImplBase implements RuleBas
 	public static final String PARAM_RULE_STR = DeterminantValueSet.PARAM_RULE_STR;
 	private ArrayList<ArrayList<Object>> rules;
 	private final static int NUMERIC_RULE = 1, CATEGORICAL_RULE = 0;
-	private HashMap<String, Constructor<? extends Annotation>> docTypeConstructorMap = new HashMap<>();
-	private HashMap<String, String> defaultDocTypes = new HashMap<>();
-	private HashMap<String, String> valueFeatureMap = new HashMap<>();
+	private final HashMap<String, Constructor<? extends Annotation>> docTypeConstructorMap = new HashMap<>();
+	private final HashMap<String, String> defaultDocTypes = new HashMap<>();
+	private final HashMap<String, String> valueFeatureMap = new HashMap<>();
 	private LinkedHashMap<String, TypeDefinition> typeDefinitions = new LinkedHashMap<>();
-	private ArrayList<ArrayList<String>> ruleCells = new ArrayList<>();
+	private final ArrayList<ArrayList<String>> ruleCells = new ArrayList<>();
 
 	public void initialize(UimaContext cont) {
 		/***
@@ -73,9 +70,7 @@ public class MetaDataAnnotator extends JCasAnnotator_ImplBase implements RuleBas
 				rule.add(numeric_conditions);
 			} else {
 				HashSet<String> valueSet = new HashSet<>();
-				for (String value : condition.split("[;,\\|]")) {
-					valueSet.add(value);
-				}
+                Collections.addAll(valueSet, condition.split("[;,\\|]"));
 				rule.add(valueSet);
 			}
 			rule.add(conclusion);
@@ -184,10 +179,8 @@ public class MetaDataAnnotator extends JCasAnnotator_ImplBase implements RuleBas
 	}
 
 	private boolean evalCategoricalCondition(HashSet<String> valueSet, String value) {
-		if (valueSet.contains(value))
-			return true;
-		return false;
-	}
+        return valueSet.contains(value);
+    }
 
 	private boolean evalNumericCondition(ArrayList<Object> conditions, double value) {
 		for (int i = 0; i < conditions.size() - 1; i += 2) {

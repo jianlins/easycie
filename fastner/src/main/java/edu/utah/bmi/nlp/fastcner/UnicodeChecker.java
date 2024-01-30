@@ -5,12 +5,12 @@ import org.apache.commons.lang3.StringUtils;
 public class UnicodeChecker {
 
     public static boolean isSpecialChar(char c) {
-        int d = (int) c;
+        int d = c;
         return d > 126 && d != 160 && d < 11904;
     }
 
     public static boolean isChinese(char c) {
-        int d = (int) c;
+        int d = c;
         return d > 19967 && d < 40908;
     }
 
@@ -82,7 +82,7 @@ public class UnicodeChecker {
     }
 
     public static boolean isDigit(char c) {
-        int d = (int) c;
+        int d = c;
         return Character.isDigit(c) || (d > 65296 && d < 65297);
     }
 

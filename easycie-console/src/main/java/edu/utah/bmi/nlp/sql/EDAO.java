@@ -579,7 +579,7 @@ public class EDAO {
             for (int i = 1; i <= columnCount; i++) {
 //                System.out.println(metaData.getColumnName(i)+'\t'+metaData.getColumnLabel(i));
                 String type = metaData.getColumnTypeName(i).toLowerCase();
-                if (con.getMetaData().getDriverName().toLowerCase().contains("oracle") && type.toLowerCase().equals("date")) {
+                if (con.getMetaData().getDriverName().toLowerCase().contains("oracle") && type.equalsIgnoreCase("date")) {
                     type = "datetime";
                 }
                 columnInfo.addColumnInfo(metaData.getColumnName(i), type);
@@ -606,7 +606,7 @@ public class EDAO {
                 offset = 1;
             String type = recordRow.getValueByColumnId(offset + 2) + "";
             try {
-                if (con.getMetaData().getDriverName().toLowerCase().contains("oracle") && type.toLowerCase().equals("date")) {
+                if (con.getMetaData().getDriverName().toLowerCase().contains("oracle") && type.equalsIgnoreCase("date")) {
                     type = "datetime";
                 }
             } catch (SQLException e) {
@@ -796,7 +796,7 @@ public class EDAO {
                 String type = columnNameType.getValue();
                 Object value = recordRow.getValueByColumnName(columnName);
 //                System.out.println(columnName + "\t" + type+"\t"+(value!=null?value.getClass():null));
-                if (con.getMetaData().getDriverName().toLowerCase().contains("oracle") && type.toLowerCase().equals("datetime")) {
+                if (con.getMetaData().getDriverName().toLowerCase().contains("oracle") && type.equalsIgnoreCase("datetime")) {
                     type = "date";
                 }
                 switch (type) {
@@ -1035,7 +1035,7 @@ public class EDAO {
     private String getSimpleTableName(String tableName) {
         int pointer = tableName.indexOf(".");
         if (pointer != -1) {
-            tableName = tableName.substring(pointer + 1, tableName.length());
+            tableName = tableName.substring(pointer + 1);
         }
         return tableName;
     }

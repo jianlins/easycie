@@ -306,7 +306,7 @@ public class DocInferenceAnnotator extends JCasAnnotator_ImplBase implements Rul
             String resultTypeShortName = defaultDocTypes.get(topic);
             AnnotationDefinition conclusionDef = AnnotationOper.createConclusionAnnotationDefinition(
                     new AnnotationDefinition(typeDefinitions.get(resultTypeShortName)),
-                    evidenceConceptGetFeatures, uniqueFeatureClassMap, Arrays.asList(new Annotation[]{}),
+                    evidenceConceptGetFeatures, uniqueFeatureClassMap, Collections.emptyList(),
                     typeDefinitions);
             if (overWriteNote) {
                 conclusionDef.setFeatureValue("Note", "default conclusion");

@@ -108,7 +108,7 @@ public class Relation extends Annotation {
   public Annotation getArg1() {
     if (Relation_Type.featOkTst && ((Relation_Type)jcasType).casFeat_Arg1 == null)
       jcasType.jcas.throwFeatMissing("Arg1", "edu.utah.bmi.nlp.type.system.Relation");
-    return (Annotation)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Relation_Type)jcasType).casFeatCode_Arg1)));}
+    return jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Relation_Type)jcasType).casFeatCode_Arg1));}
     
   /** setter for Arg1 - sets  
    * generated
@@ -130,7 +130,7 @@ public class Relation extends Annotation {
   public Annotation getArg2() {
     if (Relation_Type.featOkTst && ((Relation_Type)jcasType).casFeat_Arg2 == null)
       jcasType.jcas.throwFeatMissing("Arg2", "edu.utah.bmi.nlp.type.system.Relation");
-    return (Annotation)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Relation_Type)jcasType).casFeatCode_Arg2)));}
+    return jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Relation_Type)jcasType).casFeatCode_Arg2));}
     
   /** setter for Arg2 - sets  
    * generated

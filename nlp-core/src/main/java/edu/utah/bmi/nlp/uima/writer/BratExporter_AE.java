@@ -22,7 +22,7 @@ import java.util.*;
  * Created on 7/9/16.
  */
 public class BratExporter_AE extends XMIWritter_AE {
-    private ArrayList<Class<? extends Annotation>> exportTypes = new ArrayList<>();
+    private final ArrayList<Class<? extends Annotation>> exportTypes = new ArrayList<>();
     private LinkedHashMap<Class, LinkedHashSet<Method>> typeMethods;
     private HashMap<String, HashSet<String>> attributeToConcepts;
     private HashMap<String, HashSet<String>> attributeToValues;
@@ -36,7 +36,7 @@ public class BratExporter_AE extends XMIWritter_AE {
         for (ArrayList<String> row : ioUtils.getRuleCells()) {
             includeTypes.put(row.get(1), new ArrayList<>());
             if (row.size() > 2 && row.get(2) != null && row.get(2).trim().length() > 1) {
-                if (row.get(2).toLowerCase().equals("null"))
+                if (row.get(2).equalsIgnoreCase("null"))
                     includeTypes.put(row.get(1), null);
                 else
                     includeTypes.get(row.get(1)).addAll(Arrays.asList(row.get(2).trim().split("\\s*[,;\\|]\\s*")));

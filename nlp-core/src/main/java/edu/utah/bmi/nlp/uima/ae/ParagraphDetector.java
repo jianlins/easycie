@@ -101,9 +101,6 @@ public class ParagraphDetector extends JCasAnnotator_ImplBase {
                 measure++;
             }
         }
-        if (measure < minLength)
-            return true;
-        else
-            return false;
+        return measure < minLength;
     }
 }

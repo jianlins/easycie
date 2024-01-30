@@ -28,9 +28,9 @@ import static edu.utah.bmi.nlp.compiler.MemoryJavaFileManager.toURI;
  * Created by u0876964 on 11/3/16.
  */
 public class ClassOutputBuffer extends SimpleJavaFileObject {
-    private String name;
-    private Map<String, byte[]> classBytes;
-    private File rootDir;
+    private final String name;
+    private final Map<String, byte[]> classBytes;
+    private final File rootDir;
 
     ClassOutputBuffer(String name, Map<String, byte[]> classBytes, File rootDir) {
         super(toURI(name), Kind.CLASS);

@@ -403,7 +403,7 @@ public class FastRuSHRule_H extends FastCRuleSB implements FastRuSHRule {
                 sb.append("\n");
             }
             logger.warning("Rule definition error ----matched begin > matched end\n" +
-                    "check the following rules: \n" + sb.toString());
+                    "check the following rules: \n" + sb);
             int snippetBegin = matchBegin - 100;
             snippetBegin = snippetBegin < 0 ? 0 : snippetBegin;
             int snippetEnd = end + 100;

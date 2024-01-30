@@ -93,7 +93,7 @@ public class StringMetaReader extends CollectionReader_ImplBase {
         try {
             jcas = aCAS.getJCas();
         } catch (CASException var6) {
-            System.out.println(var6.toString());
+            System.out.println(var6);
         }
         jcas.setDocumentText(input);
         SourceDocumentInformation srcDocInfo = new SourceDocumentInformation(jcas, 0, input.length());

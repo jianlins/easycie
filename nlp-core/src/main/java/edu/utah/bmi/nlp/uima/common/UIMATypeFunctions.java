@@ -33,9 +33,8 @@ import static edu.utah.bmi.nlp.core.DeterminantValueSet.*;
  */
 public class UIMATypeFunctions {
 
-    private static final HashSet<String> baseMethods = new HashSet<>(Arrays.asList(new String[]{
-            "TypeIndexID", "Sofa", "CASImpl", "LowLevelCas", "CAS", "Address", "Type", "Class",
-            "View", "avoidcollisionTypeCode", "Begin", "Start", "End", "CoveredText", "Text"}));
+    private static final HashSet<String> baseMethods = new HashSet<>(Arrays.asList("TypeIndexID", "Sofa", "CASImpl", "LowLevelCas", "CAS", "Address", "Type", "Class",
+            "View", "avoidcollisionTypeCode", "Begin", "Start", "End", "CoveredText", "Text"));
     public static Logger logger = IOUtil.getLogger(UIMATypeFunctions.class);
 
 

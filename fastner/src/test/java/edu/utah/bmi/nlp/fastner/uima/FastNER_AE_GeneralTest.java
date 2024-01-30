@@ -47,6 +47,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngine;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -80,8 +81,8 @@ public class FastNER_AE_GeneralTest {
         try {
             fastNER_AE = createEngine(FastNER_AE_General.class,
                     configurationData);
-            simpleParser_AE = createEngine(SimpleParser_AE.class, new Object[]{});
-            annotationPrinter = createEngine(AnnotationPrinter.class, new Object[]{AnnotationPrinter.PARAM_TYPE_NAME, "ConceptBASE"});
+            simpleParser_AE = createEngine(SimpleParser_AE.class);
+            annotationPrinter = createEngine(AnnotationPrinter.class, AnnotationPrinter.PARAM_TYPE_NAME, "ConceptBASE");
 
         } catch (ResourceInitializationException e) {
             e.printStackTrace();
@@ -103,8 +104,8 @@ public class FastNER_AE_GeneralTest {
         while (annoIter.hasNext()) {
             concepts.add((Concept) annoIter.next());
         }
-        assertTrue(concepts.size() == 1,"Didn't get the right number of concepts");
-        assertTrue( concepts.get(0).getCoveredText().equals("patient denies"),"Didn't get the right concept: 'patient denies'");
+        assertEquals(1, concepts.size(), "Didn't get the right number of concepts");
+        assertEquals("patient denies", concepts.get(0).getCoveredText(), "Didn't get the right concept: 'patient denies'");
 
 
         annoIndex = jCas.getAnnotationIndex(Token.type);
@@ -114,7 +115,7 @@ public class FastNER_AE_GeneralTest {
             tokens.add((Token) annoIter.next());
 //            System.out.println(tokens.get(tokens.size()-1).getCoveredText());
         }
-        assertTrue(tokens.size() == 11,"Didn't get the right number of concepts");
+        assertEquals(11, tokens.size(), "Didn't get the right number of concepts");
 
 //        ##print the assertions below
 //        for (int i=0;i<tokens.size();i++){
@@ -261,7 +262,7 @@ public class FastNER_AE_GeneralTest {
         Annotation impression = AnnotationFactory.createAnnotation(jCas, text.indexOf("IMPRESSION") + 12, text.length(), cls);
         impression.addToIndexes();
 
-        annotationPrinter = createEngine(AnnotationPrinter.class, new Object[]{AnnotationPrinter.PARAM_TYPE_NAME, "SectionBody"});
+        annotationPrinter = createEngine(AnnotationPrinter.class, AnnotationPrinter.PARAM_TYPE_NAME, "SectionBody");
         annotationPrinter.process(jCas);
 
         configurationData = new Object[]{FastNER_AE_General.PARAM_RULE_STR, "@fastner\nfever\t0\tEntity\tACTUAL",
@@ -305,17 +306,15 @@ public class FastNER_AE_GeneralTest {
                 configurationData);
         simpleParser_AE.process(jCas);
         fastNER_AE.process(jCas);
-        AnalysisEngine annotationEval1 = createEngine(AnnotationCountEvaluator.class, new Object[]{
-                AnnotationCountEvaluator.PARAM_TYPE_NAME, "Concept",
-                AnnotationCountEvaluator.PARAM_TYPE_COUNT, 0});
+        AnalysisEngine annotationEval1 = createEngine(AnnotationCountEvaluator.class, AnnotationCountEvaluator.PARAM_TYPE_NAME, "Concept",
+                AnnotationCountEvaluator.PARAM_TYPE_COUNT, 0);
         annotationEval1.process(jCas);
         assert (AnnotationCountEvaluator.pass);
 //        annotationPrinter.process(jCas);
-        annotationPrinter = createEngine(AnnotationPrinter.class, new Object[]{AnnotationPrinter.PARAM_TYPE_NAME, "PseudoConcept"});
+        annotationPrinter = createEngine(AnnotationPrinter.class, AnnotationPrinter.PARAM_TYPE_NAME, "PseudoConcept");
         annotationPrinter.process(jCas);
-        annotationEval1 = createEngine(AnnotationCountEvaluator.class, new Object[]{
-                AnnotationCountEvaluator.PARAM_TYPE_NAME, "PseudoConcept",
-                AnnotationCountEvaluator.PARAM_TYPE_COUNT, 1});
+        annotationEval1 = createEngine(AnnotationCountEvaluator.class, AnnotationCountEvaluator.PARAM_TYPE_NAME, "PseudoConcept",
+                AnnotationCountEvaluator.PARAM_TYPE_COUNT, 1);
         annotationEval1.process(jCas);
         assert (AnnotationCountEvaluator.pass);
     }
@@ -339,15 +338,13 @@ public class FastNER_AE_GeneralTest {
                 configurationData);
         simpleParser_AE.process(jCas);
         fastNER_AE.process(jCas);
-        AnalysisEngine annotationEval1 = createEngine(AnnotationCountEvaluator.class, new Object[]{
-                AnnotationCountEvaluator.PARAM_TYPE_NAME, "Concept",
-                AnnotationCountEvaluator.PARAM_TYPE_COUNT, 1});
+        AnalysisEngine annotationEval1 = createEngine(AnnotationCountEvaluator.class, AnnotationCountEvaluator.PARAM_TYPE_NAME, "Concept",
+                AnnotationCountEvaluator.PARAM_TYPE_COUNT, 1);
         annotationEval1.process(jCas);
 //        assert(AnnotationCountEvaluator.pass);
 //        annotationPrinter.process(jCas);
-        annotationEval1 = createEngine(AnnotationCountEvaluator.class, new Object[]{
-                AnnotationCountEvaluator.PARAM_TYPE_NAME, "ConceptBASE",
-                AnnotationCountEvaluator.PARAM_TYPE_COUNT, 1});
+        annotationEval1 = createEngine(AnnotationCountEvaluator.class, AnnotationCountEvaluator.PARAM_TYPE_NAME, "ConceptBASE",
+                AnnotationCountEvaluator.PARAM_TYPE_COUNT, 1);
         annotationEval1.process(jCas);
         assert (AnnotationCountEvaluator.pass);
 
@@ -373,12 +370,12 @@ public class FastNER_AE_GeneralTest {
                 configurationData);
         simpleParser_AE.process(jCas);
         fastNER_AE.process(jCas);
-        AnalysisEngine annotationEval1 = createEngine(AnnotationCountEvaluator.class, new Object[]{AnnotationCountEvaluator.PARAM_TYPE_NAME, "Concept",
-                AnnotationCountEvaluator.PARAM_TYPE_COUNT, 1});
+        AnalysisEngine annotationEval1 = createEngine(AnnotationCountEvaluator.class, AnnotationCountEvaluator.PARAM_TYPE_NAME, "Concept",
+                AnnotationCountEvaluator.PARAM_TYPE_COUNT, 1);
         annotationEval1.process(jCas);
 //        annotationPrinter.process(jCas);
-        AnalysisEngine annotationEval2 = createEngine(AnnotationCountEvaluator.class, new Object[]{AnnotationCountEvaluator.PARAM_TYPE_NAME, "OutsideScopeConcept",
-                AnnotationCountEvaluator.PARAM_TYPE_COUNT, 1});
+        AnalysisEngine annotationEval2 = createEngine(AnnotationCountEvaluator.class, AnnotationCountEvaluator.PARAM_TYPE_NAME, "OutsideScopeConcept",
+                AnnotationCountEvaluator.PARAM_TYPE_COUNT, 1);
         annotationEval2.process(jCas);
     }
 
@@ -401,10 +398,10 @@ public class FastNER_AE_GeneralTest {
         simpleParser_AE.process(jCas);
         fastNER_AE.process(jCas);
 
-        annotationPrinter = createEngine(AnnotationPrinter.class, new Object[]{AnnotationPrinter.PARAM_TYPE_NAME, "ConceptBASE"});
+        annotationPrinter = createEngine(AnnotationPrinter.class, AnnotationPrinter.PARAM_TYPE_NAME, "ConceptBASE");
         annotationPrinter.process(jCas);
-        AnalysisEngine annotationEval1 = createEngine(AnnotationCountEvaluator.class, new Object[]{AnnotationCountEvaluator.PARAM_TYPE_NAME, "ConceptBASE",
-                AnnotationCountEvaluator.PARAM_TYPE_COUNT, 1, AnnotationCountEvaluator.PARAM_FEATURE_VALUES, "Text,protocol"});
+        AnalysisEngine annotationEval1 = createEngine(AnnotationCountEvaluator.class, AnnotationCountEvaluator.PARAM_TYPE_NAME, "ConceptBASE",
+                AnnotationCountEvaluator.PARAM_TYPE_COUNT, 1, AnnotationCountEvaluator.PARAM_FEATURE_VALUES, "Text,protocol");
         annotationEval1.process(jCas);
         assert (AnnotationCountEvaluator.pass);
     }
@@ -450,9 +447,9 @@ public class FastNER_AE_GeneralTest {
         for (Concept concept : concepts) {
             System.out.println(concept);
         }
-        assertTrue(concepts.size() == 2);
+        assertEquals(2, concepts.size());
         System.out.println(concepts.get(0).getClass());
-        assertTrue(concepts.get(0).getType().getShortName().equals("NewUmlsConcept"));
+        assertEquals("NewUmlsConcept", concepts.get(0).getType().getShortName());
         assertTrue(concepts.get(0).toString().contains("C302837"));
         assertTrue(concepts.get(0).toString().contains("hyperthermia"));
     }

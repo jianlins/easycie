@@ -20,6 +20,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.jcas.tcas.DocumentAnnotation;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 /**
@@ -99,7 +100,7 @@ public class DeterminantValueSet {
     public static String randomString(int length){
         byte[] array = new byte[length]; // length is bounded by 7
         new Random().nextBytes(array);
-        return new String(array, Charset.forName("UTF-8"));
+        return new String(array, StandardCharsets.UTF_8);
     }
     public static String randomString(){
         return randomString(7);
