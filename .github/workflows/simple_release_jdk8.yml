@@ -27,7 +27,7 @@ jobs:
 
       - name: Zip the package
         run: |
-          zip target/easycie-${{ env.MAVEN_VERSION }}.zip easycie-console/target/*${{ env.MAVEN_VERSION }}.jar fastcontext/target/*${{ env.MAVEN_VERSION }}.jar fastner/target/*${{ env.MAVEN_VERSION }}.jar nlp-core/target/*${{ env.MAVEN_VERSION }}.jar section-detector-r/target/*${{ env.MAVEN_VERSION }}.jar         
+          zip -j target/easycie-${{ env.MAVEN_VERSION }}.zip easycie-console/target/*${{ env.MAVEN_VERSION }}.jar fastcontext/target/*${{ env.MAVEN_VERSION }}.jar fastner/target/*${{ env.MAVEN_VERSION }}.jar nlp-core/target/*${{ env.MAVEN_VERSION }}.jar section-detector-r/target/*${{ env.MAVEN_VERSION }}.jar         
 
       - name: Create Release
         id: create_release
