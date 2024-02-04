@@ -33,3 +33,4 @@ jobs:
       run: |
         ls ~/.m2
         cat ~/.m2/settings.xml
+        gpg --list-keys
