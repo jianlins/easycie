@@ -1,4 +1,4 @@
-name: simple_release_jdk8
+name: simple_release_jdk11
 
 on:
   workflow_dispatch
