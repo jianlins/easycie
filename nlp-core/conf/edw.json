@@ -1,0 +1,52 @@
+{
+  "server": "jdbc:mysql://localhost:3306/",
+  "username": "mysql",
+  "password": "test",
+  "databaseName": "myschema",
+  "driver": "com.mysql.jdbc.Driver",
+  "createTables": [
+    {
+      "name": "NLP_DOCUMENT_LIST",
+      "sql": [
+        "CREATE TABLE {databaseName}.NLP_DOCUMENT_LIST(NLP_INPUT_ID INTEGER, PROCESS_TYPE VARCHAR(30), INCLUDE_EXCLUDE VARCHAR(30), PROCESS_VALUE VARCHAR(255), ENTERED_DTM DATETIME DEFAULT CURRENT_TIMESTAMP);",
+        "CREATE INDEX NLP_INPUT_ID_INDX ON {databaseName}.NLP_DOCUMENT_LIST (NLP_INPUT_ID);"
+      ]
+    }
+  ],
+  "dropTables": [
+    {
+      "name": "NLP_DOCUMENT_LIST",
+      "sql": "DROP TABLE {databaseName}.NLP_DOCUMENT_LIST;"
+    }
+  ],
+  "insertStatements": [
+    {
+      "name": "NLP_DOCUMENT_LIST",
+      "sql": "INSERT INTO {databaseName}.NLP_DOCUMENT_LIST (NLP_INPUT_ID, PROCESS_TYPE) VALUES (?,?);"
+    }
+  ],
+  "updateStatements": [
+    {
+      "name": "NLP_DOCUMENT_LIST",
+      "sql": "UPDATE {databaseName}.NLP_DOCUMENT_LIST SET PROCESS_VALUE=? WHERE NLP_INPUT_ID=?;"
+    }
+  ],
+  "queryStatements": [
+    {
+      "name": "getColumnsInfo",
+      "sql": " show fields from ?"
+    },
+    {
+      "name": "checkTableExits",
+      "sql": "SELECT COUNT(*) FROM information_schema.tables  WHERE table_schema = '{databaseName}' AND table_name = ?  LIMIT 1;"
+    },
+    {
+      "name": "nextIdofNLP_RESULT",
+      "sql": "SELECT MAX(RESULT_ID) FROM {databaseName}.NLP_RESULT;"
+    },
+    {
+      "name": "queryDocument",
+      "sql": "SELECT * FROM {databaseName}.NLP_DOCUMENT_LIST WHERE NLP_INPUT_ID=?"
+    }
+  ]
+}
