@@ -33,6 +33,7 @@ jobs:
     - name: Publish to the Maven Central Repository
       run: |
         mvn --batch-mode clean deploy
+        mvn nexus-staging:release
       env:
         MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
