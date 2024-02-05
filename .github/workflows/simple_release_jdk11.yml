@@ -15,6 +15,7 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: 11
+          cache: 'maven'
 
       - name: Get the version
         id: get_version
