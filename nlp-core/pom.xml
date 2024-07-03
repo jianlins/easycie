@@ -69,5 +69,10 @@
             <artifactId>unirest-java</artifactId>
             <version>1.4.9</version>
         </dependency>
+        <dependency>
+            <groupId>edu.utah.bmi.pojava</groupId>
+            <artifactId>pojava</artifactId>
+            <version>3.0.9</version>
+        </dependency>
     </dependencies>
 </project>

@@ -46,22 +46,22 @@ public class FastCRuleSB extends FastCRule {
 
     public void initiate(String ruleStr, String splitter) {
         method = "scorewidth";
-        ruleStore = (HashMap<Integer, Rule>) FastRuleFactory.buildRuleStore(ruleStr, null, true, true)[0];
+        ruleStore = (HashMap<Integer, NERRule>) FastRuleFactory.buildRuleStore(ruleStr, null, true, true)[0];
         initiate(ruleStore);
     }
 
-    public void initiate(HashMap<Integer, Rule> ruleStore) {
+    public void initiate(HashMap<Integer, NERRule> ruleStore) {
         this.ruleStore = ruleStore;
-        for (Map.Entry<Integer, Rule> ent : ruleStore.entrySet()) {
+        for (Map.Entry<Integer, NERRule> ent : ruleStore.entrySet()) {
             addSBRule(ent.getValue());
         }
     }
 
-    public FastCRuleSB(HashMap<Integer, Rule> ruleStore) {
+    public FastCRuleSB(HashMap<Integer, NERRule> ruleStore) {
         method = "scorewidth";
 //        initiate(ruleStore);
         this.ruleStore = ruleStore;
-        for (Map.Entry<Integer, Rule> ent : ruleStore.entrySet()) {
+        for (Map.Entry<Integer, NERRule> ent : ruleStore.entrySet()) {
             addSBRule(ent.getValue());
         }
     }

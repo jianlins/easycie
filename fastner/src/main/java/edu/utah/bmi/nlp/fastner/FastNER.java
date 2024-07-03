@@ -135,7 +135,7 @@ public class FastNER {
     }
 
 
-    public Rule getRule(int ruleId) {
+    public NERRule getRule(int ruleId) {
         return fastRule.getRule(ruleId);
     }
 
@@ -143,7 +143,7 @@ public class FastNER {
         this.fastRule.printRulesMap();
     }
 
-    public Rule getMatchedRuleString(Span matchedSpan) {
+    public NERRule getMatchedRuleString(Span matchedSpan) {
         return fastRule.ruleStore.get(matchedSpan.ruleId);
     }
 
@@ -155,7 +155,7 @@ public class FastNER {
         return fastRule.getRule(ruleId).score;
     }
 
-    public HashMap<Integer, Rule> getRuleStore() {
+    public HashMap<Integer, NERRule> getRuleStore() {
         return fastRule.getRuleStore();
     }
 

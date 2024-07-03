@@ -100,7 +100,7 @@ public class FastNER_AE_General extends JCasAnnotator_ImplBase implements RuleBa
 //    need to make sure the corresponding types (descriptor and Java classes) are available.
     protected HashMap<String, Constructor<? extends Annotation>> ConceptTypeClasses = new HashMap<String, Constructor<? extends Annotation>>();
     protected HashSet<String> includeSections = new HashSet<>();
-    protected HashSet<Class<? extends Annotation>> includeSectionClasses = new LinkedHashSet<>();
+    protected LinkedHashSet<Class<? extends Annotation>> includeSectionClasses = new LinkedHashSet<>();
     protected HashSet<String> excludeSections = new HashSet<>();
     protected Class<? extends Annotation> SentenceType, TokenType;
     protected Constructor<? extends Annotation> SentenceTypeConstructor;

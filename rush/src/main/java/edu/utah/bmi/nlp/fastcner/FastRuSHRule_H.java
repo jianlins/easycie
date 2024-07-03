@@ -24,12 +24,12 @@ public class FastRuSHRule_H extends FastCRuleSB implements FastRuSHRule {
 
     public FastRuSHRule_H(String ruleStr) {
         Object[] output = FastRuSHFactory.buildRuleStore(ruleStr);
-        HashMap<Integer, Rule> ruleStore = (HashMap<Integer, Rule>) output[0];
+        HashMap<Integer, NERRule> ruleStore = (HashMap<Integer, NERRule>) output[0];
         tokenRuleEnabled = (boolean) output[2];
         initiate(ruleStore);
     }
 
-    public FastRuSHRule_H(HashMap<Integer, Rule> ruleStore) {
+    public FastRuSHRule_H(HashMap<Integer, NERRule> ruleStore) {
         super(ruleStore);
     }
 

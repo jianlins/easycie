@@ -17,7 +17,7 @@ public class FastRuSHFactory {
     public static FastRuSHRule_H createFastRuSHRule(String ruleStr) {
         FastRuSHRule_H frr;
         Object[] output = buildRuleStore(ruleStr);
-        HashMap<Integer, Rule> ruleStore = (HashMap<Integer, Rule>) output[0];
+        HashMap<Integer, NERRule> ruleStore = (HashMap<Integer, NERRule>) output[0];
         String type = (String) output[1];
         boolean tokenRuleEnabled = (boolean) output[2];
         switch (type) {
@@ -33,7 +33,7 @@ public class FastRuSHFactory {
     }
 
     public static Object[] buildRuleStore(String ruleStr) {
-        HashMap<Integer, Rule> ruleStore = new HashMap<>();
+        HashMap<Integer, NERRule> ruleStore = new HashMap<>();
         IOUtil ioUtil = new IOUtil(ruleStr);
         String type = "en";
         if (ioUtil.settings.containsKey("cn"))
@@ -57,17 +57,17 @@ public class FastRuSHFactory {
                 determinant = DeterminantValueSet.Determinants.valueOf(cells.get(4));
                 oldformat = false;
             }
-            ruleStore.put(id, new Rule(id, rule, ruleName, score, determinant));
+            ruleStore.put(id, new NERRule(id, rule, ruleName, score, determinant));
         }
         if (oldformat) {
-            for (Map.Entry<Integer, Rule> entry : ruleStore.entrySet()) {
+            for (Map.Entry<Integer, NERRule> entry : ruleStore.entrySet()) {
                 Rule rule = entry.getValue();
                 if (rule.type == null) {
                     rule.type = rule.score % 2 == 0 ? Determinants.ACTUAL : Determinants.PSEUDO;
                 }
             }
         } else {
-            for (Map.Entry<Integer, Rule> entry : ruleStore.entrySet()) {
+            for (Map.Entry<Integer, NERRule> entry : ruleStore.entrySet()) {
                 Rule rule = entry.getValue();
                 if (rule.type == null) {
                     rule.type = Determinants.ACTUAL;

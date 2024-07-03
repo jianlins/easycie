@@ -46,7 +46,7 @@ public abstract class FastRule {
     protected boolean removePseudo = true;
     protected HashMap rulesMap = new HashMap();
     protected final Determinants END = Determinants.END;
-    public HashMap<Integer, Rule> ruleStore = new HashMap<>();
+    public HashMap<Integer, NERRule> ruleStore = new HashMap<>();
 
     protected BiFunction<ArrayList, Integer, Integer> getSpanBegin, getSpanEnd, getBeginId, getEndId;
     protected BiFunction<ArrayList, Integer, String> getSpanText, getStringText;
@@ -56,20 +56,20 @@ public abstract class FastRule {
 
     }
 
-    public FastRule(HashMap<Integer, Rule> ruleStore) {
+    public FastRule(HashMap<Integer, NERRule> ruleStore) {
         initiate(ruleStore);
     }
 
     public void initiate(String ruleStr, boolean caseSensitive) {
-        ruleStore = (HashMap<Integer, Rule>) FastRuleFactory.buildRuleStore(ruleStr, null, caseSensitive, true)[0];
+        ruleStore = (HashMap<Integer, NERRule>) FastRuleFactory.buildRuleStore(ruleStr, null, caseSensitive, true)[0];
         initiate(ruleStore);
     }
 
 
-    public void initiate(HashMap<Integer, Rule> ruleStore) {
+    public void initiate(HashMap<Integer, NERRule> ruleStore) {
         rulesMap.clear();
         this.ruleStore = ruleStore;
-        for (Map.Entry<Integer, Rule> ent : ruleStore.entrySet()) {
+        for (Map.Entry<Integer, NERRule> ent : ruleStore.entrySet()) {
             Rule rule = ent.getValue();
             if (rule.rule.indexOf("[") != -1) {
                 ArrayList<Rule> rules = expandSB(rule);
@@ -244,7 +244,7 @@ public abstract class FastRule {
     }
 
 
-    public Rule getRule(int pos) {
+    public NERRule getRule(int pos) {
         return ruleStore.get(pos);
     }
 
@@ -265,7 +265,7 @@ public abstract class FastRule {
         }
     }
 
-    public HashMap<Integer, Rule> getRuleStore() {
+    public HashMap<Integer, NERRule> getRuleStore() {
         return ruleStore;
     }
 

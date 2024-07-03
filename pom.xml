@@ -74,6 +74,7 @@
         <module>section-detector-r</module>
         <module>fastcontext</module>
         <module>easycie-console</module>
+        <module>nlp-ext</module>
     </modules>
     <build>
         <plugins>

@@ -33,7 +33,7 @@ public class FastRuSHRule_HCN extends FastRuSHRule_H {
         super(ruleStr);
     }
 
-    public FastRuSHRule_HCN(HashMap<Integer, Rule> ruleStore) {
+    public FastRuSHRule_HCN(HashMap<Integer, NERRule> ruleStore) {
         super(ruleStore);
     }
 

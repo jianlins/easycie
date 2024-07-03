@@ -1,0 +1,14 @@
+@aggregate:false
+@SSI_Doc	NO_CHANGE
+#Concept definition	ConeptName	SuperTypeName
+
+&CONCEPT_FEATURES	NO_CHANGE	Bunch_Base
+&CONCEPT_FEATURES	STATUS_CURED	Bunch_Base
+&CONCEPT_FEATURES	STATUS_INFECTION_DEVD	Bunch_Base
+&CONCEPT_FEATURES	STATUS_INFECTION_CONT	Bunch_Base
+
+
+#Topic(SplitOnFirstType)	ConclusionType	Note	MajorityType overtime by split (two types split the duration into two periods, three types for three periods..)	All the types need to be counted.
+SSI_Doc	STATUS_INFECTION_DEVD		Healed_Doc,SSI_Doc
+SSI_Doc	STATUS_CURED		SSI_Doc,Healed_Doc
+SSI_Doc	STATUS_CURED		IATOS_Doc,Healed_Doc
