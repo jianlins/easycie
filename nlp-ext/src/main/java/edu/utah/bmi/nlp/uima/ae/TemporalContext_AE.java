@@ -108,7 +108,7 @@ public class TemporalContext_AE extends JCasAnnotator_ImplBase implements RuleBa
 
         LinkedHashMap<String, TypeDefinition> typeDefs = getTypeDefs(ruleStr);
         for (String typeName : typeDefs.keySet()) {
-            Class<? extends Annotation> conceptClass = AnnotationOper.getTypeClass(typeDefs.get(typeName).getFullTypeName());
+            Class<? extends Annotation> conceptClass = AnnotationOper.getTypeClass(DeterminantValueSet.checkNameSpace(typeName));
             if (Date.class.isAssignableFrom(conceptClass))
                 continue;
             targetConceptClasses.put(typeName, conceptClass);

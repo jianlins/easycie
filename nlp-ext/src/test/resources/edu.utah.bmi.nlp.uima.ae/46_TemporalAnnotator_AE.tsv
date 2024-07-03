@@ -166,6 +166,21 @@ last date [\w+|\w+ \w+|\w+ \w+ \w+|\w+ \w+ \w+ \w+] \( \< 13 / \< 32	1	ABS_DATE
 [one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty] \) - [d|day|days] [of|ago]	1	REL_DATE	ACTUAL	1	w
 [one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty] \) [d|day|days] [of|ago]	1	REL_DATE	ACTUAL	1	w
 
+
+after [one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty] \) - [mo|month|months]	1	REL_DATE	ACTUAL	-30	w
+after [one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty] \) [mo|month|months]	1	REL_DATE	ACTUAL	-30	w
+
+after [one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty] \) - [yrs|year|years|yr]	1	REL_DATE	ACTUAL	-365	w
+after [one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty] \) [yrs|year|years|yr]	1	REL_DATE	ACTUAL	-365	w
+
+
+after [one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty] \) - [wks|week|weeks]	1	REL_DATE	ACTUAL	-7	w
+after [one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty] \) [wks|week|weeks]	1	REL_DATE	ACTUAL	-7	w
+
+after [one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty] \) - [d|day|days]	1	REL_DATE	ACTUAL	-1	w
+after [one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty] \) [d|day|days]	1	REL_DATE	ACTUAL	-1	w
+
+
 yesterday	1	REL_DATE	ACTUAL	1	w
 the day before yesterday	1	REL_DATE	ACTUAL	2	w
 
