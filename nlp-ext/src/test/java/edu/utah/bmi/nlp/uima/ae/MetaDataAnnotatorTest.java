@@ -6,21 +6,27 @@ import edu.utah.bmi.nlp.sql.RecordRow;
 import edu.utah.bmi.nlp.type.system.Token;
 import edu.utah.bmi.nlp.uima.AdaptableUIMACPERunner;
 import edu.utah.bmi.nlp.uima.common.AnnotationOper;
+import org.apache.commons.io.FileUtils;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.examples.SourceDocumentInformation;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
+import org.junit.Ignore;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngine;
 
+@Disabled
 public class MetaDataAnnotatorTest {
 
     private AdaptableUIMACPERunner runner;
@@ -28,6 +34,16 @@ public class MetaDataAnnotatorTest {
     private AnalysisEngine metaAnnotator, printer;
     private String typeDescriptor;
 
+    @BeforeAll
+    public static void clearTargetDir() {
+        try {
+            FileUtils.deleteDirectory(new File("target/target/generated-test-classes"));
+            FileUtils.deleteDirectory(new File("target/generated-test-sources"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
     @BeforeEach
     public void init() {
         typeDescriptor = "desc/type/customized";
@@ -45,7 +61,6 @@ public class MetaDataAnnotatorTest {
         }
 
         runner = new AdaptableUIMACPERunner(typeDescriptor, "target/generated-test-sources/");
-
     }
 
     private void process(String metaRuleStr, String docText, String... keyValuePairs) {

@@ -218,6 +218,8 @@ public class TrendPatternInferencer extends JCasAnnotator_ImplBase implements Ru
 
 
         for (String evidenceTypeName : allEvidenceTypes) {
+            if(!conceptClassMap.containsKey(evidenceTypeName))
+                continue;
             Iterator<? extends Annotation> iter = JCasUtil.iterator(jCas, conceptClassMap.get(evidenceTypeName));
             if (iter.hasNext()) {
                 Annotation anno = iter.next();

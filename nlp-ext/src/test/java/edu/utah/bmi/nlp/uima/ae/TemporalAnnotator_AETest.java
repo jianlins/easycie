@@ -23,9 +23,12 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class TemporalAnnotator_AETest {
     protected AnalysisEngine sectionDetector, sentenceSegmentor;
@@ -45,6 +48,19 @@ class TemporalAnnotator_AETest {
 
     }
 
+    private String getRules(String ruleFileURI){
+        String ruleStr="";
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(ruleFileURI)) {
+            if (inputStream == null) {
+                fail("Rule file not found: " + ruleFileURI);
+            }
+            ruleStr = org.apache.commons.io.IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return ruleStr;
+    }
+
 
     protected void init(String[] ruleStrs) throws ResourceInitializationException {
 
@@ -52,8 +68,8 @@ class TemporalAnnotator_AETest {
         if (!new File(typeDescriptor + ".xml").exists()) {
             typeDescriptor = "desc/type/All_Types";
         }
-        String sectionRule = "src/test/resources/edu.utah.bmi.nlp.uima.ae/00_Section_Detector.tsv";
-        String rushRule = "src/test/resources/edu.utah.bmi.nlp.uima.ae/10_RuSH_AE.tsv";
+        String sectionRule = getRules("edu/utah/bmi/nlp/uima/ae/00_Section_Detector.tsv");
+        String rushRule = getRules("edu/utah/bmi/nlp/uima/ae/10_RuSH_AE.tsv");
         runner = new AdaptableUIMACPERunner(typeDescriptor, "target/generated-test-classes");
         Collection<TypeDefinition> types = new FastNER_AE_General().getTypeDefs(ruleStrs[0]).values();
         runner.addConceptTypes(types);
@@ -79,7 +95,7 @@ class TemporalAnnotator_AETest {
         String nerRule = "@fastner\n" +
                 "@CONCEPT_FEATURES\tINFECTION\tConcept\n" +
                 "infection\tINFECTION";
-        String tempRuleStr = "src/test/resources/edu.utah.bmi.nlp.uima.ae/46_TemporalAnnotator_AE.tsv";
+        String tempRuleStr = getRules("edu/utah/bmi/nlp/uima/ae/46_TemporalAnnotator_AE.tsv");
 
         init(new String[]{nerRule, tempRuleStr});
 
@@ -115,7 +131,7 @@ class TemporalAnnotator_AETest {
         String nerRule = "@fastner\n" +
                 "@CONCEPT_FEATURES\tINFECTION\tConcept\n" +
                 "infection\tINFECTION";
-        String tempRuleStr = "src/test/resources/edu.utah.bmi.nlp.uima.ae/46_TemporalAnnotator_AE.tsv";
+        String tempRuleStr = getRules("edu/utah/bmi/nlp/uima/ae/46_TemporalAnnotator_AE.tsv");
 
         init(new String[]{nerRule, tempRuleStr});
 
@@ -150,7 +166,7 @@ class TemporalAnnotator_AETest {
         String nerRule = "@fastner\n" +
                 "@CONCEPT_FEATURES\tINFECTION\tConcept\n" +
                 "infection\tINFECTION";
-        String tempRuleStr = "src/test/resources/edu.utah.bmi.nlp.uima.ae/46_TemporalAnnotator_AE.tsv";
+        String tempRuleStr = getRules("edu/utah/bmi/nlp/uima/ae/46_TemporalAnnotator_AE.tsv");
 
         init(new String[]{nerRule, tempRuleStr});
 
@@ -188,7 +204,7 @@ class TemporalAnnotator_AETest {
         String nerRule = "@fastner\n" +
                 "@CONCEPT_FEATURES\tINFECTION\tConcept\n" +
                 "infection\tINFECTION";
-        String tempRuleStr = "src/test/resources/edu.utah.bmi.nlp.uima.ae/46_TemporalAnnotator_AE.tsv";
+        String tempRuleStr = getRules("edu/utah/bmi/nlp/uima/ae/46_TemporalAnnotator_AE.tsv");
 
         init(new String[]{nerRule, tempRuleStr});
 
@@ -223,7 +239,7 @@ class TemporalAnnotator_AETest {
         String nerRule = "@fastner\n" +
                 "@CONCEPT_FEATURES\tINFECTION\tConcept\n" +
                 "infection\tINFECTION";
-        String tempRuleStr = "src/test/resources/edu.utah.bmi.nlp.uima.ae/46_TemporalAnnotator_AE.tsv";
+        String tempRuleStr = getRules("edu/utah/bmi/nlp/uima/ae/46_TemporalAnnotator_AE.tsv");
 
         init(new String[]{nerRule, tempRuleStr});
 
@@ -260,7 +276,7 @@ class TemporalAnnotator_AETest {
         String nerRule = "@fastner\n" +
                 "@CONCEPT_FEATURES\tINFECTION\tConcept\n" +
                 "infection\tINFECTION";
-        String tempRuleStr = "src/test/resources/edu.utah.bmi.nlp.uima.ae/46_TemporalAnnotator_AE.tsv";
+        String tempRuleStr = getRules("edu/utah/bmi/nlp/uima/ae/46_TemporalAnnotator_AE.tsv");
 
         init(new String[]{nerRule, tempRuleStr});
 
@@ -292,7 +308,7 @@ class TemporalAnnotator_AETest {
         String nerRule = "@fastner\n" +
                 "@CONCEPT_FEATURES\tINFECTION\tConcept\n" +
                 "infection\tINFECTION";
-        String tempRuleStr = "src/test/resources/edu.utah.bmi.nlp.uima.ae/46_TemporalAnnotator_AE.tsv";
+        String tempRuleStr = getRules("edu/utah/bmi/nlp/uima/ae/46_TemporalAnnotator_AE.tsv");
 
         init(new String[]{nerRule, tempRuleStr});
 
