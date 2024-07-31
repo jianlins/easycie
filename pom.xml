@@ -13,7 +13,6 @@
         <uimafitversion>2.5.0</uimafitversion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>2.0.0</kotlin.version>
-        <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
     <name>EasyCIE</name>
@@ -229,7 +228,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
+                    <source>${maven.compiler.target}</source>
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
