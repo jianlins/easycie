@@ -25,8 +25,6 @@ import edu.utah.bmi.nlp.easycie.entry.SettingAb;
 import edu.utah.bmi.nlp.easycie.entry.TaskFX;
 import edu.utah.bmi.nlp.easycie.entry.TasksFX;
 import edu.utah.bmi.nlp.easycie.writer.SQLWriterCasConsumer;
-import edu.utah.bmi.nlp.rush.core.RuSH;
-import edu.utah.bmi.nlp.rush.uima.RuSH_AE;
 import edu.utah.bmi.nlp.sql.RecordRow;
 import edu.utah.bmi.nlp.uima.ae.RuleBasedAEInf;
 import edu.utah.bmi.nlp.uima.loggers.ConsoleLogger;
@@ -45,7 +43,6 @@ import org.apache.uima.resource.ResourceInitializationException;
 
 import java.io.File;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
