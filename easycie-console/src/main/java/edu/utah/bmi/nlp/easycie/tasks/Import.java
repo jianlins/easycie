@@ -5,9 +5,9 @@ import edu.utah.bmi.nlp.core.IOUtil;
 import edu.utah.bmi.nlp.easycie.core.CommonFunc;
 import edu.utah.bmi.nlp.easycie.core.ConfigKeys;
 import edu.utah.bmi.nlp.easycie.entry.EasyCIETask;
-import edu.utah.bmi.nlp.easycie.entry.SettingAb;
-import edu.utah.bmi.nlp.easycie.entry.TaskFX;
-import edu.utah.bmi.nlp.easycie.entry.TasksFX;
+import edu.utah.bmi.nlp.core.SettingAb;
+import edu.utah.bmi.nlp.core.TaskInf;
+import edu.utah.bmi.nlp.core.TasksInf;
 import edu.utah.bmi.nlp.easycie.reader.EhostReader;
 import edu.utah.bmi.nlp.easycie.writer.SQLWriterCasConsumer;
 import edu.utah.bmi.nlp.sql.EDAO;
@@ -60,14 +60,14 @@ public class Import extends EasyCIETask {
 
     }
 
-    public Import(TasksFX tasks, String importType) {
+    public Import(TasksInf tasks, String importType) {
         initiate(tasks, importType);
     }
 
-    protected void initiate(TasksFX tasks, String importType) {
+    protected void initiate(TasksInf tasks, String importType) {
         updateGUIMessage("Initiate configurations..");
-        TaskFX config = tasks.getTask("import");
-        TaskFX settingConfig = tasks.getTask("settings");
+        TaskInf config = tasks.getTask("import");
+        TaskInf settingConfig = tasks.getTask("settings");
         String documentDir = config.getValue(ConfigKeys.importDir);
         String includeFileTypes = config.getValue(ConfigKeys.includeFileTypes);
 
@@ -139,7 +139,7 @@ public class Import extends EasyCIETask {
             initSuccess = false;
             return;
         }
-        System.out.println(dbconfig.getAbsolutePath()+"\t"+dbconfig.exists());
+        logger.info(dbconfig.getAbsolutePath()+"\t"+dbconfig.exists());
         dao = EDAO.getInstance(dbconfig, true, false);
 
         initSuccess = true;
@@ -222,7 +222,7 @@ public class Import extends EasyCIETask {
         files.toArray(fileArray);
         Arrays.sort(fileArray, NameFileComparator.NAME_COMPARATOR);
         if (print)
-            System.out.println("Reading files from: " + inputDir.getAbsolutePath() +
+            logger.info("Reading files from: " + inputDir.getAbsolutePath() +
                     "\nImporting into table: " + tableName);
         int total = files.size();
         int counter = 0;
@@ -265,12 +265,12 @@ public class Import extends EasyCIETask {
             records.add(recordRow);
             dao.insertRecords(tableName, records);
             if (print)
-                System.out.println("success");
+                logger.info("success");
             updateGUIProgress(counter, total);
             counter++;
         }
         dao.close();
-        System.out.println("Totally " + counter + (counter > 1 ? " documents have" : " document has") + " been imported successfully.");
+        logger.info("Totally " + counter + (counter > 1 ? " documents have" : " document has") + " been imported successfully.");
     }
 
 //  TODO need to remove this from uima pipeline to speed up initiation and avoid type conflicts.
@@ -360,7 +360,7 @@ public class Import extends EasyCIETask {
         files.toArray(fileArray);
         Arrays.sort(fileArray, NameFileComparator.NAME_COMPARATOR);
         if (print)
-            System.out.println("Reading files from: " + inputDir.getAbsolutePath() +
+            logger.info("Reading files from: " + inputDir.getAbsolutePath() +
                     "\nImporting into table: " + tableName);
         int total = files.size();
         int fileCounter = 0, noteCounter = 0;
@@ -401,7 +401,7 @@ public class Import extends EasyCIETask {
             }
             dao.insertRecords(referenceTable, annotations);
             if (print)
-                System.out.println("success");
+                logger.info("success");
             updateGUIProgress(fileCounter, total);
             fileCounter++;
         }
@@ -414,7 +414,7 @@ public class Import extends EasyCIETask {
                 e.printStackTrace();
             }
         }
-        System.out.println("Totally " + fileCounter + (fileCounter > 1 ? " documents have" : " document has") + " been imported successfully (" + noteCounter + " notes).");
+        logger.info("Totally " + fileCounter + (fileCounter > 1 ? " documents have" : " document has") + " been imported successfully (" + noteCounter + " notes).");
         popDialog("Message", "Import success", "Totally " + fileCounter + (fileCounter > 1 ? " documents have" : " document has")
                 + " been imported successfully(" + noteCounter + " notes). \n\nThe original documents are imported directly to DATASET_ID: '" + datasetId
                 + "_ORIG'.\n\nEach document was split into individual notes with DATASET_ID: '" + datasetId + "'.");

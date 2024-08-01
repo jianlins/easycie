@@ -21,9 +21,9 @@ import edu.utah.bmi.nlp.core.DeterminantValueSet;
 import edu.utah.bmi.nlp.core.IOUtil;
 import edu.utah.bmi.nlp.easycie.core.AnnotationLogger;
 import edu.utah.bmi.nlp.easycie.core.ConfigKeys;
-import edu.utah.bmi.nlp.easycie.entry.SettingAb;
-import edu.utah.bmi.nlp.easycie.entry.TaskFX;
-import edu.utah.bmi.nlp.easycie.entry.TasksFX;
+import edu.utah.bmi.nlp.core.SettingAb;
+import edu.utah.bmi.nlp.core.TaskInf;
+import edu.utah.bmi.nlp.core.TasksInf;
 import edu.utah.bmi.nlp.easycie.writer.SQLWriterCasConsumer;
 import edu.utah.bmi.nlp.sql.RecordRow;
 import edu.utah.bmi.nlp.uima.ae.RuleBasedAEInf;
@@ -64,8 +64,8 @@ public class AdaptableCPEDescriptorStringDebugger implements Processable, Status
     }
 
 
-    public static AdaptableCPEDescriptorStringDebugger getInstance(TasksFX tasks) {
-        TaskFX config = tasks.getTask(ConfigKeys.maintask);
+    public static AdaptableCPEDescriptorStringDebugger getInstance(TasksInf tasks) {
+        TaskInf config = tasks.getTask(ConfigKeys.maintask);
         String cpeDescriptor = config.getValue("pipeLineSetting/CpeDescriptor");
         LinkedHashMap<String, String> componentsSettings = AdaptableCPEDescriptorRunner.readPipelineConfigurations(config.getChildSettings("pipeLineSetting"));
         String annotator = config.getValue(ConfigKeys.annotator);

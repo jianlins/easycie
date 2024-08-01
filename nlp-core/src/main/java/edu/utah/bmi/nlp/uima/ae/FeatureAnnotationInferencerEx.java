@@ -457,8 +457,8 @@ public class FeatureAnnotationInferencerEx implements FeatureInferencerInf {
             scheduledSaving.put(resultTypeShortName, new LinkedHashMap<>());
         double offsets = concatenateIntegerToDouble(evidenceAnnotation.getBegin(), evidenceAnnotation.getEnd());
         if (!scheduledSaving.get(resultTypeShortName).containsKey(offsets)) {
-            anno = AnnotationOper.createAnnotation(jcas, conclusionDef, conceptTypeConstructors.get(resultTypeShortName),
-                    evidenceAnnotation.getBegin(), evidenceAnnotation.getEnd(), conclusionConceptSetFeatures.get(conceptClassMap.get(resultTypeShortName)));
+            anno = AnnotationOper.createAnnotation(jcas, conclusionDef, conceptClassMap.get(resultTypeShortName),
+                    evidenceAnnotation.getBegin(), evidenceAnnotation.getEnd());
             if (noteRuleId && anno instanceof Concept) {
                 Concept con = (Concept) anno;
                 String note = con.getNote();

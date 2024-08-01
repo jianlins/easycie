@@ -3,9 +3,9 @@ package edu.utah.bmi.nlp.runner;
 
 import edu.utah.bmi.nlp.core.DeterminantValueSet;
 import edu.utah.bmi.nlp.easycie.core.ConfigKeys;
-import edu.utah.bmi.nlp.easycie.entry.SettingAb;
-import edu.utah.bmi.nlp.easycie.entry.TaskFX;
-import edu.utah.bmi.nlp.easycie.entry.TasksFX;
+import edu.utah.bmi.nlp.core.SettingAb;
+import edu.utah.bmi.nlp.core.TaskInf;
+import edu.utah.bmi.nlp.core.TasksInf;
 import edu.utah.bmi.nlp.easycie.reader.SQLTextReader;
 import edu.utah.bmi.nlp.easycie.writer.SQLWriterCasConsumer;
 import edu.utah.bmi.nlp.uima.AdaptableCPEDescriptorRunner;
@@ -19,7 +19,8 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
- * Created by Jianlin Shi on 9/19/16.
+ * This class represents a task that runs a CPE (Collection Processing Engine) Descriptor.
+ * It initiates the necessary configurations and runs the CPE.
  */
 public class RunCPEDescriptorTask {
     public static Logger logger = Logger.getLogger(RunCPEDescriptorTask.class.getCanonicalName());
@@ -29,22 +30,22 @@ public class RunCPEDescriptorTask {
     public AdaptableCPEDescriptorRunner runner;
     protected LinkedHashMap<String, String> componentsSettings;
     private String cpeDescriptor;
-    protected TasksFX tasks;
+    protected TasksInf tasks;
 
 
     public RunCPEDescriptorTask() {
 
     }
 
-    public RunCPEDescriptorTask(TasksFX tasks) {
+    public RunCPEDescriptorTask(TasksInf tasks) {
         this.tasks = tasks;
     }
 
-    public RunCPEDescriptorTask(TasksFX tasks, String paras) {
+    public RunCPEDescriptorTask(TasksInf tasks, String paras) {
         this.tasks = tasks;
     }
 
-    protected void initiate(TasksFX tasks, String option) {
+    protected void initiate(TasksInf tasks, String option) {
         if (System.getProperty("java.util.logging.config.file") == null &&
                 new File("logging.properties").exists()) {
             System.setProperty("java.util.logging.config.file", "logging.properties");
@@ -61,7 +62,7 @@ public class RunCPEDescriptorTask {
             e.printStackTrace();
         }
         logger.info("Initiate configurations..");
-        TaskFX config = tasks.getTask(ConfigKeys.maintask);
+        TaskInf config = tasks.getTask(ConfigKeys.maintask);
         cpeDescriptor = config.getValue("pipeLineSetting/CpeDescriptor");
         componentsSettings = readPipelineConfigurations(config.getChildSettings("pipeLineSetting"));
 

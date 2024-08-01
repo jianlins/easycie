@@ -6,6 +6,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+/**
+ * The TDAO class represents a Fake Data Access Object (DAO) for testing purpose.
+ *
+ */
 public class TDAO extends EDAO {
     private String lastStatement = "";
     private boolean closed = true;

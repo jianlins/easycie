@@ -635,45 +635,45 @@ public class AnnotationOper {
         return anno;
     }
 
-    @Deprecated
-    public static Annotation createAnnotation(JCas jcas, AnnotationDefinition conclusionAnnotationDefinition,
-                                              Constructor<? extends Annotation> annoConstructor, int begin, int end,
-                                              HashMap<String, Method> conclusionSetFeatureMethods) {
-        Annotation anno = null;
-        try {
-            anno = annoConstructor.newInstance(jcas, begin, end);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        for (Map.Entry<String, Object> featureValueEntry : conclusionAnnotationDefinition.getFullFeatureValuePairs().entrySet()) {
-            String featureName = featureValueEntry.getKey();
-            if (featureName.indexOf(":") != -1)
-                featureName = featureName.split(":")[0].trim();
-            Object value = featureValueEntry.getValue();
-            Method setMethod = conclusionSetFeatureMethods.get(featureName);
-            try {
-                if (setMethod == null) {
-                    logger.fine(anno + " doesn't initiate the set method for: " + featureName);
-                    setMethod = getDefaultSetMethod(anno.getClass(), featureName);
-                    if (setMethod == null)
-                        logger.info("the type: " + anno.getType() + "'s method:\t'" + featureName + "' has not be set up in rules.\t" +
-                                "\n Fail to set the value: '" + value + "' for this method.");
-                    else
-                        conclusionSetFeatureMethods.put(featureName, setMethod);
-                }
-                setMethod.invoke(anno, value);
-            } catch (Exception e) {
-                logger.warning("When trying to set value: '" + value + "' to the method:" + featureName + "' of annotation: '" + anno.getType().getShortName() + "', throw error: ");
-                e.printStackTrace();
-            }
-
-        }
-        return anno;
-    }
+//    @Deprecated
+//    public static Annotation createAnnotation(JCas jcas, AnnotationDefinition conclusionAnnotationDefinition,
+//                                              Constructor<? extends Annotation> annoConstructor, int begin, int end,
+//                                              HashMap<String, Method> conclusionSetFeatureMethods) {
+//        Annotation anno = null;
+//        try {
+//            anno = annoConstructor.newInstance(jcas, begin, end);
+//        } catch (InstantiationException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        }
+//        for (Map.Entry<String, Object> featureValueEntry : conclusionAnnotationDefinition.getFullFeatureValuePairs().entrySet()) {
+//            String featureName = featureValueEntry.getKey();
+//            if (featureName.indexOf(":") != -1)
+//                featureName = featureName.split(":")[0].trim();
+//            Object value = featureValueEntry.getValue();
+//            Method setMethod = conclusionSetFeatureMethods.get(featureName);
+//            try {
+//                if (setMethod == null) {
+//                    logger.fine(anno + " doesn't initiate the set method for: " + featureName);
+//                    setMethod = getDefaultSetMethod(anno.getClass(), featureName);
+//                    if (setMethod == null)
+//                        logger.info("the type: " + anno.getType() + "'s method:\t'" + featureName + "' has not be set up in rules.\t" +
+//                                "\n Fail to set the value: '" + value + "' for this method.");
+//                    else
+//                        conclusionSetFeatureMethods.put(featureName, setMethod);
+//                }
+//                setMethod.invoke(anno, value);
+//            } catch (Exception e) {
+//                logger.warning("When trying to set value: '" + value + "' to the method:" + featureName + "' of annotation: '" + anno.getType().getShortName() + "', throw error: ");
+//                e.printStackTrace();
+//            }
+//
+//        }
+//        return anno;
+//    }
 
     private static LinkedHashSet<Method> retrieveMethods(Class<? extends Annotation> aClass,
                                                          LinkedHashMap<Class, LinkedHashSet<Method>> typeMethods) {

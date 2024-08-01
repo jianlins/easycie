@@ -16,18 +16,22 @@
 
 package edu.utah.bmi.nlp.sql;
 
+import edu.utah.bmi.nlp.core.IOUtil;
+
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * @author Jianlin Shi
  * Created on 12/11/16.
  */
 public class RecordRowIterator implements Iterator<RecordRow> {
+    public static Logger logger = IOUtil.getLogger(RecordRowIterator.class);
     private ResultSet resultSet;
     private ColumnInfo columninfo;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -79,6 +83,9 @@ public class RecordRowIterator implements Iterator<RecordRow> {
                         record.addCell(col.getKey(), resultSet.getInt(col.getKey()));
                         break;
                     case "number":
+                        record.addCell(col.getKey(), resultSet.getLong(col.getKey()));
+                        break;
+                    case "numeric":
                         record.addCell(col.getKey(), resultSet.getLong(col.getKey()));
                         break;
                     case "varchar":
@@ -169,7 +176,7 @@ public class RecordRowIterator implements Iterator<RecordRow> {
                             record.addCell(col.getKey(), clob.getSubString(1, (int) clob.length()));
                         break;
                     default:
-                        System.err.println("Data type: '" + col.getValue() + "' for column '" + col.getValue() + "' has not been fully supported, read it as string instead.");
+                        logger.warning("Data type: '" + col.getValue() + "' for column '" + col.getValue() + "' has not been fully supported, read it as string instead.");
                         record.addCell(col.getKey(), resultSet.getString(col.getKey()));
                 }
             }

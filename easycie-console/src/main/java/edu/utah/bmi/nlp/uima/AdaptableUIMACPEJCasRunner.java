@@ -15,6 +15,13 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This class is deprecated.
+ *
+ * The `AdaptableUIMACPEJCasRunner` class extends the `AdaptableUIMACPERunner` class and provides additional functionalities related to UIMA CPE (Collection Processing Engine) for
+ *  processing JCas objects.
+ */
+@Deprecated
 public class AdaptableUIMACPEJCasRunner extends AdaptableUIMACPERunner {
 
 	protected AnalysisEngine aggregatedAE;

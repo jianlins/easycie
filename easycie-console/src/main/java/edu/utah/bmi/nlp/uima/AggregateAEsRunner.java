@@ -5,9 +5,9 @@ import edu.utah.bmi.nlp.core.IOUtil;
 import edu.utah.bmi.nlp.easycie.core.AnnotationLogger;
 import edu.utah.bmi.nlp.easycie.core.ConfigKeys;
 import edu.utah.bmi.nlp.easycie.core.SettingOper;
-import edu.utah.bmi.nlp.easycie.entry.SettingAb;
-import edu.utah.bmi.nlp.easycie.entry.TaskFX;
-import edu.utah.bmi.nlp.easycie.entry.TasksFX;
+import edu.utah.bmi.nlp.core.SettingAb;
+import edu.utah.bmi.nlp.core.TaskInf;
+import edu.utah.bmi.nlp.core.TasksInf;
 import edu.utah.bmi.nlp.easycie.reader.SQLTextReader;
 import edu.utah.bmi.nlp.easycie.writer.SQLWriterCasConsumer;
 import edu.utah.bmi.nlp.sql.RecordRow;
@@ -44,7 +44,7 @@ import static org.apache.commons.io.comparator.NameFileComparator.NAME_COMPARATO
 public class AggregateAEsRunner {
     private static Logger logger = IOUtil.getLogger(AggregateAEsRunner.class);
     protected static HashMap<String, AggregateAEsRunner> AESRunners = new HashMap<>();
-    protected TasksFX tasks;
+    protected TasksInf tasks;
     protected String customTypeDescriptor;
     protected String metaStr;
     protected String aesDir;
@@ -52,7 +52,7 @@ public class AggregateAEsRunner {
     private JCas jCas;
     private AnalysisEngine aggregateAE;
     protected String runId = "-1";
-    protected TaskFX debugConfig;
+    protected TaskInf debugConfig;
     protected String option = "";
     public boolean ready = false;
     protected UIMALogger uimaLogger;
@@ -63,12 +63,12 @@ public class AggregateAEsRunner {
     public boolean ehost = false, brat = false, xmi = true;
     protected LinkedHashMap<String, LinkedHashMap<String, String>> componentsSettings;
 
-    public static AggregateAEsRunner getInstance(TasksFX tasks) {
+    public static AggregateAEsRunner getInstance(TasksInf tasks) {
         return getInstance(tasks, "debug");
     }
 
 
-    public static AggregateAEsRunner getInstance(TasksFX tasks, String option) {
+    public static AggregateAEsRunner getInstance(TasksInf tasks, String option) {
         AggregateAEsRunner AESRunner;
         if (!AESRunners.containsKey(option)) {
             AESRunner = new AggregateAEsRunner(tasks, option);
@@ -96,22 +96,22 @@ public class AggregateAEsRunner {
 
     public AggregateAEsRunner(String configFile, String option) {
         setOption(option);
-        TasksFX tasks = new SettingOper(configFile).readSettings();
+        TasksInf tasks = new SettingOper(configFile).readSettings();
         init(tasks);
     }
 
 
-    public AggregateAEsRunner(TasksFX tasks) {
+    public AggregateAEsRunner(TasksInf tasks) {
         init(tasks);
     }
 
-    public AggregateAEsRunner(TasksFX tasks, String option) {
+    public AggregateAEsRunner(TasksInf tasks, String option) {
 
         setOption(option);
         init(tasks);
     }
 
-    public void init(TasksFX tasks) {
+    public void init(TasksInf tasks) {
         this.tasks = tasks;
         refreshPipe();
     }
@@ -132,7 +132,7 @@ public class AggregateAEsRunner {
 
     }
 
-    protected void initiate(TasksFX tasks, String option) {
+    protected void initiate(TasksInf tasks, String option) {
         if (System.getProperty("java.util.logging.config.file") == null &&
                 new File("logging.properties").exists()) {
             System.setProperty("java.util.logging.config.file", "logging.properties");
@@ -149,7 +149,7 @@ public class AggregateAEsRunner {
             e.printStackTrace();
         }
         logger.fine("Initiate configurations..");
-        TaskFX config = tasks.getTask(ConfigKeys.maintask);
+        TaskInf config = tasks.getTask(ConfigKeys.maintask);
         LinkedHashMap<String, SettingAb> pipelineSettings = config.getChildSettings("pipeLineSetting");
         componentsSettings = new LinkedHashMap<>();
         for (SettingAb setting : pipelineSettings.values()) {
@@ -183,7 +183,7 @@ public class AggregateAEsRunner {
         bunchResultTable = config.getValue(ConfigKeys.bunchResultTableName);
 
 
-        TaskFX exportConfig = tasks.getTask("export");
+        TaskInf exportConfig = tasks.getTask("export");
         ehostDir = exportConfig.getValue(ConfigKeys.outputEhostDir);
         bratDir = exportConfig.getValue(ConfigKeys.outputBratDir);
         xmiDir = exportConfig.getValue(ConfigKeys.outputXMIDir);
@@ -294,7 +294,7 @@ public class AggregateAEsRunner {
         return uimaLogger;
     }
 
-    private void readDebugConfigs(TasksFX tasks) {
+    private void readDebugConfigs(TasksInf tasks) {
         UpdateMessage("Initiating debug pipeline...");
         debugConfig = tasks.getTask("debug");
         metaStr = debugConfig.getValue(ConfigKeys.metaStr).trim();

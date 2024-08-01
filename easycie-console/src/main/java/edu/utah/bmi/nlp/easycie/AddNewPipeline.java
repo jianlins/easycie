@@ -1,5 +1,6 @@
 package edu.utah.bmi.nlp.easycie;
 
+import edu.utah.bmi.nlp.core.IOUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -9,10 +10,12 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.CodeSource;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class AddNewPipeline {
+    private static final Logger logger = IOUtil.getLogger(AddNewPipeline.class);
     protected String configDirResource = "/demo_configurations/";
     protected String configIdStr = "";
     protected String configDirPath = "";
@@ -131,7 +134,7 @@ public class AddNewPipeline {
 
 
     protected InputStream getResourceInputStream(String path) {
-        System.out.println("get resource: " + path);
+        logger.info("get resource: " + path);
         InputStream ins = getClass().getResourceAsStream(path);
         if (ins == null) {
             System.err.println(path);
@@ -165,7 +168,7 @@ public class AddNewPipeline {
                 URL jar = src.getLocation();
                 if (new File(jar.getPath()).exists() && !jar.getPath().endsWith(".jar")) {
                     configDirResource = new File(jar.getPath(), configDirResource).getAbsolutePath();
-                    System.out.println(configDirResource);
+                    logger.info(configDirResource);
                     copyLocalRuleConfigs();
                     return new ArrayList<>();
                 }
@@ -176,13 +179,13 @@ public class AddNewPipeline {
                     if (e == null)
                         break;
                     String name = e.getName();
-                    System.out.println(name + "\t" + (name.indexOf(path) >= 0));
+                    logger.info(name + "\t" + (name.indexOf(path) >= 0));
                     if (name.indexOf(path) >= 0) {
                         files.add(name.substring(path.length()).replaceAll("/", ""));
                     }
                 }
             } else {
-                System.out.println("no rule file found in jar.");
+                logger.info("no rule file found in jar.");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -218,7 +221,7 @@ public class AddNewPipeline {
     }
 
     public static void main(String[] args) {
-        System.out.println(args.length);
-        System.out.println(new AddNewPipeline(args));
+        logger.info(""+args.length);
+        logger.info(""+new AddNewPipeline(args));
     }
 }

@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NLPTask {
+public class NLPTask implements TaskInf{
     protected Map<String, SettingAb> paras;
     protected final Map<String, SettingAb> map = new LinkedHashMap<String, SettingAb>();
     protected final Map<String, SettingAb> executes = new LinkedHashMap<String, SettingAb>();

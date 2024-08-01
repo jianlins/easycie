@@ -20,22 +20,28 @@ import ch.vorburger.exec.ManagedProcessException;
 import ch.vorburger.mariadb4j.DB;
 import ch.vorburger.mariadb4j.DBConfiguration;
 import ch.vorburger.mariadb4j.DBConfigurationBuilder;
+import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
-
+//not working for jdk8 on mac yet.
+@Disabled
 public class EmbeddedMysqlDatabase {
-    private DBConfigurationBuilder configBuilder;
-    private DB db;
+    private static DBConfigurationBuilder configBuilder;
+    private static DB db;
 
     public EmbeddedMysqlDatabase() {
         init();
     }
 
-    public void init() {
+    @BeforeAll
+    public static void init() {
 //        System.setProperty("Dlog4j.configuration", "src/test/resources/db/log4j.properties");
 
         configBuilder = DBConfigurationBuilder.newBuilder();
@@ -44,7 +50,7 @@ public class EmbeddedMysqlDatabase {
         DBConfiguration config = configBuilder.build();
     }
 
-
+    @Test
     public void start() throws ManagedProcessException, SQLException {
         db = DB.newEmbeddedDB(configBuilder.build());
         db.start();
@@ -56,12 +62,9 @@ public class EmbeddedMysqlDatabase {
         conn.close();
     }
 
-    public void stop() throws ManagedProcessException {
+    @AfterAll
+    public static void stop() throws ManagedProcessException {
         db.stop();
     }
 
-    public static void main(String[] args) throws ManagedProcessException, SQLException {
-        new EmbeddedMysqlDatabase().start();
-
-    }
 }

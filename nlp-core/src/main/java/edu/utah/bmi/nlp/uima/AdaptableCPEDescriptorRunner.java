@@ -69,8 +69,11 @@ import java.util.logging.Logger;
 import static edu.utah.bmi.nlp.core.DeterminantValueSet.defaultSuperTypeName;
 
 /**
- * @author Jianlin Shi
- * Created on 7/9/17.
+ * The AdaptableCPEDescriptorRunner class represents a runner for the
+ * Common Analysis Structure (CAS) Processor (CPE) descriptor. It takes
+ * in easycie tasks configuration object, apply the configurations to set
+ * up a CPE pipeline, and execute it.
+ *
  */
 public class AdaptableCPEDescriptorRunner implements StatusSetable {
     public static Logger classLogger = IOUtil.getLogger(AdaptableCPEDescriptorRunner.class);
@@ -117,8 +120,8 @@ public class AdaptableCPEDescriptorRunner implements StatusSetable {
     }
 
 
-    public static AdaptableCPEDescriptorRunner getInstance(NLPTasks tasks) {
-        NLPTask config = tasks.getTask(ConfigKeys.maintask);
+    public static AdaptableCPEDescriptorRunner getInstance(TasksInf tasks) {
+        TaskInf config = tasks.getTask(ConfigKeys.maintask);
         String cpeDescriptor = config.getValue("pipeLineSetting/CpeDescriptor");
         LinkedHashMap<String, String> componentsSettings = readPipelineConfigurations(config.getChildSettings("pipeLineSetting"));
         String annotator = config.getValue(ConfigKeys.annotator);

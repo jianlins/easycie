@@ -2,7 +2,7 @@ package edu.utah.bmi.nlp.easycie
 
 import edu.utah.bmi.nlp.easycie.core.ConfigKeys
 import edu.utah.bmi.nlp.easycie.core.SettingOper
-import edu.utah.bmi.nlp.easycie.entry.TasksFX
+import edu.utah.bmi.nlp.core.TasksInf
 import edu.utah.bmi.nlp.easycie.tasks.Import
 import edu.utah.bmi.nlp.easycie.tasks.RunCPEDescriptorTask
 import edu.utah.bmi.nlp.sql.EDAO
@@ -18,7 +18,6 @@ class TestPipeline {
     @Test
     @Order(1)
     fun testImport() {
-        kotlin.io.println("set configs")
         val settingOper = SettingOper(easycieXML.path)
         tasks = settingOper.readSettings()
         val importer = Import(tasks, "txt")
@@ -35,8 +34,8 @@ class TestPipeline {
         assert(numDocs.equals(2))
     }
 
-//    @Test
-//    @Order(2)
+    @Test
+    @Order(2)
     fun processPipeline() {
         tasks.getTask(ConfigKeys.maintask).setValue(ConfigKeys.annotator, "test_run")
         val runTask = RunCPEDescriptorTask(tasks)
@@ -66,7 +65,7 @@ class TestPipeline {
         private val projectDri = File("target/generated-test-sources/test_app")
         private val projectName = "test_project"
         private var easycieXML = File(projectDri, "conf/" + projectName + "/test_project_config.xml")
-        lateinit var tasks: TasksFX
+        lateinit var tasks: TasksInf
         lateinit var dao: EDAO
 
         @BeforeAll

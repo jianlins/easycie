@@ -1,7 +1,12 @@
 package edu.utah.bmi.nlp.easycie.entry;
 
 
+import edu.utah.bmi.nlp.core.SettingAb;
 
+/**
+ * The Setting class represents a setting with a name, value, description, double click action, and open click action.
+ * It implements the SettingAb interface.
+ */
 public class Setting implements SettingAb {
     protected StrProperty settingName;
 

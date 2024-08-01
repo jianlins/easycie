@@ -26,15 +26,16 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Date;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Jianlin Shi on 9/20/16.
+ * The EDAO class represents the DataAccessObject for interacting with a database.
  */
 public class EDAO {
     public static Logger logger = IOUtil.getLogger(EDAO.class);
-    public static HashMap<String, EDAO> instances = new HashMap<>();
+    public static ConcurrentHashMap<String, EDAO> instances = new ConcurrentHashMap<>();
     private static EDAO lastInstance;
     @Deprecated
     public boolean debug = false;
@@ -78,7 +79,17 @@ public class EDAO {
         return getInstance(configFile, initiateTables, overwriteExistingTables, true);
     }
 
+    /**
+     * Retrieves an instance of EDAO with the provided configuration file and options.
+     *
+     * @param configFile                 The configuration file for the EDAO instance
+     * @param initiateTables             Indicates whether to initiate tables
+     * @param overwriteExistingTables    Indicates whether to overwrite existing tables
+     * @param concurUpdatable            Indicates whether concurrent updates are enabled
+     * @return An instance of EDAO
+     */
     public static EDAO getInstance(File configFile, boolean initiateTables, boolean overwriteExistingTables, boolean concurUpdatable) {
+
         String key = configFile.getAbsolutePath();
         try {
             if (!instances.containsKey(key)
@@ -128,11 +139,20 @@ public class EDAO {
         initConnection(configFile, initiateTables, overwriteExistingTables, concurUpdatable);
     }
 
+    /**
+     * Initializes the database connection.
+     *
+     * @param configFile              The configuration file for the database.
+     * @param initiateTables          Flag indicating whether to initiate tables.
+     * @param overwriteExistingTables Flag indicating whether to overwrite existing tables.
+     * @param concurUpdatable         Flag indicating whether the connection supports concurrent updates.
+     */
     protected void initConnection(File configFile, boolean initiateTables, boolean overwriteExistingTables, boolean concurUpdatable) {
 
         this.configFile = configFile;
         if (!configFile.exists()) {
-            throw new Error("db configure file: " + configFile.getAbsolutePath() + " doesn't exist.");
+            logger.warning("db configure file: " + configFile.getAbsolutePath() + " doesn't exist.");
+            return;
         }
         configReader = ConfigReaderFactory.createConfigReader(configFile);
         server = (String) configReader.getValue("server");
@@ -213,7 +233,7 @@ public class EDAO {
                 createTableTemplates.put(templateName, sqls);
 //                add insert sql
                 if (!values.containsKey("insert")) {
-                    System.err.println("Template " + templateName + " hasn't set up insert sql template.");
+                    logger.warning("Template " + templateName + " hasn't set up insert sql template.");
                     continue;
                 }
                 String insertTemplate = fillVariables((String) values.get("insert"));
@@ -317,7 +337,7 @@ public class EDAO {
                     queries.put("checkTableExists", sql);
                 }
             } else {
-                System.err.println("'checkTableExists' hasn't been set up yet. You need to add it into 'queryStatements'.");
+                logger.warning("'checkTableExists' hasn't been set up yet. You need to add it into 'queryStatements'.");
             }
         }
     }
@@ -398,6 +418,7 @@ public class EDAO {
             boolean tableExist = checkTableExits(tableName);
             if (tableExist) {
                 parseSQLColumnInfor(tableName, sql, insertTableColumnInfo);
+                sql = cleanMappedValues(sql);
                 addInsertPreparedStatement(tableName, sql, returnKey);
                 if (returnKey != null)
                     insertReturnEnabledTables.put(tableName, (String) returnKey);
@@ -405,6 +426,11 @@ public class EDAO {
             }
         }
 
+    }
+
+    private String cleanMappedValues(String insertSQL) {
+        String cleanedSQL = insertSQL.replaceAll("\\{\\w+\\}", "?");
+        return cleanedSQL;
     }
 
 
@@ -426,7 +452,7 @@ public class EDAO {
         for (int i = 0; i < columns.length; i++) {
             String column = columns[i].trim();
             String para = paras[i];
-            if (!para.equals("?"))
+            if (!para.equals("?") && !(para.startsWith("{") && para.endsWith("}")))
                 continue;
             if (column.startsWith("'") && column.endsWith("'"))
                 column.substring(1, column.length() - 1);
@@ -434,7 +460,11 @@ public class EDAO {
                 column.substring(1, column.length() - 1);
             else if (column.startsWith("\"") && column.endsWith("\""))
                 column.substring(1, column.length() - 1);
-            insertColumnInfo.addColumnInfo(column, tableColumnInfor.getColumnType(column));
+            if (para.startsWith("{") && para.endsWith("}")) {
+                insertColumnInfo.addColumnInfo(column, para.substring(1, para.length() - 1), tableColumnInfor.getColumnType(column));
+            } else {
+                insertColumnInfo.addColumnInfo(column, tableColumnInfor.getColumnType(column));
+            }
         }
         tableColumnInfo.put(tableName, insertColumnInfo);
         return insertColumnInfo;
@@ -449,17 +479,17 @@ public class EDAO {
                         if (insertPreparedStatements.containsKey(tableName)) {
                             insertPreparedStatements.get(tableName).clearBatch();
                             insertPreparedStatements.get(tableName).close();
-//                            System.out.println(insertPreparedStatements.get(tableName).isClosed());
+//                            logger.info(insertPreparedStatements.get(tableName).isClosed());
                         }
                         if (queryPreparedStatements.containsKey(tableName))
-                            System.out.println(queryPreparedStatements.get(tableName).isClosed());
+                            logger.info("The prepared query statement for tableName is close: "+queryPreparedStatements.get(tableName).isClosed());
 
                         stmt.execute(sql);
                         if (!con.getAutoCommit())
                             con.commit();
                     }
                 } else {
-                    System.out.println("The sql to create table: " + tableName + " hasn't been set up.");
+                    logger.info("The sql to create table: " + tableName + " hasn't been set up.");
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -467,11 +497,11 @@ public class EDAO {
 
 //			try {
 //				if (dropPreparedStatements.containsKey(tableName)) {
-//					System.out.println(tableName + "exists, drop it.");
+//					logger.info(tableName + "exists, drop it.");
 //					dropPreparedStatements.get(tableName).execute();
 //					con.commit();
 //				} else {
-//					System.out.println("The sql to drop table: " + tableName + " hasn't been set up.");
+//					logger.info("The sql to drop table: " + tableName + " hasn't been set up.");
 //				}
 //			} catch (SQLException e) {
 //				e.printStackTrace();
@@ -498,7 +528,7 @@ public class EDAO {
                         con.commit();
                 }
             } else {
-                System.out.println("The sql to create table: " + tableName + " hasn't been set up.");
+                logger.info("The sql to create table: " + tableName + " hasn't been set up.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -527,6 +557,7 @@ public class EDAO {
             if (returnKey != null)
                 insertReturnEnabledTables.put(tableName, returnKey);
             parseSQLColumnInfor(tableName, insertSQL, insertTableColumnInfo);
+            insertSQL = cleanMappedValues(insertSQL);
             addInsertPreparedStatement(tableName, insertSQL, returnKey);
         }
         if (queryTemplates.containsKey(templateName)) {
@@ -537,6 +568,7 @@ public class EDAO {
                 pstms = con.prepareStatement(sql);
                 queryPreparedStatements.put(tableName, pstms);
             } catch (SQLException e) {
+                logger.warning("Error thrown while trying initiate "+templateName+" template for table "+tableName);
                 e.printStackTrace();
             }
 
@@ -555,7 +587,7 @@ public class EDAO {
                         con.commit();
                 }
             } else {
-                System.out.println("The sql to create table: " + tableName + " hasn't been set up.");
+                logger.info("The sql to create table: " + tableName + " hasn't been set up.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -564,7 +596,7 @@ public class EDAO {
 
     public void initiateTables(boolean overwrite) {
         for (String tableName : createTableSQLs.keySet()) {
-//            System.out.println("create table: " + tableName);
+//            logger.info("create table: " + tableName);
             initiateTable(tableName, overwrite);
         }
     }
@@ -577,7 +609,7 @@ public class EDAO {
 
             int columnCount = metaData.getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
-//                System.out.println(metaData.getColumnName(i)+'\t'+metaData.getColumnLabel(i));
+//                logger.info(metaData.getColumnName(i)+'\t'+metaData.getColumnLabel(i));
                 String type = metaData.getColumnTypeName(i).toLowerCase();
                 if (con.getMetaData().getDriverName().toLowerCase().contains("oracle") && type.toLowerCase().equals("date")) {
                     type = "datetime";
@@ -625,7 +657,7 @@ public class EDAO {
         RecordRowIterator recordIterator = null;
         ColumnInfo metaData = null;
         try {
-//            System.out.println(sql);
+//            logger.info(sql);
             sql = fillVariables(sql);
             ResultSet rs = stmt.executeQuery(sql);
             metaData = getResultSetMetaData(rs);
@@ -647,7 +679,7 @@ public class EDAO {
         RecordRowIterator recordIterator = null;
         ColumnInfo metaData = null;
         try {
-//            System.out.println(sql);
+//            logger.info(sql);
             if (queryPreparedStatements.containsKey(queryName)) {
                 PreparedStatement queryStmt = queryPreparedStatements.get(queryName);
                 setPstmtValues(queryStmt, values);
@@ -684,7 +716,7 @@ public class EDAO {
                     e.printStackTrace();
                 }
             } else {
-                System.out.println("Query SQL: '" + queryName + "' has not been configured.");
+                logger.info("Query SQL: '" + queryName + "' has not been configured.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -732,7 +764,7 @@ public class EDAO {
             if (preparedStatements.containsKey(databaseName + "." + tableName)) {
                 return preparedStatements.get(databaseName + "." + tableName);
             } else
-                System.err.println(preparedStatements.getClass().getSimpleName() + " for table: " + tableName + " hasn't been set up.");
+                logger.warning(preparedStatements.getClass().getSimpleName() + " for table: " + tableName + " hasn't been set up.");
         }
         return preparedStatements.get(tableName);
     }
@@ -748,6 +780,8 @@ public class EDAO {
             int columnId = columnInfo.getColumnId(columnName);
             Object value = null;
             if (record.getColumnNameValues().size() > 0) {
+                if (columnInfo.isMappabelColumn(columnName))
+                    columnName = columnInfo.getMappedRecordColumn(columnName);
                 value = record.getValueByColumnName(columnName);
             } else if (record.getColumnIdsValues().size() > 0) {
                 value = record.getValueByColumnId(columnId);
@@ -794,8 +828,10 @@ public class EDAO {
                 String columnName = columnNameType.getKey();
                 int columnId = columnInfo.getColumnId(columnName);
                 String type = columnNameType.getValue();
+                if (columnInfo.isMappabelColumn(columnName))
+                    columnName = columnInfo.getMappedRecordColumn(columnName);
                 Object value = recordRow.getValueByColumnName(columnName);
-//                System.out.println(columnName + "\t" + type+"\t"+(value!=null?value.getClass():null));
+//                logger.info(columnName + "\t" + type+"\t"+(value!=null?value.getClass():null));
                 if (con.getMetaData().getDriverName().toLowerCase().contains("oracle") && type.toLowerCase().equals("datetime")) {
                     type = "date";
                 }
@@ -856,7 +892,7 @@ public class EDAO {
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Pseudo insert records....");
             for (RecordRow record : records)
-                System.out.println(record.toString("\t") + "\n");
+                logger.info(record.toString("\t") + "\n");
 
             return;
         }
@@ -905,7 +941,7 @@ public class EDAO {
     private void setPstmtValue(PreparedStatement insertPstmt, Integer key, Object value) {
         try {
             if (value != null) {
-//                System.out.println(key+"\t"+value);
+//                logger.info(key+"\t"+value);
                 insertPstmt.setObject(key, value);
             } else {
                 insertPstmt.setNull(key, Types.NULL);
@@ -920,7 +956,7 @@ public class EDAO {
             for (int i = 0; i < values.length; i++) {
                 Object value = values[i];
                 if (value != null) {
-//                System.out.println(key+"\t"+value);
+//                logger.info(key+"\t"+value);
                     insertPstmt.setObject(i + 1, value);
                 } else {
                     insertPstmt.setNull(i + 1, Types.NULL);
@@ -982,7 +1018,7 @@ public class EDAO {
     public boolean checkTableExits(String tableName) {
 //        bypass sqlite jdbc bug
         try {
-//            System.out.println(con.getMetaData().getDriverName());
+//            logger.info(con.getMetaData().getDriverName());
             if (con.getMetaData().getDriverName().toLowerCase().startsWith("sqlite")) {
                 return checkExists(tableName);
             }

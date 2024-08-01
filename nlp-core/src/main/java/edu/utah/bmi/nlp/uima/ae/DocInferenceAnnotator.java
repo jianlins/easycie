@@ -125,6 +125,7 @@ public class DocInferenceAnnotator extends JCasAnnotator_ImplBase implements Rul
 
     protected ArrayList<ArrayList<String>> ruleCells = new ArrayList<>();
 
+    @Deprecated
     protected HashMap<String, Constructor<? extends Annotation>> docTypeConstructorMap = new HashMap<>();
 
     protected HashMap<Class<? extends Annotation>, IntervalST<Annotation>> evidenceAnnotationTree = new HashMap<>();
@@ -357,8 +358,8 @@ public class DocInferenceAnnotator extends JCasAnnotator_ImplBase implements Rul
     protected void addFeatureSeparatedDocAnnotation(JCas jCas, Span span, String resultTypeShortName, AnnotationDefinition conclusionDef,
                                                     Constructor<? extends Annotation> docTypeConstructor,
                                                     HashMap<String, Method> conclusionSetFeatures) {
-        Annotation docAnnotation = AnnotationOper.createAnnotation(jCas, conclusionDef, docTypeConstructor,
-                span.getBegin(), span.getEnd(), conclusionSetFeatures);
+        Annotation docAnnotation = AnnotationOper.createAnnotation(jCas, conclusionDef, conceptClassMap.get(resultTypeShortName),
+                span.getBegin(), span.getEnd());
         docAnnotation.addToIndexes();
     }
 

@@ -415,8 +415,8 @@ public class FeatureAnnotationInferencer implements FeatureInferencerInf {
             AnnotationDefinition conclusionDef = AnnotationOper.createConclusionAnnotationDefinition(conclusionAnnotationDefinition,
                     evidenceConceptGetFeatures, uniqueFeatureClassMap, Arrays.asList(new Annotation[]{evidenceAnnotation}), typeDefinitions);
             String resultTypeShortName = conclusionAnnotationDefinition.getShortTypeName();
-            anno = AnnotationOper.createAnnotation(jcas, conclusionDef, conceptTypeConstructors.get(resultTypeShortName),
-                    evidenceAnnotation.getBegin(), evidenceAnnotation.getEnd(), conclusionConceptSetFeatures.get(conceptClassMap.get(resultTypeShortName)));
+            anno = AnnotationOper.createAnnotation(jcas, conclusionDef, conceptClassMap.get(resultTypeShortName),
+                    evidenceAnnotation.getBegin(), evidenceAnnotation.getEnd());
 //            System.out.println(anno.getClass());
 //            System.out.println(conceptClassMap.get(resultTypeShortName).isInstance(anno));
 //            System.out.println(AnnotationOper.getTypeClass(DeterminantValueSet.checkNameSpace("ADE3")).isInstance(anno));

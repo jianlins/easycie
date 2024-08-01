@@ -1,7 +1,6 @@
 package edu.utah.bmi.nlp.core;
 
 
-
 public class Setting implements SettingAb {
     protected String settingName;
 
@@ -21,10 +20,22 @@ public class Setting implements SettingAb {
 
     public void init(String settingName, String settingValue, String settingDesc, String doubleClick, String openClick) {
         this.settingName = new String(settingName);
-        this.settingValue = new String(settingValue);
-        this.settingDesc = new String(settingDesc);
-        this.doubleClick = new String(doubleClick);
-        this.openClick = new String(openClick);
+        if (settingValue != null) {
+            this.settingValue = new String(settingValue);
+        } else
+            this.settingValue = "";
+        if (settingDesc != null)
+            this.settingDesc = new String(settingDesc);
+        else
+            this.settingDesc = null;
+        if (doubleClick != null)
+            this.doubleClick = new String(doubleClick);
+        else
+            this.doubleClick = null;
+        if (openClick != null)
+            this.openClick = new String(openClick);
+        else
+            this.openClick = null;
     }
 
     public String getSettingName() {
@@ -56,8 +67,8 @@ public class Setting implements SettingAb {
         return this.settingValue;
     }
 
-    public void setSettingValue(String settingValue){
-        this.settingValue=new String(settingValue);
+    public void setSettingValue(String settingValue) {
+        this.settingValue = new String(settingValue);
     }
 
     public String settingDescProperty() {

@@ -217,8 +217,8 @@ public class BunchMixInferencer extends JCasAnnotator_ImplBase implements RuleBa
             }
             annoDef.setFeatureValue("Note", evidence.replaceAll(",", "+"));
         }
-        Annotation conclusion = AnnotationOper.createAnnotation(previousJCas, annoDef, this.bunchTypeConstructorMap.get(typeName),
-                position.getBegin(), position.getEnd(), this.conclusionAnnotationSetFeatures.get(conclucionClassMap.get(typeName)));
+        Annotation conclusion = AnnotationOper.createAnnotation(previousJCas, annoDef, conclucionClassMap.get(typeName),
+                position.getBegin(), position.getEnd());
         conclusion.addToIndexes();
     }
 

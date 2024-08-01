@@ -15,6 +15,12 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This class represents a runner for executing Adaptable UIMA CPE (Collection Processing Engine) tasks.
+ * It extends the Adaptable UIMA CPE runner class.
+ *
+ * @deprecated This class is deprecated and should not be used. Consider using the AdaptableCPEDescriptorRunner class instead.
+ */
 @Deprecated
 public class AdaptableUIMACPETaskJCasRunner extends AdaptableUIMACPERunner {
 

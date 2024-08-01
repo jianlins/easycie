@@ -16,8 +16,11 @@
 
 package edu.utah.bmi.nlp.core;
 
-import java.util.*;
 
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
 /**
  * A class that holds all the information needed to define a new Type from a parent Type.
  * Use to dynamically generate annotations
@@ -136,6 +139,8 @@ public class TypeDefinition implements Comparable<TypeDefinition>, Cloneable {
 
     @Override
     public int compareTo(TypeDefinition o) {
+        if (o==null)
+            return 0;
         if (!this.fullTypeName.equals(o.fullTypeName))
             return 1;
         if (!this.fullSuperTypeName.equals(o.fullSuperTypeName))
@@ -153,8 +158,6 @@ public class TypeDefinition implements Comparable<TypeDefinition>, Cloneable {
     }
 
     public String toString() {
-        ArrayList<String> featureNames = new ArrayList<>();
-        featureNames.addAll(getNewFeatureNames());
-        return getFullTypeName() + " <" + getFullSuperTypeName() + ">:\t" + featureNames;
+        return this.fullTypeName;
     }
 }

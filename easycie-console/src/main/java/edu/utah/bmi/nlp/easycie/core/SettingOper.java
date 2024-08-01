@@ -1,8 +1,10 @@
 package edu.utah.bmi.nlp.easycie.core;
 
 
-import edu.utah.bmi.nlp.easycie.entry.TaskFX;
-import edu.utah.bmi.nlp.easycie.entry.TasksFX;
+import edu.utah.bmi.nlp.core.NLPTask;
+import edu.utah.bmi.nlp.core.NLPTasks;
+import edu.utah.bmi.nlp.core.TaskInf;
+import edu.utah.bmi.nlp.core.TasksInf;
 import org.dom4j.Element;
 
 import java.io.File;
@@ -14,11 +16,14 @@ import java.util.Map;
  * Created by Jianlin_Shi on 10/26/15.
  */
 public class SettingOper {
-    private TasksFX tasks = new TasksFX();
-    private File settingFile;
-    private File projectDir;
-    private XMLConfigOper config;
+    private TasksInf tasks = new NLPTasks();
+    protected File settingFile;
+    protected File projectDir;
+    protected XMLConfigOper config;
 
+    protected void SettingOper(){
+        
+    }
 
     public SettingOper(String settingFileName) {
         settingFile = new File(settingFileName);
@@ -31,12 +36,12 @@ public class SettingOper {
         config = new XMLConfigOper(settingFileName);
     }
 
-    public TasksFX readSettings() {
+    public TasksInf readSettings() {
         Element root = config.document.getRootElement();
         for (Iterator t = root.elementIterator(); t.hasNext(); ) {
             Element taskEle = (Element) t.next();
             String taskName = taskEle.getName();
-            TaskFX task = new TaskFX(taskName);
+            TaskInf task = new NLPTask(taskName);
             iterateTaskElement(taskEle, task, "");
             tasks.addTask(task);
         }
@@ -44,13 +49,13 @@ public class SettingOper {
         return tasks;
     }
 
-    private TaskFX genProjectDir(){
-        TaskFX task = new TaskFX("projectDir");
+    protected TaskInf genProjectDir(){
+        TaskInf task = new NLPTask("projectDir");
         task.setValue("projectDir", projectDir.getAbsolutePath());
         return task;
     }
 
-    private void iterateTaskElement(Element taskEle, TaskFX task, String prefix) {
+    protected void iterateTaskElement(Element taskEle, TaskInf task, String prefix) {
         if (prefix.length() > 0)
             prefix = prefix + "/";
         for (Iterator gs = taskEle.elementIterator(); gs.hasNext(); ) {
@@ -98,12 +103,12 @@ public class SettingOper {
         config.save(file);
     }
 
-    public void writeTasks(TasksFX tasks) {
+    public void writeTasks(TasksInf tasks) {
         Element root = config.document.getRootElement();
         for (Iterator t = root.elementIterator(); t.hasNext(); ) {
             Element taskEle = (Element) t.next();
             String taskName = taskEle.getName();
-            TaskFX task = tasks.getTask(taskName);
+            TaskInf task = tasks.getTask(taskName);
             for (Iterator gs = taskEle.elementIterator(); gs.hasNext(); ) {
                 Element group = (Element) gs.next();
                 String groupName = group.getName();

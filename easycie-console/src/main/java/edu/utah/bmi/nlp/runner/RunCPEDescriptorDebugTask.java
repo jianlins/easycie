@@ -2,8 +2,8 @@ package edu.utah.bmi.nlp.runner;
 
 
 import edu.utah.bmi.nlp.easycie.core.ConfigKeys;
-import edu.utah.bmi.nlp.easycie.entry.TaskFX;
-import edu.utah.bmi.nlp.easycie.entry.TasksFX;
+import edu.utah.bmi.nlp.core.TaskInf;
+import edu.utah.bmi.nlp.core.TasksInf;
 import edu.utah.bmi.nlp.uima.AdaptableCPEDescriptorStringDebugger;
 
 import java.util.LinkedHashMap;
@@ -20,7 +20,7 @@ public class RunCPEDescriptorDebugTask  {
     protected LinkedHashMap<String, String> componentsSettings;
     protected LinkedHashMap<String, String> loggerSettings;
     private String cpeDescriptor;
-    private TasksFX tasks;
+    private TasksInf tasks;
     private String inputStr, metaStr;
     private String pipelineName;
 
@@ -29,13 +29,13 @@ public class RunCPEDescriptorDebugTask  {
     }
 
 
-    public RunCPEDescriptorDebugTask(TasksFX tasks) {
+    public RunCPEDescriptorDebugTask(TasksInf tasks) {
         this.tasks = tasks;
     }
 
 
-    protected void initiate(TasksFX tasks) {
-        TaskFX config = tasks.getTask(ConfigKeys.maintask);
+    protected void initiate(TasksInf tasks) {
+        TaskInf config = tasks.getTask(ConfigKeys.maintask);
         annotator = config.getValue(ConfigKeys.annotator);
         String rawStringValue = config.getValue(ConfigKeys.reportAfterProcessing);
         report = rawStringValue.length() > 0 && (rawStringValue.charAt(0) == 't' || rawStringValue.charAt(0) == 'T' || rawStringValue.charAt(0) == '1');

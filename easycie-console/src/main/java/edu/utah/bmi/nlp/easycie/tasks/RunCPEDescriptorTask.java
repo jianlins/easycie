@@ -4,12 +4,11 @@ package edu.utah.bmi.nlp.easycie.tasks;
 import edu.utah.bmi.nlp.core.DeterminantValueSet;
 import edu.utah.bmi.nlp.easycie.core.ConfigKeys;
 import edu.utah.bmi.nlp.easycie.entry.EasyCIETask;
-import edu.utah.bmi.nlp.easycie.entry.SettingAb;
-import edu.utah.bmi.nlp.easycie.entry.TaskFX;
-import edu.utah.bmi.nlp.easycie.entry.TasksFX;
+import edu.utah.bmi.nlp.core.SettingAb;
+import edu.utah.bmi.nlp.core.TaskInf;
+import edu.utah.bmi.nlp.core.TasksInf;
 import edu.utah.bmi.nlp.easycie.reader.SQLTextReader;
 import edu.utah.bmi.nlp.easycie.writer.SQLWriterCasConsumer;
-import edu.utah.bmi.nlp.sql.EDAO;
 import edu.utah.bmi.nlp.uima.AdaptableCPEDescriptorRunner;
 import edu.utah.bmi.nlp.uima.BunchMixInferenceWriter;
 import edu.utah.bmi.nlp.uima.loggers.NLPDBConsoleLogger;
@@ -42,7 +41,7 @@ public class RunCPEDescriptorTask extends EasyCIETask {
     public AdaptableCPEDescriptorRunner runner;
     protected LinkedHashMap<String, String> componentsSettings;
     private String cpeDescriptor;
-    protected TasksFX tasks;
+    protected TasksInf tasks;
     private File appDir;
 
 
@@ -50,15 +49,15 @@ public class RunCPEDescriptorTask extends EasyCIETask {
 
     }
 
-    public RunCPEDescriptorTask(TasksFX tasks) {
+    public RunCPEDescriptorTask(TasksInf tasks) {
         this.tasks = tasks;
     }
 
-    public RunCPEDescriptorTask(TasksFX tasks, String paras) {
+    public RunCPEDescriptorTask(TasksInf tasks, String paras) {
         this.tasks = tasks;
     }
 
-    protected void initiate(TasksFX tasks, String option) {
+    protected void initiate(TasksInf tasks, String option) {
         if (System.getProperty("java.util.logging.config.file") == null &&
                 new File("logging.properties").exists()) {
             System.setProperty("java.util.logging.config.file", "logging.properties");
@@ -79,10 +78,10 @@ public class RunCPEDescriptorTask extends EasyCIETask {
         if (tasks.getTask("projectDir") != null)
             appDir = new File(tasks.getTask("projectDir").getValue("projectDir"));
 
-        System.out.println("AppDir: " + appDir.getAbsolutePath());
+        logger.fine("AppDir: " + appDir.getAbsolutePath());
 
         updateGUIMessage("Initiate configurations..");
-        TaskFX config = tasks.getTask(ConfigKeys.maintask);
+        TaskInf config = tasks.getTask(ConfigKeys.maintask);
         cpeDescriptor = config.getValue("pipeLineSetting/CpeDescriptor");
         componentsSettings = readPipelineConfigurations(config.getChildSettings("pipeLineSetting"));
 
@@ -106,13 +105,13 @@ public class RunCPEDescriptorTask extends EasyCIETask {
         readerDBConfigFileName = adjustConfigPath(appDir, readerDBConfigFileName);
         writerDBConfigFileName = adjustConfigPath(appDir, writerDBConfigFileName);
 //        updateReaderDBConfig(componentsSettings, readerDBConfigFileName, cpeDescriptor);
-        updateWriterDBConfig(componentsSettings, writerDBConfigFileName);
+//        updateWriterDBConfig(componentsSettings, writerDBConfigFileName);
         runner = AdaptableCPEDescriptorRunner.getInstance(cpeDescriptor, annotator, new NLPDBConsoleLogger(writerDBConfigFileName, annotator),
                 componentsSettings, "desc/type/" + pipelineName + "_" + annotator + "_Type.xml", "classes");
         ((NLPDBConsoleLogger) runner.getLogger()).setReportable(report);
         ((NLPDBConsoleLogger) runner.getLogger()).setTask(this);
         updateReaderConfigurations(runner);
-//        updateWriterConfigurations(runner);
+        updateWriterConfigurations(runner);
     }
 
     private void updateReaderDBConfig(LinkedHashMap<String, String> componentsSettings, String readerDBConfigFileName, String cpeDescriptor) {

@@ -45,9 +45,12 @@ import java.util.*;
 import static edu.utah.bmi.nlp.core.DeterminantValueSet.defaultSuperTypeName;
 
 /**
- * @author Jianlin Shi
- * Created on 7/9/16.
+ * The AdaptableUIMACPERunner class represents a runner for UIMA CPE (Collection Processing Engine) pipeline. It allows the user
+ * to configure and run multiple analysis engines in a UIMA pipeline.
+ *
+ * @deprecated This class is deprecated and will be removed in future versions. Use AdaptableCPEDescriptorRunner instead.
  */
+@Deprecated
 public class AdaptableUIMACPERunner {
     protected CollectionReaderDescription reader;
     protected ArrayList<AnalysisEngineDescription> analysisEngineDescriptors = new ArrayList<>();
