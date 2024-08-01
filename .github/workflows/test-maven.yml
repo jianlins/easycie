@@ -34,3 +34,4 @@ jobs:
         ls ~/.m2
         cat ~/.m2/settings.xml
         gpg --list-keys
+        mvn clean package
