@@ -1,4 +1,4 @@
-name: Publish jdk8 Branch
+name: Publish jdk8
 
 on:
   workflow_dispatch
@@ -36,6 +36,10 @@ jobs:
         ls *.xml*
         head -c 500 pom.xml
         mvn -N versions:update-child-modules
+
+    - name: debug build
+      run: |
+        mvn -pl nlp-ext -am test
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
