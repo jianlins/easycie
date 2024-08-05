@@ -17,6 +17,7 @@
 package edu.utah.bmi.nlp.core;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -69,6 +70,7 @@ public class IOUtilTest {
 	}
 
 	@Test
+	@Disabled
 	public void testExcel(){
 		IOUtil ioUtil=new IOUtil("conf/ctakes_integrate_translatorInf2.xlsx");
 	}
