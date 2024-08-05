@@ -1,7 +1,13 @@
 name: Publish jdk8
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      pkg_version:
+        description: 'set the publish version'
+        type: string
+        required: false
+        default: '2.0.0.0-jdk8-SNAPSHOT'
 
 jobs:
   build:
@@ -31,7 +37,7 @@ jobs:
 
     - name: change version to jdk8
       run: |        
-        mvn versions:set -DnewVersion=2.0.0.0-jdk8-SNAPSHOT
+        mvn versions:set -DnewVersion=${{ github.event.inputs.pkg_version  }}
         ls *.xml*
         head -c 500 pom.xml
         
