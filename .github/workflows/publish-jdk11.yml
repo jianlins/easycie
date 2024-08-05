@@ -33,8 +33,8 @@ jobs:
         sed -i 's/-jdk8<\/version>/-jdk11<\/version>/g' pom.xml
         sed -i 's/-jdk8-SNAPSHOT<\/version>/-jdk11-SNAPSHOT<\/version>/g' pom.xml
         ls *.xml*
-        cat pom.xml
-        mvn versions:update-child-modules -DallowSnapshots=true
+        head -c 500 pom.xml
+        mvn -N versions:update-child-modules
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
