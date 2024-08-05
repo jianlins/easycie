@@ -36,12 +36,16 @@ import static edu.utah.bmi.nlp.core.DeterminantValueSet.checkNameSpace;
 import static edu.utah.bmi.nlp.uima.ae.DocInferenceAnnotator.*;
 
 /**
- * Allows the inference based on multiple document types.
+ * Allows the inference based on multiple document types. This implementation keep track of previous bunch document, and doing
+ * inference when bunchId changes or reach the end of the dataset. The document-level annotations of previous bunch were stored
+ * using previousJCas and  previousRecordRow.
+ * This implementation might have not been fully tested.
  * Rule format:
  * Question name    Bunch Conclusion Type   Evidence Type 1, Evidence Type 2...
  */
-public class BunchMixInferencer extends JCasAnnotator_ImplBase implements RuleBasedAEInf {
-    public static Logger logger = IOUtil.getLogger(BunchMixInferencer.class);
+@Deprecated
+public class BunchMixInferencerTmp extends JCasAnnotator_ImplBase implements RuleBasedAEInf {
+    public static Logger logger = IOUtil.getLogger(BunchMixInferencerTmp.class);
     public static final String PARAM_BUNCH_COLUMN_NAME = "BunchColumnName";
     public static final String PARAM_RULE_STR = DeterminantValueSet.PARAM_RULE_STR;
     public static final String PARAM_ANNO_POSITION = "AnnotatePosition";
@@ -74,6 +78,7 @@ public class BunchMixInferencer extends JCasAnnotator_ImplBase implements RuleBa
     protected Pattern pattern = Pattern.compile("^\\s*(\\w+)");
 
     public void initialize(UimaContext cont) {
+
         Object parameterObject = cont.getConfigParameterValue(PARAM_BUNCH_COLUMN_NAME);
         bunchColumnName = parameterObject != null && parameterObject.toString().trim().length() > 0 ? (String) parameterObject : "BUNCH_ID";
 

@@ -79,9 +79,14 @@ public class RunCPEDescriptorTask {
         snippetResultTable = config.getValue(ConfigKeys.snippetResultTableName);
         docResultTable = config.getValue(ConfigKeys.docResultTableName);
         bunchResultTable = config.getValue(ConfigKeys.bunchResultTableName);
+//      allow log table to be configurable from project configuration file.
+        String tableName=config.getValue(ConfigKeys.logTableName,"LOG");
+        String keyColumnName=config.getValue(ConfigKeys.keyColumnName,"RUN_ID");
+        int maxCommentLength=Integer.parseInt(config.getValue(ConfigKeys.maxCommentLength, "-1").trim());
         String pipelineName = new File(cpeDescriptor).getName();
         pipelineName = pipelineName.substring(0, pipelineName.length() - 4);
-        runner = AdaptableCPEDescriptorRunner.getInstance(cpeDescriptor, annotator, new NLPDBConsoleLogger(writerDBConfigFileName, annotator),
+        runner = AdaptableCPEDescriptorRunner.getInstance(cpeDescriptor, annotator,
+                new NLPDBConsoleLogger(writerDBConfigFileName, tableName, keyColumnName, annotator, maxCommentLength),
                 componentsSettings, "desc/type/" + pipelineName + "_" + annotator + "_Type.xml", "classes");
         ((NLPDBConsoleLogger) runner.getLogger()).setReportable(report);
         updateReaderConfigurations(runner);
@@ -97,18 +102,6 @@ public class RunCPEDescriptorTask {
 
 
     protected void updateWriterConfigurations(AdaptableCPEDescriptorRunner runner) {
-//        if (CPEFactory.lastCpeDescriptorUrl.length() > 0 ||
-//                new File(CPEFactory.lastCpeDescriptorUrl).getAbsolutePath().equals(new File(cpeDescriptor).getAbsolutePath())) {
-//            for (int writerId : runner.getWriterIds().values()) {
-//                runner.updateCpeProcessorConfiguration(writerId, DeterminantValueSet.PARAM_DB_CONFIG_FILE, writerDBConfigFileName);
-//                runner.updateCpeProcessorConfiguration(writerId, DeterminantValueSet.PARAM_VERSION, runner.getLogger().getRunid() + "");
-//                runner.updateCpeProcessorConfiguration(writerId, DeterminantValueSet.PARAM_ANNOTATOR, annotator);
-//                runner.updateCpeProcessorConfiguration(writerId, SQLWriterCasConsumer.PARAM_SNIPPET_TABLENAME, snippetResultTable);
-//                runner.updateCpeProcessorConfiguration(writerId, SQLWriterCasConsumer.PARAM_DOC_TABLENAME, docResultTable);
-//                runner.updateCpeProcessorConfiguration(writerId, BunchMixInferenceWriter.PARAM_TABLENAME, bunchResultTable);
-//            }
-//        } else {
-//        changed to the compiled processors will be handled in cached CPEFactory
         for (int writerId : runner.getWriterIds().values()) {
             runner.updateDescriptorConfiguration(writerId, DeterminantValueSet.PARAM_DB_CONFIG_FILE, writerDBConfigFileName);
             runner.updateDescriptorConfiguration(writerId, DeterminantValueSet.PARAM_VERSION, runner.getLogger().getRunid() + "");

@@ -23,6 +23,18 @@ import java.io.File;
 import java.util.*;
 import java.util.logging.Logger;
 
+
+ /**
+ * The BunchInferencer class extends the JCasAnnotator_ImplBase and implements the RuleBasedAEInf interface.
+ * This class is primarily used for performing inference operations.
+ * While this class hasn't been fully tested and is therefore considered deprecated, it holds methods to parse rules, process a JCas object,
+ * initialize with user-provided parameters, and evaluate visit counts. It carries out these operations using maps for
+ * inference, counters, and feature values, along with other class fields like result table name. Because the "static" keyword is used,
+ * these class fields are more like global variables and should be avoided in new code.
+ *
+ * @deprecated This class is not fully tested and should only be used after revision and testing.
+ */
+@Deprecated
 public class BunchInferencer extends JCasAnnotator_ImplBase implements RuleBasedAEInf {
     public static Logger logger = IOUtil.getLogger(BunchInferencer.class);
     public static final String PARAM_SQLFILE = "DBConfigFile";

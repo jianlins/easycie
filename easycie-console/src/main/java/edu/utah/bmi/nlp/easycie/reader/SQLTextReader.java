@@ -21,9 +21,10 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
- * This class is  fixed to column names, record identifier is "filename", and the xmi column is "xmi"
+ * In order to integrate metadata into document level reasoning, use  SQLMetaTextReader instead
  *
- * @author Jianlin Shi on 5/20/16.
+ * @see edu.utah.bmi.nlp.easycie.reader.SQLMetaTextReader
+ *
  */
 public class SQLTextReader extends CollectionReader_ImplBase {
     public static Logger logger = Logger.getLogger(SQLTextReader.class.getCanonicalName());
@@ -62,7 +63,7 @@ public class SQLTextReader extends CollectionReader_ImplBase {
             e.printStackTrace();
         }
         dbConfigFile = new File(readConfigureString(PARAM_DB_CONFIG_FILE, null));
-        System.out.println("read db config: "+dbConfigFile);
+        logger.info("read db config: "+dbConfigFile);
         dao = EDAO.getInstance(this.dbConfigFile);
         querySqlName = readConfigureString(PARAM_QUERY_SQL_NAME, "masterInputQuery");
         countSqlName = readConfigureString(PARAM_COUNT_SQL_NAME, "masterCountQuery");
@@ -88,8 +89,7 @@ public class SQLTextReader extends CollectionReader_ImplBase {
 
     protected void addDocs() {
         totalDocs = dao.countRecords(countSqlName, docTableName, datasetId);
-        if (logger.isLoggable(Level.INFO))
-            System.out.println("Total documents need to be processed: " + totalDocs);
+        logger.info("Total documents need to be processed: " + totalDocs);
         recordIterator = dao.queryRecordsFromPstmt(querySqlName, docTableName, datasetId);
     }
 

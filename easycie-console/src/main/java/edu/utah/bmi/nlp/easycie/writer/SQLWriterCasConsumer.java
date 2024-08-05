@@ -85,7 +85,7 @@ public class SQLWriterCasConsumer extends JCasAnnotator_ImplBase {
         minTextLength = (Integer) readConfigureObject(cont, PARAM_MIN_LENGTH, 0);
         annotator = readConfigureString(cont, PARAM_ANNOTATOR, "uima");
         version = readConfigureString(cont, PARAM_VERSION, null);
-        System.out.println("writer db config file: "+sqlFile);
+        classLogger.info("writer db config file: "+sqlFile);
         dao = EDAO.getInstance(this.sqlFile,true,false);
         dao.batchsize = batchSize;
         dao.initiateTableFromTemplate("ANNOTATION_TABLE", snippetTableName, overwriteTable);

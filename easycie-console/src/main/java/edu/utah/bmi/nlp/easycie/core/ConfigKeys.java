@@ -103,6 +103,10 @@ public class ConfigKeys {
     public static final String snippetResultTableName = "output/snippetResultTable";
     public static final String docResultTableName = "output/docResultTable";
     public static final String bunchResultTableName = "output/bunchResultTable";
+    public static final String logTableName = "output/logTable";
+    public static final String keyColumnName = "output/keyColumnName";
+    public static final String maxCommentLength = "output/maxCommentLength";
+
 
 
     public static final String rushRule = "nlpComponents/rush";

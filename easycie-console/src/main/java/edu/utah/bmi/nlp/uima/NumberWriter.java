@@ -305,7 +305,7 @@ public class NumberWriter extends JCasAnnotator_ImplBase {
 			}
 		}
 		if (sampleSize == 0) {
-			System.out.println(numText + " in document: " + doc_name + "  is not a spelled out number");
+			logger.fine(numText + " in document: " + doc_name + "  is not a spelled out number");
 		}
 		return sampleSize;
 	}

@@ -17,32 +17,8 @@
     <dependencies>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
-            <artifactId>nlp-core</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.utah.bmi.nlp</groupId>
-            <artifactId>fastner</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>2.9.7</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>edu.utah.bmi.nlp</groupId>
-            <artifactId>rush</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>edu.utah.bmi.nlp</groupId>
-            <artifactId>section-detector-r</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>test</scope>
+            <artifactId>easycie-console</artifactId>
+            <version>2.0.0.0-jdk8</version>
         </dependency>
     </dependencies>
 

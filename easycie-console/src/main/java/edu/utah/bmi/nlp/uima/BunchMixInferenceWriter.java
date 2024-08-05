@@ -6,7 +6,7 @@ import edu.utah.bmi.nlp.core.TypeDefinition;
 import edu.utah.bmi.nlp.easycie.core.AnnotationLogger;
 import edu.utah.bmi.nlp.sql.EDAO;
 import edu.utah.bmi.nlp.sql.RecordRow;
-import edu.utah.bmi.nlp.uima.ae.BunchMixInferencer;
+import edu.utah.bmi.nlp.uima.ae.BunchMixInferencerTmp;
 import edu.utah.bmi.nlp.uima.ae.RuleBasedAEInf;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
@@ -24,10 +24,21 @@ import java.util.*;
 import java.util.logging.Logger;
 
 /**
- * Allows the inference based on multiple document types.
+ * Supports inference based on multiple document types. The inference is directly outputted to the database rather than
+ * being saved to JCas as annotations.
+ * <p>
+ * This supports direct inference over document-level annotations stored over time in the 'typeCounter'.
+ * Inference occurs only when 'bunchID' changes or at the end of processing. These results are directly written to the
+ * patient-level results table. This should function alongside SQLWriterCasConsumer, which writes snippet-level and
+ * document-level results to respective tables.
+ * <p>
+ * For more complex logic inferencing, such as inferring a conclusion based on document-level annotation patterns and
+ * certain document-level conclusions, use 'BunchMinInferencer' and 'TrackedSQLWriterCasConsumer' from the 'nlp-ext' module.
+ * <p>
  * Rule format:
  * Question name    Bunch Conclusion Type   Evidence Type 1, Evidence Type 2...
- */
+ **/
+
 public class BunchMixInferenceWriter extends JCasAnnotator_ImplBase implements RuleBasedAEInf {
     public static Logger logger = IOUtil.getLogger(BunchMixInferenceWriter.class);
     public static final String PARAM_SQLFILE = DeterminantValueSet.PARAM_DB_CONFIG_FILE;
@@ -85,7 +96,7 @@ public class BunchMixInferenceWriter extends JCasAnnotator_ImplBase implements R
         dao = EDAO.getInstance(new File(configFile));
 
         dao.initiateTableFromTemplate("ANNOTATION_TABLE", resultTableName, false);
-        BunchMixInferencer.parseRuleStr(inferenceStr, defaultBunchType, inferenceMap, typeCounter, ruleStore);
+        BunchMixInferencerTmp.parseRuleStr(inferenceStr, defaultBunchType, inferenceMap, typeCounter, ruleStore);
     }
 
 //
@@ -204,7 +215,8 @@ public class BunchMixInferenceWriter extends JCasAnnotator_ImplBase implements R
             runId = Integer.parseInt(previousRecordRow.getStrByColumnName("RUN_ID"));
         RecordRow recordRow = new RecordRow()
                 .addCell("RUN_ID", runId)
-                .addCell("DOC_NAME", previousRecordRow.getValueByColumnName(bunchColumnName))
+                .addCell(bunchColumnName, previousRecordRow.getValueByColumnName(bunchColumnName))
+                .addCell("DOC_NAME", previousRecordRow.getValueByColumnName("DOC_NAME"))
                 .addCell("TYPE", typeName)
                 .addCell("ANNOTATOR", annotator)
                 .addCell("BEGIN", 0)
