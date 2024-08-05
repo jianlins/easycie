@@ -29,13 +29,12 @@ jobs:
         gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
 
-    - name: change version to jdk11
-      run: |
-        sed -i 's/-jdk11<\/version>/-jdk8<\/version>/g' pom.xml
-        sed -i 's/-jdk11-SNAPSHOT<\/version>/-jdk8-SNAPSHOT<\/version>/g' pom.xml
+    - name: change version to jdk8
+      run: |        
+        mvn versions:set -DnewVersion=2.0.0.0-jdk8-SNAPSHOT
         ls *.xml*
         head -c 500 pom.xml
-        mvn -N versions:update-child-modules
+        
 
     - name: debug build
       run: |
