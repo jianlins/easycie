@@ -7,3 +7,4 @@ data/*.sqlite
 desc/type/pipeline*.xml
 .DS_Store
 *.sqlite
+edw_*

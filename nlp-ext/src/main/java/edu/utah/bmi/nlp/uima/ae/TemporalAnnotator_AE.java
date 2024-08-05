@@ -60,7 +60,7 @@ import static edu.utah.bmi.nlp.core.NERSpan.scorewidth;
  * @author Jianlin Shi
  */
 public class TemporalAnnotator_AE extends FastCNER_AE_General {
-    public static Logger logger = IOUtil.getLogger(TemporalAnnotator_AE.class);
+    public static Logger logger = IOUtil.getLogger(TemporalAnnotator_AE0.class);
 
     //  specify which type of annotations as the target concept
     public static final String PARAM_SAVE_INFERRED_RECORD_DATE = "SaveInferredRecordDate";

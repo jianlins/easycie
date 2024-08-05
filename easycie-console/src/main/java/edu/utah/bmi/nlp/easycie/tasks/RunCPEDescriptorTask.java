@@ -58,6 +58,7 @@ public class RunCPEDescriptorTask extends EasyCIETask {
     }
 
     protected void initiate(TasksInf tasks, String option) {
+
         if (System.getProperty("java.util.logging.config.file") == null &&
                 new File("logging.properties").exists()) {
             System.setProperty("java.util.logging.config.file", "logging.properties");

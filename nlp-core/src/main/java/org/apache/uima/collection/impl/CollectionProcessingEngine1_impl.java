@@ -36,12 +36,17 @@ import org.apache.uima.util.Progress;
 import java.util.Map;
 import java.util.Properties;
 
+/**
+ * Compared with original CollectionProcessingEngine_impl, this class make mCPM protected so that can be accessed in
+ * subclasses, e.g. OpenCollectionProcessingEngine_impl
+ * @see org.apache.uima.collection.impl.OpenCollectionProcessingEngine_impl
+ */
 
-public class CollectionProcessingEngine_impl implements CollectionProcessingEngine {
+public class CollectionProcessingEngine1_impl implements CollectionProcessingEngine {
     /**
      * CPM instance that handles the processing
      */
-    private BaseCPMImpl mCPM = null;
+    protected BaseCPMImpl mCPM = null;
 
     /*
      * (non-Javadoc)

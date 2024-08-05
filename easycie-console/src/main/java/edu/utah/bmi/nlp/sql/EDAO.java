@@ -550,7 +550,9 @@ public class EDAO {
         } else if (!checkTableExits(tableName)) {
             createTableNIndexes(templateName, tableName);
         }
-        if (insertTemplates.containsKey(templateName)) {
+        if(this.insertPreparedStatements.containsKey(tableName)) {
+            logger.info("The prepared insert statement has been created already for tableName: "+tableName);
+        }else if (insertTemplates.containsKey(templateName)) {
             String insertSQL = insertTemplates.get(templateName);
             insertSQL = insertSQL.replaceAll("\\{tableName}", tableName);
             String returnKey = insertReturnEnabledTables.getOrDefault(templateName, null);
@@ -560,7 +562,9 @@ public class EDAO {
             insertSQL = cleanMappedValues(insertSQL);
             addInsertPreparedStatement(tableName, insertSQL, returnKey);
         }
-        if (queryTemplates.containsKey(templateName)) {
+        if(this.queryPreparedStatements.containsKey(tableName)) {
+            logger.info("The prepared query statement has been created already for tableName: "+tableName);
+        }else if (queryTemplates.containsKey(templateName)) {
             String sql = queryTemplates.get(templateName);
             sql = sql.replaceAll("\\{tableName}", tableName);
             PreparedStatement pstms;

@@ -116,7 +116,7 @@ public class BunchMixInferencer extends JCasAnnotator_ImplBase implements RuleBa
                 bunchQueueClassName = "edu.utah.bmi.nlp.uima.ae." + bunchQueueClassName;
             }
             try {
-                Class bunchQueueCls = AnnotationOper.getTypeClass(bunchQueueClassName);
+                Class bunchQueueCls = AnnotationOper.getClass(bunchQueueClassName, JCasAnnotator_ImplBase.class);
                 Field bunchRecordRowsField = bunchQueueCls.getDeclaredField("bunchRecordRows");
                 Object value = bunchRecordRowsField.get(null);
                 srcBunchRecordRows = (LinkedBlockingQueue<RecordRow>) value;

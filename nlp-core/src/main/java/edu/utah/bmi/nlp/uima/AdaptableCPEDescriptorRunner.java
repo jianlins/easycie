@@ -35,7 +35,7 @@ import org.apache.uima.collection.CasConsumerDescription;
 import org.apache.uima.collection.CollectionProcessingEngine;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.collection.base_cpm.CasProcessor;
-import org.apache.uima.collection.impl.CollectionProcessingEngine_impl;
+import org.apache.uima.collection.impl.CollectionProcessingEngine1_impl;
 import org.apache.uima.collection.impl.cpm.engine.CPMEngine;
 import org.apache.uima.collection.impl.metadata.CpeDefaultValues;
 import org.apache.uima.collection.impl.metadata.cpe.CpeDescriptorFactory;
@@ -1040,7 +1040,7 @@ public class AdaptableCPEDescriptorRunner implements StatusSetable {
         if (mCPE != null && cpeId < mCPE.getCasProcessors().length) {
             CasProcessor processor = mCPE.getCasProcessors()[cpeId];
             try {
-                CPMEngine cpeEngine = ((CollectionProcessingEngine_impl) mCPE).getCPM().getCpEngine();
+                CPMEngine cpeEngine = ((CollectionProcessingEngine1_impl) mCPE).getCPM().getCpEngine();
                 CpeCasProcessor cpeProcessor = currentCpeDesc.getCpeCasProcessors().getCpeCasProcessor(cpeId);
                 String processorName = cpeProcessor.getName();
                 LinkedHashMap<String, String> configTypes = aeConfigTypeMap.get(processorName);

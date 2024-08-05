@@ -46,6 +46,8 @@ public class RunCPEDescriptorTask {
     }
 
     protected void initiate(TasksInf tasks, String option) {
+        System.setProperty("uima.framework_impl","org.apache.uima.impl.OpenUIMAFramework_impl");
+        System.out.println(System.getProperty("uima.framework_impl"));
         if (System.getProperty("java.util.logging.config.file") == null &&
                 new File("logging.properties").exists()) {
             System.setProperty("java.util.logging.config.file", "logging.properties");
@@ -85,6 +87,7 @@ public class RunCPEDescriptorTask {
         int maxCommentLength=Integer.parseInt(config.getValue(ConfigKeys.maxCommentLength, "-1").trim());
         String pipelineName = new File(cpeDescriptor).getName();
         pipelineName = pipelineName.substring(0, pipelineName.length() - 4);
+
         runner = AdaptableCPEDescriptorRunner.getInstance(cpeDescriptor, annotator,
                 new NLPDBConsoleLogger(writerDBConfigFileName, tableName, keyColumnName, annotator, maxCommentLength),
                 componentsSettings, "desc/type/" + pipelineName + "_" + annotator + "_Type.xml", "classes");
