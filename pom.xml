@@ -6,7 +6,7 @@
 
     <groupId>edu.utah.bmi.nlp</groupId>
     <artifactId>easycie</artifactId>
-    <version>2.0.0.0-jdk8</version>
+    <version>2.0.1.0-jdk8</version>
     <packaging>pom</packaging>
     <properties>
         <uimaversion>2.10.0</uimaversion>
@@ -73,6 +73,7 @@
         <module>fastcontext</module>
         <module>easycie-console</module>
         <module>nlp-ext</module>
+        <module>easycie-deploy</module>
     </modules>
     <build>
         <plugins>
