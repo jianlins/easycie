@@ -195,9 +195,9 @@ public class FeatureAnnotationInferencerEx implements FeatureInferencerInf {
 
                 String evidenceTypeName = row.get(4);
                 Class<? extends Annotation> evidenceTypeClass = AnnotationOper.getTypeClass(evidenceTypeName);
-                if (evidenceTypeClass==null) {
+                if (evidenceTypeClass == null) {
                     System.out.println(row);
-                    logger.warning("Class "+evidenceTypeName+" has not been loaded to memory, check the Class definition for rule: "+row);
+                    logger.warning("Class " + evidenceTypeName + " has not been loaded to memory, check the Class definition for rule: " + row);
                     continue;
                 }
                 String evidenceTypeShortName = DeterminantValueSet.getShortName(evidenceTypeName);
@@ -261,8 +261,8 @@ public class FeatureAnnotationInferencerEx implements FeatureInferencerInf {
                             || scopeShortName.equals(DocumentAnnotation.class.getCanonicalName()))
                         continue;
                     Class scopeClass = AnnotationOper.getTypeClass(scopeShortName);
-                    if (scopeClass==null){
-                        logger.warning("Class "+scopeShortName+"' has not been loaded to memory. Check section rules see if this section has been defined.");
+                    if (scopeClass == null) {
+                        logger.warning("Class " + scopeShortName + "' has not been loaded to memory. Check section rules see if this section has been defined.");
                     }
                     scopeIndex.put(scopeClass.getSimpleName(), scopeClass);
                 } else if (row.size() == 6) {
@@ -424,7 +424,7 @@ public class FeatureAnnotationInferencerEx implements FeatureInferencerInf {
 
     private void indexScopes(JCas jCas, Class<? extends Annotation> scopeClass) {
         IntervalST<Annotation> scopeTree = new IntervalST<>();
-        for( Annotation scopeAnnotation: JCasUtil.select(jCas, scopeClass)) {
+        for (Annotation scopeAnnotation : JCasUtil.select(jCas, scopeClass)) {
             scopeTree.put(new Interval1D(scopeAnnotation.getBegin(), scopeAnnotation.getEnd()), scopeAnnotation);
         }
         scopes.put(scopeClass, scopeTree);
@@ -435,11 +435,10 @@ public class FeatureAnnotationInferencerEx implements FeatureInferencerInf {
 
         logger.finest("\n\nIterate evidence type: " + evidenceTypeClass.getSimpleName());
         ArrayList<Annotation> scheduledSaving = new ArrayList<>();
-        for( Annotation evidenceAnnotation: JCasUtil.select(jcas, evidenceTypeClass)) {
+        for (Annotation evidenceAnnotation : JCasUtil.select(jcas, evidenceTypeClass)) {
             if (strictNameMatch && !evidenceAnnotation.getClass().getSimpleName().equals(evidenceTypeShortName))
                 continue;
-            boolean matched = findMatches(jcas, evidenceAnnotation,
-                    evidenceConceptGetFeatures.get(evidenceTypeShortName), ruleMap.get(evidenceTypeClass), allMatches);
+            boolean matched = findMatches(jcas, evidenceAnnotation, ruleMap.get(evidenceTypeClass), allMatches);
 
             if (matched && removeEvidenceConcept)
                 scheduledRemoval.add(evidenceAnnotation);
@@ -462,7 +461,7 @@ public class FeatureAnnotationInferencerEx implements FeatureInferencerInf {
             if (noteRuleId && anno instanceof Concept) {
                 Concept con = (Concept) anno;
                 String note = con.getNote();
-                if (note == null || note.length()==0)
+                if (note == null || note.length() == 0)
                     con.setNote("\tMachedId:\t" + matchedRuleId);
                 else
                     con.setNote(con.getNote() + "\n\tMachedId:\t" + matchedRuleId);
@@ -473,17 +472,15 @@ public class FeatureAnnotationInferencerEx implements FeatureInferencerInf {
     }
 
 
-    private boolean findMatches(JCas jCas, Annotation annotation, HashMap<String, Method> methodHashMap,
-                                Object value, LinkedHashMap<String, LinkedHashMap<Double, Object[]>> allMatches) {
+    private boolean findMatches(JCas jCas, Annotation annotation, Object value, LinkedHashMap<String, LinkedHashMap<Double, Object[]>> allMatches) {
 
         logger.finest("\nAnalyze evidence annotation: " + annotation.getClass().getSimpleName()
                 + " [" + annotation.getBegin() + "-" + annotation.getEnd() + "]");
         double offsets = concatenateIntegerToDouble(annotation.getBegin(), annotation.getEnd());
-        return findMatchedRuleIds(jCas, annotation, offsets, methodHashMap, value, allMatches);
+        return findMatchedRuleIds(jCas, annotation, offsets, value, allMatches);
     }
 
-    private boolean findMatchedRuleIds(JCas jCas, Annotation annotation, double offsets, HashMap<String, Method> methodHashMap,
-                                       Object value, LinkedHashMap<String, LinkedHashMap<Double, Object[]>> allMatches) {
+    private boolean findMatchedRuleIds(JCas jCas, Annotation annotation, double offsets, Object value, LinkedHashMap<String, LinkedHashMap<Double, Object[]>> allMatches) {
         boolean found = false;
         LinkedHashMap<String, Object> ruleMaps = (LinkedHashMap<String, Object>) value;
         for (String featureName : ruleMaps.keySet()) {
@@ -509,41 +506,18 @@ public class FeatureAnnotationInferencerEx implements FeatureInferencerInf {
                     }
                 continue;
             }
-            try {
-                Method m = methodHashMap.getOrDefault(featureName, null);
-                if (m == null) {
-                    logger.finest("" + annotation.getClass().getSimpleName());
-                    String className = annotation.getClass().getSimpleName();
-                    if (evidenceConceptGetFeatures.containsKey(className)) {
-                        if (evidenceConceptGetFeatures.get(className).containsKey(featureName)) {
-                            m = evidenceConceptGetFeatures.get(className).get(featureName);
-                        } else {
-                            m = AnnotationOper.getDefaultGetMethod(annotation.getClass(), featureName);
-                            evidenceConceptGetFeatures.get(className).put(featureName, m);
-                        }
-                    }
-                    if (m == null) {
-                        logger.info("Class: " + annotation.getClass() + " doesn't have a feature: " + featureName);
-                        continue;
-                    }
 
-                }
-                String annotationFeatureValue = (String) m.invoke(annotation);
+            String annotationFeatureValue = "" + AnnotationOper.getFeatureValue(featureName, annotation);
 
 
-                Object nextStep = ruleMaps.get(featureName);
-                if (((LinkedHashMap<String, Object>) nextStep).containsKey(annotationFeatureValue)) {
-                    logger.finest("Matched rule: " + featureName + ":" + annotationFeatureValue);
-                    nextStep = ((LinkedHashMap<String, Object>) nextStep).get(annotationFeatureValue);
-                    if (findMatchedRuleIds(jCas, annotation, offsets, methodHashMap, nextStep, allMatches))
-                        found = true;
-                } else {
-                    continue;
-                }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
+            Object nextStep = ruleMaps.get(featureName);
+            if (((LinkedHashMap<String, Object>) nextStep).containsKey(annotationFeatureValue)) {
+                logger.finest("Matched rule: " + featureName + ":" + annotationFeatureValue);
+                nextStep = ((LinkedHashMap<String, Object>) nextStep).get(annotationFeatureValue);
+                if (findMatchedRuleIds(jCas, annotation, offsets, nextStep, allMatches))
+                    found = true;
+            } else {
+                continue;
             }
         }
         return found;

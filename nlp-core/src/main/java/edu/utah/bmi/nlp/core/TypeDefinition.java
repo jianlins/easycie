@@ -17,6 +17,9 @@
 package edu.utah.bmi.nlp.core;
 
 
+import org.apache.uima.cas.FeatureStructure;
+import org.apache.uima.fit.util.FSUtil;
+
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -33,7 +36,7 @@ public class TypeDefinition implements Comparable<TypeDefinition>, Cloneable {
     public String fullSuperTypeName;
     public String fullTypeName;
     public LinkedHashMap<String, String> featureTypes = new LinkedHashMap<>();
-    public LinkedHashMap<String, String> featureDefaultValues = new LinkedHashMap<>();
+    public LinkedHashMap<String, Object> featureDefaultValues = new LinkedHashMap<>();
 
 
     public TypeDefinition(String typeName, String superTypeName) {
@@ -57,12 +60,12 @@ public class TypeDefinition implements Comparable<TypeDefinition>, Cloneable {
         }
     }
 
-    public TypeDefinition(String typeName, String superTypeName, LinkedHashMap<String, String> newFeatureNames) {
+    public TypeDefinition(String typeName, String superTypeName, LinkedHashMap<String, Object> newFeatureNames) {
         initWFeaturValuePairs(typeName, superTypeName, newFeatureNames);
     }
 
 
-    public void initWFeaturValuePairs(String typeName, String superTypeName, LinkedHashMap<String, String> newFeatureDefaultValues) {
+    public void initWFeaturValuePairs(String typeName, String superTypeName, LinkedHashMap<String, Object> newFeatureDefaultValues) {
         init(typeName, superTypeName, null);
         setFeatureDefaultValues(newFeatureDefaultValues);
     }
@@ -102,11 +105,11 @@ public class TypeDefinition implements Comparable<TypeDefinition>, Cloneable {
         return featureDefaultValues.keySet();
     }
 
-    public LinkedHashMap<String, String> getFeatureValuePairs() {
+    public LinkedHashMap<String, Object> getFeatureValuePairs() {
         return featureDefaultValues;
     }
 
-    public void setFeatureDefaultValues(LinkedHashMap<String, String> featureDefaultValues) {
+    public void setFeatureDefaultValues(LinkedHashMap<String, Object> featureDefaultValues) {
         this.featureDefaultValues = featureDefaultValues;
     }
 
@@ -114,7 +117,40 @@ public class TypeDefinition implements Comparable<TypeDefinition>, Cloneable {
         if (newFeatureNames == null)
             return;
         for (String featureName : newFeatureNames) {
-            this.featureDefaultValues.put(featureName, "");
+            if (featureName.indexOf(":")==-1)
+                this.featureDefaultValues.put(featureName, "");
+            else{
+                String[]featureNameParts = featureName.split(":");
+                featureName=featureNameParts[0];
+                String featureType = featureNameParts[1];
+                this.featureTypes.put(featureName,featureType);
+                switch (featureType) {
+                    case "int":
+                        this.featureDefaultValues.put(featureName, 0);
+                        break;
+                    case "String":
+                        this.featureDefaultValues.put(featureName, "");
+                        break;
+                    case "boolean":
+                        this.featureDefaultValues.put(featureName, false);
+                        break;
+                    case "long":
+                        this.featureDefaultValues.put(featureName, (long) 0);
+                        break;
+                    case "short":
+                        this.featureDefaultValues.put(featureName, (short) 0);;
+                        break;
+                    case "double":
+                        this.featureDefaultValues.put(featureName, (double) 0);
+                        break;
+                    case "float":
+                        this.featureDefaultValues.put(featureName, (float) 0);
+                        break;
+                    default:
+                        this.featureDefaultValues.put(featureName, null);
+                        break;
+                }
+            }
         }
     }
 
@@ -154,7 +190,7 @@ public class TypeDefinition implements Comparable<TypeDefinition>, Cloneable {
 
     public TypeDefinition clone() {
         return new TypeDefinition(this.fullTypeName, this.fullSuperTypeName,
-                (LinkedHashMap<String, String>) this.featureDefaultValues.clone());
+                (LinkedHashMap<String, Object>) this.featureDefaultValues.clone());
     }
 
     public String toString() {

@@ -1,5 +1,6 @@
 package edu.utah.bmi.nlp.uima.ae;
 
+import edu.utah.bmi.nlp.core.AnnotationDefinition;
 import edu.utah.bmi.nlp.core.DeterminantValueSet;
 import edu.utah.bmi.nlp.core.IOUtil;
 import edu.utah.bmi.nlp.core.TypeDefinition;
@@ -35,7 +36,6 @@ public class MetaDataAnnotator extends JCasAnnotator_ImplBase implements RuleBas
     public static final String PARAM_MATCH_MULTIPLE = "MatchMultiple";
     private ArrayList<ArrayList<Object>> rules;
     private final static int NUMERIC_RULE = 1, CATEGORICAL_RULE = 0, CALCULATION_RULE = 2, DATE_DIFF_RULE = 3;
-    private HashMap<String, Constructor<? extends Annotation>> docTypeConstructorMap = new HashMap<>();
     private HashMap<String, String> defaultDocTypes = new HashMap<>();
     private HashMap<String, String> valueFeatureMap = new HashMap<>();
     private LinkedHashMap<String, TypeDefinition> typeDefinitions = new LinkedHashMap<>();
@@ -75,9 +75,7 @@ public class MetaDataAnnotator extends JCasAnnotator_ImplBase implements RuleBas
         ArrayList<ArrayList<Object>> rules = new ArrayList<>();
         IOUtil ioUtil = new IOUtil(ruleStr, true);
         typeDefinitions = getTypeDefs(ruleStr, ioUtil);
-        for (TypeDefinition typeDefinition : typeDefinitions.values()) {
-            buildConstructor(typeDefinition);
-        }
+
         int col=0;
         if (ioUtil.getSetting("version").equals("2")) {
             this.version = 2;
@@ -157,19 +155,19 @@ public class MetaDataAnnotator extends JCasAnnotator_ImplBase implements RuleBas
         return conditions;
     }
 
-    private void buildConstructor(TypeDefinition typeDefinition) {
-        Class docType;
-        try {
-            if (!docTypeConstructorMap.containsKey(typeDefinition.shortTypeName)) {
-                docType = AnnotationOper.getTypeClass(typeDefinition.fullTypeName);
-                Constructor cc = docType.getConstructor(JCas.class, int.class, int.class);
-                docTypeConstructorMap.put(typeDefinition.shortTypeName, cc);
-            }
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-
-    }
+//    private void buildConstructor(TypeDefinition typeDefinition) {
+//        Class docType;
+//        try {
+//            if (!docTypeConstructorMap.containsKey(typeDefinition.shortTypeName)) {
+//                docType = AnnotationOper.getTypeClass(typeDefinition.fullTypeName);
+//                Constructor cc = docType.getConstructor(JCas.class, int.class, int.class);
+//                docTypeConstructorMap.put(typeDefinition.shortTypeName, cc);
+//            }
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
 
     @Override
@@ -227,21 +225,13 @@ public class MetaDataAnnotator extends JCasAnnotator_ImplBase implements RuleBas
     }
 
     private void saveAnnotation(JCas aJCas, String typeName) {
-        Constructor<? extends Annotation> annoConstructor = docTypeConstructorMap.get(typeName);
         Token anno = JCasUtil.selectByIndex(aJCas, Token.class, 0);
         if (anno == null) {
             anno = new Token(aJCas, 0, 1);
         }
-        try {
-            Annotation conclusionAnno = annoConstructor.newInstance(aJCas, anno.getBegin(), anno.getEnd());
-            conclusionAnno.addToIndexes();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        AnnotationDefinition annoDef=new AnnotationDefinition(typeDefinitions.get(typeName));
+        Annotation conclusionAnno = AnnotationOper.createAnnotation(aJCas, annoDef, AnnotationOper.getTypeClass(annoDef.fullTypeName), anno.getBegin(), anno.getEnd());
+        conclusionAnno.addToIndexes();
     }
 
     private ArrayList<String> getAnnotationTypes(RecordRow baseRecordRow) {

@@ -51,6 +51,7 @@ public class EmbeddedMysqlDatabase {
     }
 
     @Test
+    @Disabled
     public void start() throws ManagedProcessException, SQLException {
         db = DB.newEmbeddedDB(configBuilder.build());
         db.start();

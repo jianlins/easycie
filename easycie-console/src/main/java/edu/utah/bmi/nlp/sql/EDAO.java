@@ -830,6 +830,8 @@ public class EDAO {
         try {
             for (Map.Entry<String, String> columnNameType : columnInfo.getColumnInfoSet()) {
                 String columnName = columnNameType.getKey();
+                if(!recordRow.getColumnNameValues().containsKey(columnName))
+                    continue;
                 int columnId = columnInfo.getColumnId(columnName);
                 String type = columnNameType.getValue();
                 if (columnInfo.isMappabelColumn(columnName))

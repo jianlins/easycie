@@ -24,7 +24,6 @@ import edu.utah.bmi.nlp.uima.common.AnnotationOper;
 import org.apache.uima.fit.util.FSUtil;
 import org.apache.uima.jcas.tcas.Annotation;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -145,7 +144,7 @@ public class DocInferenceFeatureReader {
                 logger.info("\tYou need specify which evidence class's feature value need to be used for the feature: " + featureName);
                 logger.info("\tAs the default, only the 1st evidence annotation: '" + listMatchedEvidenceClass.substring(1).split(",")[0] + "' is used to assign the feature value");
             } else {
-                logger.info("Short form feature value assignment rule found: assign feature '" + featureName + "' a value from evidence annotation: '" + listAllEvidenceClass.substring(1) + "'");
+                logger.finest("Short form feature value assignment rule found: assign feature '" + featureName + "' a value from evidence annotation: '" + listAllEvidenceClass.substring(1) + "'");
             }
             String evidenceTypeShortName = evidence.getSimpleName();
             if (!evidenceConceptGetFeatures.containsKey(evidenceTypeShortName)) {
@@ -223,15 +222,8 @@ public class DocInferenceFeatureReader {
                 String evidenceConceptName = DeterminantValueSet.getShortName(valueVariable);
                 if (!evidenceAnnotationMap.containsKey(evidenceConceptName))
                     continue;
-                try {
-                    String value = evidenceConceptGetFeatures.get(evidenceConceptName)
-                            .get(featureName).invoke(evidenceAnnotationMap.get(evidenceConceptName)) + "";
-                    sb.append(value);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
+                Object value=AnnotationOper.getFeatureValue(featureName, evidenceAnnotationMap.get(evidenceConceptName));
+                sb.append(value);
             } else if (valueVariable.charAt(0) == '$') {
                 String evidenceClass = valueVariable.substring(1);
                 if (evidenceAnnotationMap.containsKey(evidenceClass) && evidenceConceptGetFeatures.containsKey(evidenceClass)

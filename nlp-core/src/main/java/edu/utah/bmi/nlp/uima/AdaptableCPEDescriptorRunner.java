@@ -873,8 +873,8 @@ public class AdaptableCPEDescriptorRunner implements StatusSetable {
 
     public void addConceptType(TypeDefinition typeDefinition) {
         if (conceptTypeDefinitions.containsKey(typeDefinition.fullTypeName)) {
-            LinkedHashMap<String, String> thisFeatureValuePairs = typeDefinition.getFeatureValuePairs();
-            LinkedHashMap<String, String> previousFeatureValuePairs = conceptTypeDefinitions.get(typeDefinition.fullTypeName).getFeatureValuePairs();
+            LinkedHashMap<String, Object> thisFeatureValuePairs = typeDefinition.getFeatureValuePairs();
+            LinkedHashMap<String, Object> previousFeatureValuePairs = conceptTypeDefinitions.get(typeDefinition.fullTypeName).getFeatureValuePairs();
             for (String featureName : thisFeatureValuePairs.keySet()) {
                 if (!previousFeatureValuePairs.containsKey(featureName)) {
                     previousFeatureValuePairs.put(featureName, thisFeatureValuePairs.get(featureName));

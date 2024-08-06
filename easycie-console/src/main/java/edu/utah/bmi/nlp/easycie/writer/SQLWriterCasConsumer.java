@@ -55,15 +55,15 @@ public class SQLWriterCasConsumer extends JCasAnnotator_ImplBase {
     public static final String PARAM_ANNOTATOR = DeterminantValueSet.PARAM_ANNOTATOR;
     public static final String PARAM_VERSION = DeterminantValueSet.PARAM_VERSION;
     public static final String PARAM_MIN_LENGTH = "MinTextLength";
+    public static final String PARAM_MAX_SNIPPET_LENGTH = "MaxSnippetLength";
 
     public static final String PARAM_USE_ANNOTATIONS_ANNOTATOR = "UserAnnotationsAnnotator";
     protected File sqlFile;
     protected String snippetTableName, docTableName, annotator = "", version;
-    protected int mDocNum, batchSize = 15, minTextLength;
+    protected int mDocNum, batchSize = 15, minTextLength, maxSnippetLength;
     public static EDAO dao = null;
     protected boolean debug = false, overwriteTable = false, useAnnotationsAnnotator = false;
     private ArrayList<String> typeToSave = new ArrayList<>();
-    private HashMap<String, HashMap<String, Method>> annotationGetFeatures = new HashMap<>();
 
 
     public SQLWriterCasConsumer() {
@@ -83,10 +83,11 @@ public class SQLWriterCasConsumer extends JCasAnnotator_ImplBase {
         useAnnotationsAnnotator = (Boolean) readConfigureObject(cont, PARAM_USE_ANNOTATIONS_ANNOTATOR, false);
         batchSize = (Integer) readConfigureObject(cont, PARAM_BATCHSIZE, 15);
         minTextLength = (Integer) readConfigureObject(cont, PARAM_MIN_LENGTH, 0);
+        maxSnippetLength = (Integer) readConfigureObject(cont, PARAM_MAX_SNIPPET_LENGTH, 200);
         annotator = readConfigureString(cont, PARAM_ANNOTATOR, "uima");
         version = readConfigureString(cont, PARAM_VERSION, null);
-        classLogger.info("writer db config file: "+sqlFile);
-        dao = EDAO.getInstance(this.sqlFile,true,false);
+        classLogger.info("writer db config file: " + sqlFile);
+        dao = EDAO.getInstance(this.sqlFile, true, false);
         dao.batchsize = batchSize;
         dao.initiateTableFromTemplate("ANNOTATION_TABLE", snippetTableName, overwriteTable);
         dao.initiateTableFromTemplate("ANNOTATION_TABLE", docTableName, overwriteTable);
@@ -180,32 +181,15 @@ public class SQLWriterCasConsumer extends JCasAnnotator_ImplBase {
                 String featureName = feature.getShortName();
                 String value = "";
                 String typeName = thisAnnotation.getClass().getSimpleName();
-                if (!annotationGetFeatures.containsKey(typeName))
-                    annotationGetFeatures.put(typeName, new LinkedHashMap<>());
-                Method getMethod = null;
-                if (!annotationGetFeatures.get(typeName).containsKey(featureName)) {
-                    try {
-                        getMethod = thisAnnotation.getClass().getMethod(AnnotationOper.inferGetMethodName(featureName));
-                        annotationGetFeatures.get(typeName).put(featureName, getMethod);
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
+                try {
+                    Object obj = AnnotationOper.getFeatureValue(featureName, thisAnnotation);
+                    if (obj instanceof FSArray) {
+                        value = serilizeFSArray((FSArray) obj);
+                    } else {
+                        value = obj + "";
                     }
-                } else {
-                    getMethod = annotationGetFeatures.get(typeName).get(featureName);
-                }
-                if (getMethod != null) {
-                    try {
-                        Object obj = getMethod.invoke(thisAnnotation);
-                        if (obj instanceof FSArray) {
-                            value = serilizeFSArray((FSArray) obj);
-                        } else {
-                            value = obj + "";
-                        }
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 switch (featureName) {
                     case "Annotator":
@@ -305,6 +289,11 @@ public class SQLWriterCasConsumer extends JCasAnnotator_ImplBase {
                 classLogger.finest(dao.con.isClosed() + "");
             } catch (SQLException e) {
                 e.printStackTrace();
+            }
+            if (maxSnippetLength > 0) {
+                String snippet = record.getStrByColumnName("SNIPPET");
+                if (snippet.length() > maxSnippetLength)
+                    record.addCell("SNIPPET", snippet.substring(0, maxSnippetLength));
             }
             dao.insertRecord(tableName, record);
             total++;

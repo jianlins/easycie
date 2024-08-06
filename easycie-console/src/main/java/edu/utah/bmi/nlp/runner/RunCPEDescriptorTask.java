@@ -47,7 +47,7 @@ public class RunCPEDescriptorTask {
 
     protected void initiate(TasksInf tasks, String option) {
         System.setProperty("uima.framework_impl","org.apache.uima.impl.OpenUIMAFramework_impl");
-        System.out.println(System.getProperty("uima.framework_impl"));
+        logger.fine("System property uima.framework_impl: "+System.getProperty("uima.framework_impl"));
         if (System.getProperty("java.util.logging.config.file") == null &&
                 new File("logging.properties").exists()) {
             System.setProperty("java.util.logging.config.file", "logging.properties");

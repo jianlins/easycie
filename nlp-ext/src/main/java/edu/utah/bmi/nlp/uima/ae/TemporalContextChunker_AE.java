@@ -203,25 +203,7 @@ public class TemporalContextChunker_AE extends TemporalContext_AE {
             Concept concept = (Concept) filteredConcepts.get(conceptId);
             String typeName = concept.getType().getShortName();
             if (saveDateDifference) {
-                if (setDiffMethods.containsKey(typeName)) {
-                    if (setDiffMethods.get(typeName) != null)
-                        AnnotationOper.setFeatureValue(setDiffMethods.get(typeName), concept, date.getElapse() + "");
-                } else {
-                    boolean foundParentClass = false;
-                    Class<? extends Annotation> conceptClass = AnnotationOper.getTypeClass(DeterminantValueSet.checkNameSpace(typeName));
-                    for (String existClassName : setDiffMethods.keySet()) {
-                        Class<? extends Annotation> existClass = AnnotationOper.getTypeClass(DeterminantValueSet.checkNameSpace(existClassName));
-                        if (existClass.isAssignableFrom(conceptClass)) {
-                            setDiffMethods.put(typeName, setDiffMethods.get(existClassName));
-                            foundParentClass = true;
-                            break;
-                        }
-                    }
-                    if (!foundParentClass)
-                        setDiffMethods.put(typeName, null);
-                    else
-                        AnnotationOper.setFeatureValue(setDiffMethods.get(typeName), concept, date.getElapse() + "");
-                }
+                AnnotationOper.setFeatureValue(DIFFMETHOD, concept,  date.getElapse() + "");
             }
             concept.setTemporality(date.getTemporality());
         }

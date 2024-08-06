@@ -125,8 +125,6 @@ public class DocInferenceAnnotator extends JCasAnnotator_ImplBase implements Rul
 
     protected ArrayList<ArrayList<String>> ruleCells = new ArrayList<>();
 
-    @Deprecated
-    protected HashMap<String, Constructor<? extends Annotation>> docTypeConstructorMap = new HashMap<>();
 
     protected HashMap<Class<? extends Annotation>, IntervalST<Annotation>> evidenceAnnotationTree = new HashMap<>();
     protected HashMap<Class<? extends Annotation>, IntervalST<Integer>> scopeAnnotationTree = new HashMap<>();
@@ -148,7 +146,6 @@ public class DocInferenceAnnotator extends JCasAnnotator_ImplBase implements Rul
     protected void parseRuleStr(String ruleStr) {
         inferenceMap.clear();
         conceptClassMap.clear();
-        docTypeConstructorMap.clear();
         evidenceConceptGetFeatures.clear();
         conclusionConceptSetFeatures.clear();
         IOUtil ioUtil = new IOUtil(ruleStr, true);
@@ -162,7 +159,6 @@ public class DocInferenceAnnotator extends JCasAnnotator_ImplBase implements Rul
 //			add doc conclusion type
                 String docTypeName = row.get(2).trim();
                 inference.add(docTypeName);
-                buildConstructor(docTypeName);
 //			add evidences
                 ArrayList<Class> evidences = new ArrayList<>();
                 for (String evidenceTypeName : row.get(4).split(",")) {
@@ -184,8 +180,6 @@ public class DocInferenceAnnotator extends JCasAnnotator_ImplBase implements Rul
 
                 String featureSetting = row.get(3).trim();
                 inference.add(new DocInferenceFeatureReader(featureSetting, conceptClassMap, evidenceConceptGetFeatures, evidences));
-
-                initSetReflections(typeDefinitions, conceptClassMap, docTypeConstructorMap, conclusionConceptSetFeatures);
 
                 inference.add(evidences);
 //			add scope
@@ -222,24 +216,6 @@ public class DocInferenceAnnotator extends JCasAnnotator_ImplBase implements Rul
             } catch (Exception e) {
                 logger.warning("Error parse rule: " + row);
             }
-        }
-
-    }
-
-    protected void buildConstructor(String docTypeName) {
-        Class docType;
-        try {
-            if (!docTypeConstructorMap.containsKey(docTypeName)) {
-                docType = AnnotationOper.getTypeClass(DeterminantValueSet.checkNameSpace(docTypeName));
-                if (docType == null) {
-                    logger.warning(docTypeName + " has not been initiated. Please check the definition in rule files.");
-                    return;
-                }
-                Constructor cc = docType.getConstructor(JCas.class, int.class, int.class);
-                docTypeConstructorMap.put(docTypeName, cc);
-            }
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
         }
 
     }
@@ -312,8 +288,7 @@ public class DocInferenceAnnotator extends JCasAnnotator_ImplBase implements Rul
             if (overWriteNote) {
                 conclusionDef.setFeatureValue("Note", "default conclusion");
             }
-            addFeatureSeparatedDocAnnotation(jCas, span, conclusionDef,
-                    conceptClassMap.get(resultTypeShortName));
+            addFeatureSeparatedDocAnnotation(jCas, span, conclusionDef, AnnotationOper.getTypeClass(resultTypeShortName));
         }
     }
 
@@ -336,8 +311,7 @@ public class DocInferenceAnnotator extends JCasAnnotator_ImplBase implements Rul
                 if (overWriteNote) {
                     conclusionDef.setFeatureValue("Note", evidencesString);
                 }
-                addFeatureSeparatedDocAnnotation(jCas, span, conclusionDef,
-                        conceptClassMap.get(resultTypeShortName));
+                addFeatureSeparatedDocAnnotation(jCas, span, conclusionDef, AnnotationOper.getTypeClass(resultTypeShortName));
             }
             if (toRemove.size() > 0) {
                 for (Annotation anno : toRemove) {
@@ -366,11 +340,11 @@ public class DocInferenceAnnotator extends JCasAnnotator_ImplBase implements Rul
     protected String aggregateDefaultFeatureValues(String docType) {
         if (typeDefinitions.containsKey(docType)) {
             StringBuilder sb = new StringBuilder();
-            for (Map.Entry<String, String> entry : typeDefinitions.get(docType).getFeatureValuePairs().entrySet()) {
+            for (Map.Entry<String, Object> entry : typeDefinitions.get(docType).getFeatureValuePairs().entrySet()) {
                 String featureName = entry.getKey();
                 if (featureName.equals("Features"))
-                    return entry.getValue();
-                String value = entry.getValue();
+                    return ""+entry.getValue();
+                String value =""+ entry.getValue();
                 sb.append("\t\t");
                 sb.append(featureName);
                 sb.append(":\t");
@@ -458,22 +432,13 @@ public class DocInferenceAnnotator extends JCasAnnotator_ImplBase implements Rul
     protected void addFeatureAggregatedDocAnnotation(JCas jCas, Span span, String topic, String docTypeName, String featuresString, String evidencesString) {
         if (docTypeName != null) {
             logger.finest("Try add doc annotation: " + docTypeName);
-            Constructor<? extends Annotation> cs = docTypeConstructorMap.get(docTypeName);
-            try {
-                Annotation anno = cs.newInstance(jCas, span.getBegin(), span.getEnd());
-                if (anno instanceof Doc_Base) {
-                    Doc_Base docAnno = (Doc_Base) anno;
-                    docAnno.setTopic(topic);
-                    docAnno.setNote(evidencesString);
-                    docAnno.setFeatures(featuresString);
-                    docAnno.addToIndexes();
-                }
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
+            Annotation anno=AnnotationOper.createAnnotation(jCas, new AnnotationDefinition(typeDefinitions.get(docTypeName)), AnnotationOper.getTypeClass(docTypeName), span.getBegin(), span.getEnd());
+            if (anno instanceof Doc_Base) {
+                Doc_Base docAnno = (Doc_Base) anno;
+                docAnno.setTopic(topic);
+                docAnno.setNote(evidencesString);
+                docAnno.setFeatures(featuresString);
+                docAnno.addToIndexes();
             }
         }
     }

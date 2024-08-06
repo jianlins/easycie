@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cpeDescription xmlns="http://uima.apache.org/resourceSpecifier">
+    <collectionReader>
+        <collectionIterator>
+            <descriptor>
+                <import location="../ae_ordered/SCOUTSQLReader.xml"/>
+            </descriptor>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>DBConfigFile</name>
+                    <value>
+                        <string>conf/hai/sqliteconfig.xml</string>
+                    </value>
+                </nameValuePair>
+                <nameValuePair>
+                    <name>DocTableName</name>
+                    <value>
+                        <string>SAMPLES</string>
+                    </value>
+                </nameValuePair>
+                <nameValuePair>
+                    <name>DatasetId</name>
+                    <value>
+                        <string>I2B2</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </collectionIterator>
+    </collectionReader>
+    <casProcessors casPoolSize="2" processingUnitThreadCount="1">
+        <casProcessor deployment="integrated" name="Section_Detector">
+            <descriptor>
+                <import location="../ae_ordered/00_SectionDetectorR_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/hai/00_Section_Detector.tsv</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="RuSH">
+            <descriptor>
+                <import location="../ae_ordered/10_RuSH_AE.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/hai/10_RuSH_AE.tsv</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="TemporalMetaAnnotator">
+            <descriptor>
+                <import location="../ae_ordered/13_TemporalMetaAnnotator_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/ssi/17_TemporalMetaAnnotator_AE.tsv</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="MetaDataAnnotator">
+            <descriptor>
+                <import location="../ae_ordered/15_MetaDataAnnotator_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/ssi/15_MetaDataAnnotator_AE.tsv</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="ParagraphDetector">
+            <descriptor>
+                <import location="../ae_ordered/20_ParagraphAnnotator_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/hai/20_FastNER_AE.tsv</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="FastNER">
+            <descriptor>
+                <import location="../ae_ordered/30_FastNER_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/hai/20_FastNER_AE.tsv</string>
+                    </value>
+                </nameValuePair>
+                <nameValuePair>
+                    <name>LogRuleInfo</name>
+                    <value>
+                        <boolean>true</boolean>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="FastCNER">
+            <descriptor>
+                <import location="../ae_ordered/35_FastCNER_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/pe_imp_wsec/30_FastCNER_AE.tsv</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="FastContext">
+            <descriptor>
+                <import location="../ae_ordered/40_FastContext_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/hai/40_FastContext_AE.csv</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="TemporalAnnotator">
+            <descriptor>
+                <import location="../ae_ordered/45_TemporalAnnotator_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/hai/50_TemporalContext_AE.tsv</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="TemporalContext">
+            <descriptor>
+                <import location="../ae_ordered/50_TemporalContext2_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/hai/50_TemporalContext_AE.tsv</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="TemporalContextChunker">
+            <descriptor>
+                <import location="../ae_ordered/55_TemporalContextChunker_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/hai/50_TemporalContext_AE.tsv</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="FeatureInferencer">
+            <descriptor>
+                <import location="../ae_ordered/60_FeatureInference_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/hai/60_FeatureInference_AE.tsv</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+
+        <casProcessor deployment="integrated" name="FeatureMerger">
+            <descriptor>
+                <import location="../ae_ordered/70_FeatureMerger_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string></string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="ParagraphInferencer">
+            <descriptor>
+                <import location="../ae_ordered/80_DocInference_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string></string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="StatusFeatureInferencer">
+            <descriptor>
+                <import location="../ae_ordered/60_FeatureInference_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/hai/60_FeatureInference_AE.tsv</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="DocInferencerA">
+            <descriptor>
+                <import location="../ae_ordered/80_DocInference_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string></string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="MentionTemporalAdjuster">
+            <descriptor>
+                <import location="../ae_ordered/60_FeatureInference_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/hai/70_MentionTemporalAdjuster_AE.tsv</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="DocInferencerB">
+            <descriptor>
+                <import location="../ae_ordered/80_DocInference_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string></string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="TrendPatternInferencer">
+            <descriptor>
+                <import location="../ae_ordered/85_TrendPatternInferencer_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/ssi/90_PatInference_AE.tsv</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="TrendIntervalPatternInferencer">
+            <descriptor>
+                <import location="../ae_ordered/85_TrendIntervalPatternInferencer_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" default="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string></string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+        <casProcessor deployment="integrated" name="PatInferencer">
+            <descriptor>
+                <import location="../ae_ordered/90_BunchInferencer_aeDescriptor.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="0/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000" efault="-1"/>
+            </errorHandling>
+            <checkpoint batch="10000" time="1000ms"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>RuleFileOrStr</name>
+                    <value>
+                        <string>conf/ssi/90_PatInference_AE.tsv</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+
+        <casProcessor deployment="integrated" name="SQLWriter">
+            <descriptor>
+                <import location="../ae_ordered/90_TrackedSQLWriterCasConsumer.xml"/>
+            </descriptor>
+            <deploymentParameters/>
+            <filter/>
+            <errorHandling>
+                <errorRateThreshold action="terminate" value="100/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000"/>
+            </errorHandling>
+            <checkpoint batch="10000"/>
+            <configurationParameterSettings>
+                <nameValuePair>
+                    <name>DBConfigFile</name>
+                    <value>
+                        <string>conf/hai/sqliteconfig.xml</string>
+                    </value>
+                </nameValuePair>
+                <nameValuePair>
+                    <name>OverWriteTable</name>
+                    <value>
+                        <boolean>false</boolean>
+                    </value>
+                </nameValuePair>
+                <nameValuePair>
+                    <name>WriteConcepts</name>
+                    <value>
+                        <string>Concept</string>
+                    </value>
+                </nameValuePair>
+                <nameValuePair>
+                    <name>Annotator</name>
+                    <value>
+                        <string>test</string>
+                    </value>
+                </nameValuePair>
+            </configurationParameterSettings>
+        </casProcessor>
+
+    </casProcessors>
+    <cpeConfig>
+        <numToProcess>-1</numToProcess>
+        <deployAs>immediate</deployAs>
+        <checkpoint batch="0" time="300000"/>
+        <timerImpl/>
+    </cpeConfig>
+</cpeDescription>

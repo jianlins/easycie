@@ -286,7 +286,7 @@ public class IOUtil {
                     if (!conceptFeaturesMap.containsKey(conceptName)) {
                         conceptFeaturesMap.put(conceptName, new TypeDefinition(conceptName, "", new ArrayList<>()));
                     }
-                    LinkedHashMap<String, String> featureValues = conceptFeaturesMap.get(conceptName).getFeatureValuePairs();
+                    LinkedHashMap<String, Object> featureValues = conceptFeaturesMap.get(conceptName).getFeatureValuePairs();
                     for (String feature : features) {
                         if (feature.trim().length() > 0)
                             featureValues.put(feature, "");

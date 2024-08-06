@@ -15,16 +15,6 @@
     <description>The commandline interface to the EasyCIE (Easy Clinical Information Extractor), which contains
         a complete end-to-end rule-based clinical NLP pipeline.
     </description>
-    <properties>
-        <!--for packaging jdk included version-->
-        <!--<java.path>jdk1.8/bin/java</java.path>-->
-        <!--<java.win.path>jdk1.8\bin\java</java.win.path>-->
-        <!--for packaging without jdk version-->
-        <java.path>java</java.path>
-        <java.win.path>java</java.win.path>
-        <current.version>4.0.0-SNAPSHOT</current.version>
-        <kotlin.version>1.6.20-RC</kotlin.version>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -195,36 +185,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-maven-plugin</artifactId>
-                <version>${kotlin.version}</version>
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>test-compile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>test-compile</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <source>src/test/java</source>
-                                <source>target/generated-test-sources/uima-descripters</source>
-                            </sourceDirs>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <jvmTarget>1.8</jvmTarget>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

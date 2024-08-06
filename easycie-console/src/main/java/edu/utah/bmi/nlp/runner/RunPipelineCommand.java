@@ -1,26 +1,33 @@
 package edu.utah.bmi.nlp.runner;
 
+import edu.utah.bmi.nlp.core.IOUtil;
 import edu.utah.bmi.nlp.core.TasksInf;
 import edu.utah.bmi.nlp.easycie.core.SettingOper;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import org.apache.commons.cli.*;
 
 public class RunPipelineCommand {
-
+    public static Logger logger= IOUtil.getLogger(RunPipelineCommand.class);
     public static void main(String[] args) throws Exception {
         Options options = new Options();
         // add options
         options.addOption("c", "config_file", true, "Path of project configuration file.");
         CommandLineParser parser = new DefaultParser();
+        String configFile = "";
         try {
             CommandLine cmd = parser.parse(options, args);
-            String configFile = cmd.getOptionValue("c", "conf/test/test_config.xml");
-            runpipe(new File(configFile));
+            if (cmd.hasOption("c"))
+                configFile = cmd.getOptionValue("c", "conf/test/test_config.xml");
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.fine(e.getMessage());
         }
+        if (configFile.length() > 0)
+            runpipe(new File(configFile));
+        else
+            logger.warning("config_file has not been specified");
     }
 
 

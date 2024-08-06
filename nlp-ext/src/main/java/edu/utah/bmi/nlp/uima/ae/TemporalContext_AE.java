@@ -70,7 +70,6 @@ public class TemporalContext_AE extends JCasAnnotator_ImplBase implements RuleBa
 
     public static final String DIFFMETHOD = "AfterRefInHours";
 
-    protected LinkedHashMap<String, Method> setDiffMethods = new LinkedHashMap<>();
     protected LinkedHashMap<String, Class<? extends Annotation>> targetConceptClasses = new LinkedHashMap<>();
 
     //  read from record table, specify which column is the reference datetime, usually is set to admission datetime.
@@ -112,9 +111,6 @@ public class TemporalContext_AE extends JCasAnnotator_ImplBase implements RuleBa
             if (Date.class.isAssignableFrom(conceptClass))
                 continue;
             targetConceptClasses.put(typeName, conceptClass);
-            Method setDiffMethod = AnnotationOper.getDefaultSetMethod(conceptClass, DIFFMETHOD);
-            if (setDiffMethod != null)
-                setDiffMethods.put(typeName, setDiffMethod);
         }
         if (targetConceptClasses.size() == 0) {
             targetConceptClasses.put("Concept", Concept.class);
@@ -321,8 +317,8 @@ public class TemporalContext_AE extends JCasAnnotator_ImplBase implements RuleBa
                 sentenceStatusCache.put(sentenceId, tempStatus);
             } else if (counter > 1) {
 //                if multiple dates in a sentence will evaluate the distance for each concept in that sentence
-                if (saveDateDifference && setDiffMethods.containsKey(typeName))
-                    AnnotationOper.setFeatureObjValue(setDiffMethods.get(typeName), concept, elapse + "");
+                if (saveDateDifference)
+                    AnnotationOper.setFeatureValue(DIFFMETHOD, concept, elapse + "");
                 concept.setTemporality(tempStatus);
             } else {
                 sentenceTempDiffCache.put(sentenceId, null);
@@ -331,12 +327,12 @@ public class TemporalContext_AE extends JCasAnnotator_ImplBase implements RuleBa
         }
 
         if (sentenceTempDiffCache.containsKey(sentenceId) && sentenceTempDiffCache.get(sentenceId) != null) {
-            if (saveDateDifference && setDiffMethods.containsKey(typeName))
-                AnnotationOper.setFeatureObjValue(setDiffMethods.get(typeName), concept, sentenceTempDiffCache.get(sentenceId) + "");
+            if (saveDateDifference)
+                AnnotationOper.setFeatureValue(DIFFMETHOD, concept, sentenceTempDiffCache.get(sentenceId) + "");
             concept.setTemporality(sentenceStatusCache.get(sentenceId));
         } else if (inferAll && counter == 0) {
-            if (saveDateDifference && setDiffMethods.containsKey(typeName))
-                AnnotationOper.setFeatureValue(setDiffMethods.get(typeName), concept, docElapse + "");
+            if (saveDateDifference)
+                AnnotationOper.setFeatureValue(DIFFMETHOD, concept, docElapse + "");
             if (docTempStatus.length() > 0)
                 concept.setTemporality(docTempStatus);
         }

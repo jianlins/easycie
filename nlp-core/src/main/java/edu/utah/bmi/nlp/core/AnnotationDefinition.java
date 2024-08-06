@@ -39,7 +39,7 @@ public class AnnotationDefinition extends TypeDefinition {
     }
 
     public AnnotationDefinition(TypeDefinition typeDefinition) {
-        super(typeDefinition.fullTypeName, typeDefinition.fullSuperTypeName, (LinkedHashMap<String, String>) typeDefinition.getFeatureValuePairs().clone());
+        super(typeDefinition.fullTypeName, typeDefinition.fullSuperTypeName, (LinkedHashMap<String, Object>) typeDefinition.getFeatureValuePairs().clone());
         for (String featureName : featureDefaultValues.keySet()) {
             this.featureValues.put(featureName, featureDefaultValues.get(featureName));
         }

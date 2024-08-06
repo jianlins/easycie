@@ -292,7 +292,7 @@ public class TemporalMetaAnnotator_AE extends TemporalAnnotator_AE {
                         dt = handleAmbiguousCase(dateMention, recordDate);
                     }
                     logger.finest("Parse '" + dateMention + "' as: '" + dt.toString() + "'");
-                    addDateMentions(jcas, ConceptTypeConstructors, allDateMentions,
+                    addDateMentions(jcas, allDateMentions,
                             typeOfDate, certainty, span, 0, dt, getRuleInfo(span));
                 }
             } else {

@@ -52,7 +52,7 @@ import static edu.utah.bmi.nlp.core.NERSpan.scorewidth;
  * and/or the sentences that contain specified concepts (targetConceptTypes).
  * Save the date mention annotation, normalize the date to a standard format (in NormDate attribute).
  * Save the elapsed hours with respect to reference date (in Elapse attribute)
- *
+ * <p>
  * Compared with TemporalContext_AE_General (annotate the temporality attribute directly to the target concepts),
  * this will only set the attributes for date time mentions first (can be more efficient) and then use TemporalContextChunker_AE
  * to assign temporal attributes to the target concepts.
@@ -84,6 +84,8 @@ public class TemporalAnnotator_AE extends FastCNER_AE_General {
     protected HashMap<String, Integer> numberMap = new HashMap<>();
 
     protected LinkedHashSet<Class<? extends Annotation>> targetConceptTypes = new LinkedHashSet<>();
+
+    protected LinkedHashMap<String, TypeDefinition> typeDefs = new LinkedHashMap<>();
 
     protected Pattern[] patterns = new Pattern[5];
 
@@ -167,6 +169,7 @@ public class TemporalAnnotator_AE extends FastCNER_AE_General {
                 this.fastNER.fastRule.ruleStore.put(ruleId, rule);
             }
         }
+
     }
 
     protected LinkedHashMap<String, TypeDefinition> initFastNER(UimaContext cont, String ruleStr) {
@@ -181,7 +184,7 @@ public class TemporalAnnotator_AE extends FastCNER_AE_General {
             fastNER.setWidthCompareMethod(byRuleLength);
             cner = false;
         }
-        LinkedHashMap<String, TypeDefinition> typeDefs = fastNER.getTypeDefinitions();
+        typeDefs = fastNER.getTypeDefinitions();
         typeDefs.remove(DeterminantValueSet.TEMPORAL_CATEGORIES1.substring(1));
         return typeDefs;
     }
@@ -297,7 +300,7 @@ public class TemporalAnnotator_AE extends FastCNER_AE_General {
                     }
                     dates = fastNER.processAnnotationList(tokensInSeg);
                 }
-                if (sentence!=null)
+                if (sentence != null)
                     allDateMentions.addAll(parseDateMentions(jCas, sentence, dates, recordDate));
             }
         } catch (Exception e) {
@@ -311,10 +314,11 @@ public class TemporalAnnotator_AE extends FastCNER_AE_General {
     /**
      * Index senteces: if boundary is paragraphy, then sentences within the paragraphs that contains a target concept or within selected sections will be index.
      * If boundary is sentence, then the sentences that contains a target concept or within selected sections will be index.
-     * @param jCas JCas object
-     * @param conceptTree interval tree of concepts
+     *
+     * @param jCas          JCas object
+     * @param conceptTree   interval tree of concepts
      * @param paragraphTree interval tree of paragraphs
-     * @param sectionTree interval tree of sections
+     * @param sectionTree   interval tree of sections
      * @return a list of sentence annotations.
      */
     protected ArrayList<Annotation> indexSentences(JCas jCas, IntervalST<Annotation> conceptTree,
@@ -463,7 +467,7 @@ public class TemporalAnnotator_AE extends FastCNER_AE_General {
                             dt = handleAmbiguousCase(dateMention, recordDate);
                         }
                         logger.finest("Parse '" + dateMention + "' as: '" + dt.toString() + "'");
-                        absDates.add(addDateMentions(jcas, ConceptTypeConstructors, allDateMentions,
+                        absDates.add(addDateMentions(jcas, allDateMentions,
                                 typeOfDate, certainty, span, offset, dt, getRuleInfo(span)));
                         absDateTimes.add(dt);
                     }
@@ -548,13 +552,12 @@ public class TemporalAnnotator_AE extends FastCNER_AE_General {
         return diff;
     }
 
-    protected Concept addDateMentions(JCas jcas, HashMap<String, Constructor<? extends Concept>> ConceptTypeConstructors,
-                                      ArrayList<Annotation> allDateMentions, String typeName,
-                                      String certainty, Span span, int offset, DateTime date, String... ruleInfo) {
+    protected Annotation addDateMentions(JCas jcas, ArrayList<Annotation> allDateMentions, String typeName,
+                                         String certainty, Span span, int offset, DateTime date, String... ruleInfo) {
         if (getSpanType(span) != DeterminantValueSet.Determinants.ACTUAL) {
             return null;
         }
-        Concept anno = null;
+        Annotation anno = null;
         if (!dateAnnos.containsKey(typeName)) {
             dateAnnos.put(typeName, new IntervalST<>());
         }
@@ -565,33 +568,28 @@ public class TemporalAnnotator_AE extends FastCNER_AE_General {
         } else {
             intervalST.put(interval1D, span);
         }
-        try {
-            anno = ConceptTypeConstructors.get(typeName).newInstance(jcas, span.begin + offset, span.end + offset);
-            anno.setCertainty(certainty);
-
-            if (ruleInfo.length > 0) {
-                anno.setNote(String.join("\n", ruleInfo));
-            }
-            if (anno instanceof edu.utah.bmi.nlp.type.system.Date) {
-                if (date != null) {
-                    ((edu.utah.bmi.nlp.type.system.Date) anno).setNormDate(date.toString());
-                    long diff = getDiffHours(date, referenceDate);
-                    ((edu.utah.bmi.nlp.type.system.Date) anno).setElapse(diff);
-                    if (categories.size() > 0) {
-                        for (double upperBound : categories.keySet()) {
-                            if (diff < upperBound) {
-                                String status=categories.get(upperBound);
-                                anno.setTemporality(status);
-                                break;
-                            }
+        anno = AnnotationOper.createAnnotation(jcas, new AnnotationDefinition(this.typeDefs.get(typeName)), AnnotationOper.getTypeClass(typeName), span.begin + offset, span.end + offset);
+        AnnotationOper.setFeatureValue("Certainty", anno, certainty);
+        if (ruleInfo.length > 0) {
+            AnnotationOper.setFeatureValue("Note", anno, String.join("\n", ruleInfo));
+        }
+        if (anno instanceof edu.utah.bmi.nlp.type.system.Date) {
+            if (date != null) {
+                ((edu.utah.bmi.nlp.type.system.Date) anno).setNormDate(date.toString());
+                long diff = getDiffHours(date, referenceDate);
+                ((edu.utah.bmi.nlp.type.system.Date) anno).setElapse(diff);
+                if (categories.size() > 0) {
+                    for (double upperBound : categories.keySet()) {
+                        if (diff < upperBound) {
+                            String status = categories.get(upperBound);
+                            AnnotationOper.setFeatureValue("Temporality", anno, status);
+                            break;
                         }
                     }
                 }
             }
-            allDateMentions.add(anno);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
         }
+        allDateMentions.add(anno);
         return anno;
     }
 
@@ -613,7 +611,7 @@ public class TemporalAnnotator_AE extends FastCNER_AE_General {
             if (unit > 7) {
                 certainty = "uncertain";
             }
-            addDateMentions(jcas, ConceptTypeConstructors, allDateMentions, typeName, certainty, span, offset, dt, getRuleInfo(span));
+            addDateMentions(jcas, allDateMentions, typeName, certainty, span, offset, dt, getRuleInfo(span));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -639,11 +637,11 @@ public class TemporalAnnotator_AE extends FastCNER_AE_General {
                 if (interval > 7) {
                     certainty = "uncertain";
                 }
-                addDateMentions(jcas, ConceptTypeConstructors, allDateMentions, typeName, certainty, span, offset, dt, getRuleInfo(span));
+                addDateMentions(jcas, allDateMentions, typeName, certainty, span, offset, dt, getRuleInfo(span));
             } else {
 //              deal with yesterday, the day before yesterday etc.
                 dt = anchorDate.minusDays(unit);
-                addDateMentions(jcas, ConceptTypeConstructors, allDateMentions, typeName, certainty, span, offset, dt, getRuleInfo(span));
+                addDateMentions(jcas,allDateMentions, typeName, certainty, span, offset, dt, getRuleInfo(span));
             }
         } catch (Exception e) {
             e.printStackTrace();

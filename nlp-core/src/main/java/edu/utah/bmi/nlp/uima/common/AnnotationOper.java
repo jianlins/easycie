@@ -19,10 +19,8 @@ package edu.utah.bmi.nlp.uima.common;
 import edu.utah.bmi.nlp.compiler.MemoryClassLoader;
 import edu.utah.bmi.nlp.core.*;
 import edu.utah.bmi.nlp.sql.RecordRow;
-import org.apache.uima.cas.FSIndex;
-import org.apache.uima.cas.FSIterator;
-import org.apache.uima.cas.Feature;
-import org.apache.uima.cas.FeatureStructure;
+import org.apache.uima.cas.*;
+import org.apache.uima.cas.impl.CASImpl;
 import org.apache.uima.examples.SourceDocumentInformation;
 import org.apache.uima.fit.factory.AnnotationFactory;
 import org.apache.uima.fit.util.FSUtil;
@@ -330,6 +328,7 @@ public class AnnotationOper {
 
     public static Object getFeatureValue(String featureName, Annotation annotation) {
         Feature f = annotation.getType().getFeatureByBaseName(featureName);
+
         if(f==null){
             logger.info("Feature: "+featureName+" doesn't exists in annotation: "+annotation.getType());
             return null;
@@ -470,6 +469,7 @@ public class AnnotationOper {
         }
     }
 
+    @Deprecated
     public static AnnotationDefinition createConclusionAnnotationDefinition(AnnotationDefinition conclusionDefinition,
                                                                             HashMap<String, HashMap<String, Method>> evidenceConceptGetFeatures,
                                                                             HashMap<String, String> uniqueFeatureClassMap,
@@ -481,14 +481,14 @@ public class AnnotationOper {
         for (Annotation anno : evidenceAnnotations) {
             sortedEvidenceAnnotations.put(anno.getClass().getSimpleName(), anno);
         }
-        for (Map.Entry<String, String> featureValueEntry : conclusionDefinition.getFeatureValuePairs().entrySet()) {
+        for (Map.Entry<String, Object> featureValueEntry : conclusionDefinition.getFeatureValuePairs().entrySet()) {
             String featureName = featureValueEntry.getKey();
 //            TODO check if this is necessary
             if (featureName.indexOf(":") != -1)
                 featureName = featureName.split(":")[0].trim();
             Object value = featureValueEntry.getValue();
             if (value instanceof String && ((String) value).length() == 0) {
-                logger.info("Conclusion type '" + resultTypeShortName + "' feature '" + featureName + "' value is empty.");
+                logger.fine("Conclusion type '" + resultTypeShortName + "' feature '" + featureName + "' value is empty.");
                 value = null;
             }
             Annotation evidenceAnnotation;
@@ -578,6 +578,106 @@ public class AnnotationOper {
             else if (typeDefinitions.containsKey(conclusionAnnotatoinDef.shortTypeName) && typeDefinitions.get(conclusionAnnotatoinDef.getShortTypeName()).getFeatureValuePairs().containsKey(featureName)) {
                 conclusionAnnotatoinDef.setFeatureValue(featureName, typeDefinitions.get(conclusionAnnotatoinDef.getShortTypeName()).getFeatureValuePairs().get(featureName));
             }
+        }
+        return conclusionAnnotatoinDef;
+    }
+
+    /**
+     * This is more preferred method than above: createConclusionAnnotationDefinition
+     *
+     * @param conclusionDefinition
+     * @param evidenceConceptGetFeatures
+     * @param uniqueFeatureClassMap
+     * @param evidenceAnnotations
+     * @return AnnotationDefinition
+     */
+
+    public static AnnotationDefinition createConclusionAnnotationDefinition(AnnotationDefinition conclusionDefinition,
+                                                                            HashMap<String, List<String>> evidenceConceptGetFeatures,
+                                                                            HashMap<String, String> uniqueFeatureClassMap,
+                                                                            List<Annotation> evidenceAnnotations) {
+        AnnotationDefinition conclusionAnnotatoinDef = conclusionDefinition.clone();
+        String resultTypeShortName = conclusionDefinition.getShortTypeName();
+        LinkedHashMap<String, Annotation> sortedEvidenceAnnotations = new LinkedHashMap<>();
+        for (Annotation anno : evidenceAnnotations) {
+            sortedEvidenceAnnotations.put(anno.getClass().getSimpleName(), anno);
+        }
+        for (Map.Entry<String, Object> featureValueEntry : conclusionDefinition.getFeatureValuePairs().entrySet()) {
+            String featureName = featureValueEntry.getKey();
+//            TODO check if this is necessary
+            if (featureName.indexOf(":") != -1)
+                featureName = featureName.split(":")[0].trim();
+            Object value = featureValueEntry.getValue();
+            if (value instanceof String && ((String) value).length() == 0) {
+                logger.info("Conclusion type '" + resultTypeShortName + "' feature '" + featureName + "' value is empty.");
+                value = null;
+            }
+            Annotation evidenceAnnotation;
+            if (value == null) {
+//              In the form of "FeatureName"
+                if (evidenceAnnotations.size() == 0) {
+                    logger.warning("Evidence annotation for conclusion: '" + resultTypeShortName + "' feature " + featureName + " is needed");
+                    continue;
+                }
+                evidenceAnnotation = evidenceAnnotations.get(0);
+                String evidenceClassName = evidenceAnnotation.getClass().getSimpleName();
+                if (evidenceAnnotations.size() > 1) {
+//                      if there are multiple evidence annotations, try to find the best match
+                    if (!uniqueFeatureClassMap.containsKey(featureName)) {
+//                          if the feature is not known to be unique, try to find if it is unique, otherwise, choose the 1st referenced class
+                        for (String className : sortedEvidenceAnnotations.keySet()) {
+                            if (evidenceConceptGetFeatures.get(className).contains(featureName)) {
+                                if (uniqueFeatureClassMap.containsKey(featureName)) {
+                                    logger.warning("Feature " + featureName + " is not unique in current evidences: "
+                                            + sortedEvidenceAnnotations.keySet() + ". Only the 1st referenced Class will be used: "
+                                            + uniqueFeatureClassMap.get(featureName));
+                                } else {
+                                    uniqueFeatureClassMap.put(featureName, className);
+                                }
+                            }
+                        }
+                    }
+                    evidenceClassName = uniqueFeatureClassMap.get(featureName);
+                    evidenceAnnotation = sortedEvidenceAnnotations.get(evidenceClassName);
+                }
+                List<String> evidenceFeatures = new ArrayList<>();
+                if (evidenceConceptGetFeatures.containsKey(evidenceClassName)) {
+                    evidenceFeatures = evidenceConceptGetFeatures.get(evidenceClassName);
+                } else {
+                    Class parentClass = evidenceAnnotation.getClass();
+                    while (parentClass != null && parentClass != Annotation.class) {
+                        parentClass = parentClass.getSuperclass();
+                        if (evidenceConceptGetFeatures.containsKey(parentClass.getSimpleName())) {
+                            evidenceFeatures = evidenceConceptGetFeatures.get(parentClass);
+                            break;
+                        }
+                    }
+                }
+                if (evidenceFeatures == null) {
+                    evidenceConceptGetFeatures.put(evidenceClassName, new ArrayList<>());
+                    evidenceFeatures = evidenceConceptGetFeatures.get(evidenceClassName);
+                }
+                if (evidenceFeatures.contains(featureName)) {
+                    value=AnnotationOper.getFeatureValue(featureName, evidenceAnnotation);
+                }else{
+                    logger.fine(evidenceClassName + " doesn't have the feature: " + featureName);
+                }
+            } else if (value instanceof String && isUpperCase(((String) value).charAt(0))) {
+//              In form of "FeatureName:ConceptName" (in short form)
+                String evidenceClassName = (String) value;
+                evidenceAnnotation = sortedEvidenceAnnotations.get(evidenceClassName);
+                if (evidenceAnnotation != null) {
+                    List<String> evidenceFeatures = evidenceConceptGetFeatures.get(evidenceClassName);
+                    if (evidenceFeatures.contains(featureName)) {
+                        value=AnnotationOper.getFeatureValue(featureName, evidenceAnnotation);
+                    }else{
+                        value=null;
+                        logger.fine(evidenceClassName + " doesn't have the feature: " + featureName);
+                    }
+                }
+            }
+//              In the form of "FeatureName:value", need to make sure the 1st char of value is not Capitalized
+            conclusionAnnotatoinDef.setFeatureValue(featureName, value);
         }
         return conclusionAnnotatoinDef;
     }
