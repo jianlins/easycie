@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><collectionReaderDescription xmlns="http://uima.apache.org/resourceSpecifier">
+<?xml version="1.0" encoding="UTF-8"?><collectionReaderDescription xmlns="http://uima.apache.org/resourceSpecifier">
     <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
     <implementationName>edu.utah.bmi.nlp.easycie.reader.SQLTextReader</implementationName>
     <processingResourceMetaData>
