@@ -47,12 +47,12 @@ jobs:
         head -c 500 pom.xml
 
     - name: change compile version to 1.8
-      if: ${{ github.event.inputs.jdk_version == '8' }}
+      if: ${{ github.event.inputs.jdk_version <= 8 }}
       run: |
         sed -i.bak 's|<maven\.compiler\.target>[^<]*</maven\.compiler\.target>|<maven.compiler.target>1.8</maven.compiler.target>|g' pom.xml
 
     - name: change compile version to ${{ github.event.inputs.jdk_version }}
-      if: ${{ github.event.inputs.jdk_version > '8' }}
+      if: ${{ github.event.inputs.jdk_version > 8 }}
       run: |
         sed -i.bak 's|<maven\.compiler\.target>[^<]*</maven\.compiler\.target>|<maven.compiler.target>${{ github.event.inputs.jdk_version }}</maven.compiler.target>|g' pom.xml
     
