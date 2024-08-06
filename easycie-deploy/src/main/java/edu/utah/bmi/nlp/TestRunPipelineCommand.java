@@ -14,7 +14,7 @@ public class TestRunPipelineCommand {
         System.out.println("Start processing at: " + dtf.format(start));
         String config="conf/scout_edw/dvt_edw/scout_dvt.xml";
         System.out.println(new File(config).exists());
-        RunPipelineCommand.main(new String[]{"version=3.0","-c", config});
+        RunPipelineCommand.main(new String[]{"-c", config});
 
     }
 }
