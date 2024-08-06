@@ -7,7 +7,7 @@ on:
         description: 'set the publish version'
         type: string
         required: false
-        default: '2.0.0.0-jdk8-SNAPSHOT'
+        default: '2.0.1.0-jdk8-SNAPSHOT'
       jdk_version:
         description: 'set the jdk version'
         type: int
