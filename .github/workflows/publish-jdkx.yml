@@ -1,5 +1,5 @@
 name: Publish jdkx
-
+run-name: Publish ${{ github.event.inputs.pkg_version  }}
 on:
   workflow_dispatch:
     inputs:
