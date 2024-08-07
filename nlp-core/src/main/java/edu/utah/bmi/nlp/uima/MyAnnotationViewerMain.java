@@ -16,6 +16,7 @@
 
 package edu.utah.bmi.nlp.uima;
 
+import edu.utah.bmi.nlp.core.IOUtil;
 import org.apache.uima.UIMAException;
 import org.apache.uima.UIMAFramework;
 import org.apache.uima.UIMARuntimeException;
@@ -24,6 +25,7 @@ import org.apache.uima.cas.CAS;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.metadata.FsIndexDescription;
 import org.apache.uima.resource.metadata.TypeSystemDescription;
+import org.apache.uima.tools.cpm.AdaptableCpmFrame;
 import org.apache.uima.tools.docanalyzer.PrefsMediator;
 import org.apache.uima.tools.images.Images;
 import org.apache.uima.tools.util.gui.AboutDialog;
@@ -43,6 +45,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
 import java.util.prefs.Preferences;
 
 /**
@@ -106,7 +109,7 @@ public class MyAnnotationViewerMain extends JFrame {
             this.setIconImage(Images.getImage(Images.MICROSCOPE));
             // new ImageIcon(getClass().getResource(FRAME_ICON_IMAGE)).getImage());
         } catch (IOException e) {
-            System.err.println("Image could not be loaded: " + e.getMessage());
+            IOUtil.logExceptions(IOUtil.getLogger(AdaptableCpmFrame.class), e);
         }
 
         this.getContentPane().setBackground(Color.WHITE);

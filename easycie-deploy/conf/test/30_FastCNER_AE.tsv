@@ -1,0 +1,6 @@
+@fastcner
+&CONCEPT_FEATURES	AMB_PE	Concept
+&CONCEPT_FEATURES	PE	Concept
+
+\s(PE) 	0	PE	ACTUAL
+\s(PEs) 	0	PE	ACTUAL

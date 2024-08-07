@@ -28,6 +28,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -666,6 +667,19 @@ public class IOUtil {
         return getLogger(cls.getCanonicalName());
     }
 
+    public static void logExceptions(Logger logger, Exception e){
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        logger.warning(sw.toString());
+    }
+
+    public static void logExceptions(Logger logger, Exception e, Level level){
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        logger.log(level, sw.toString());
+    }
 }
 
 

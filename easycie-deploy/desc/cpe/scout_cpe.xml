@@ -169,7 +169,7 @@
                 <nameValuePair>
                     <name>RuleFileOrStr</name>
                     <value>
-                        <string>conf/pe_imp_wsec/30_FastCNER_AE.tsv</string>
+                        <string>conf/scout_edw/dvt_edw/30_FastCNER_AE.tsv</string>
                     </value>
                 </nameValuePair>
             </configurationParameterSettings>

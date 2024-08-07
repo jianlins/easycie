@@ -38,6 +38,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -225,7 +226,7 @@ public class TemporalContext_AE_General2 extends FastCNER_AE_General {
 
 		} catch (Exception e) {
 			logger.fine("Illegal date string: " + dateString);
-			logger.fine(e.getMessage());
+			IOUtil.logExceptions(logger, e, Level.FINE);
 		}
 //        try {
 //            if (utilDate == null) {

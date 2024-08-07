@@ -5,6 +5,9 @@ import edu.utah.bmi.nlp.core.TasksInf;
 import edu.utah.bmi.nlp.easycie.core.SettingOper;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.cli.*;
@@ -30,7 +33,7 @@ public class RunPipelineCommand {
             compiledClassPath = cmd.getOptionValue("p", "classes");
             loggerClassName = cmd.getOptionValue("l", "");
         } catch (ParseException e) {
-            logger.fine(e.getMessage());
+            IOUtil.logExceptions(logger, e);
         }
         if (configFile.length() == 0)
             logger.warning("config_file has not been specified");
@@ -50,7 +53,10 @@ public class RunPipelineCommand {
         try {
             runTask.call();
         } catch (Exception e) {
-            logger.warning(e.getMessage());
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            logger.warning(sw.toString());
         }
     }
 }

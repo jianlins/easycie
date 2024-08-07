@@ -42,6 +42,7 @@ import static java.lang.Character.isUpperCase;
  */
 public class AnnotationOper {
     public static Logger logger = IOUtil.getLogger(AnnotationOper.class);
+    public static HashMap<String, String>featureMissing=new HashMap<>();
 
 
     public static IntervalST<Annotation> indexAnnotation(JCas jcas, int typeId) {
@@ -327,9 +328,16 @@ public class AnnotationOper {
     }
 
     public static Object getFeatureValue(String featureName, Annotation annotation) {
+        String annoName=annotation.getType().getName();
+        if (featureMissing.containsKey(annoName)){
+            if(featureMissing.get(annoName).equals(featureName)){
+                logger.finest("Feature: " + featureName + " doesn't exists in annotation: " + annotation.getType());
+                return null;
+            }
+        }
         Feature f = annotation.getType().getFeatureByBaseName(featureName);
-
         if (f == null) {
+            featureMissing.put(annoName, featureName);
             logger.info("Feature: " + featureName + " doesn't exists in annotation: " + annotation.getType());
             return null;
         }

@@ -1,20 +1,20 @@
 package edu.utah.bmi.nlp.runner;
 
 
-import edu.utah.bmi.nlp.core.DeterminantValueSet;
+import edu.utah.bmi.nlp.core.*;
 import edu.utah.bmi.nlp.easycie.core.ConfigKeys;
-import edu.utah.bmi.nlp.core.SettingAb;
-import edu.utah.bmi.nlp.core.TaskInf;
-import edu.utah.bmi.nlp.core.TasksInf;
 import edu.utah.bmi.nlp.easycie.reader.SQLTextReader;
 import edu.utah.bmi.nlp.easycie.writer.SQLWriterCasConsumer;
 import edu.utah.bmi.nlp.uima.AdaptableCPEDescriptorRunner;
 import edu.utah.bmi.nlp.uima.BunchMixInferenceWriter;
+import edu.utah.bmi.nlp.uima.common.AnnotationOper;
 import edu.utah.bmi.nlp.uima.loggers.NLPDBConsoleLogger;
 import edu.utah.bmi.nlp.uima.loggers.UIMALogger;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashMap;
@@ -124,26 +124,29 @@ public class RunCPEDescriptorTask {
      */
     public UIMALogger getUIMALogger(String loggerClassName, String writerDBConfigFileName, String tableName, String keyColumnName,
                                     String annotator, int maxCommentLength) {
-        Class<? extends UIMALogger> uimaLoggerClass = NLPDBConsoleLogger.class;
+        Class<? extends UIMALogger> uimaLoggerClass;
         UIMALogger uimaLogger = new NLPDBConsoleLogger(writerDBConfigFileName, tableName, keyColumnName, annotator, maxCommentLength);
         try {
             if (!loggerClassName.trim().equals("")) {
-                Constructor<? extends UIMALogger> constructor = uimaLoggerClass.getConstructor(String.class, String.class, String.class, String.class, Integer.class);
+                uimaLoggerClass = AnnotationOper.getClass(loggerClassName, UIMALogger.class);
+                Constructor<? extends UIMALogger> constructor = uimaLoggerClass.getConstructor(String.class, String.class, String.class, String.class, int.class);
                 uimaLogger = constructor.newInstance(writerDBConfigFileName, tableName, keyColumnName, annotator, maxCommentLength);
             }else{
                 logger.fine("loggerClassName is empty, use default NLPDBConsoleLogger instead.");
             }
         } catch (NoSuchMethodException e) {
-            logger.warning(e.getMessage());
+            IOUtil.logExceptions(logger, e);
         } catch (InvocationTargetException e) {
-            logger.warning(e.getMessage());
+            IOUtil.logExceptions(logger, e);
         } catch (InstantiationException e) {
-            logger.warning(e.getMessage());
+            IOUtil.logExceptions(logger, e);
         } catch (IllegalAccessException e) {
-            logger.warning(e.getMessage());
+            IOUtil.logExceptions(logger, e);
         }
         return uimaLogger;
     }
+
+
 
     protected void updateReaderConfigurations(AdaptableCPEDescriptorRunner runner) {
         runner.updateReadDescriptorsConfiguration(DeterminantValueSet.PARAM_DB_CONFIG_FILE, readerDBConfigFileName);

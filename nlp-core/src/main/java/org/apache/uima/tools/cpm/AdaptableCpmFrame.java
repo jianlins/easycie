@@ -19,6 +19,7 @@
 
 package org.apache.uima.tools.cpm;
 
+import edu.utah.bmi.nlp.core.IOUtil;
 import org.apache.uima.tools.images.Images;
 import org.apache.uima.tools.util.gui.AboutDialog;
 import org.apache.uima.tools.util.gui.FileChooserBugWorkarounds;
@@ -32,9 +33,12 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AdaptableCpmFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = 756368351780483658L;
+    public static Logger logger=IOUtil.getLogger(AdaptableCpmFrame.class);
 
     private AdaptableCpmPanel cpmPanel;
 
@@ -56,7 +60,7 @@ public class AdaptableCpmFrame extends JFrame implements ActionListener {
         } catch (Exception e) {
             // I don't think this should ever happen, but if it does just print error and continue
             // with defalt look and feel
-            System.err.println("Could not set look and feel: " + e.getMessage());
+            IOUtil.logExceptions(logger, e, Level.FINE);
         }
         // UIManager.put("Panel.background",Color.WHITE);
         // Need to set other colors as well
@@ -69,7 +73,8 @@ public class AdaptableCpmFrame extends JFrame implements ActionListener {
             this.setIconImage(Images.getImage(Images.MICROSCOPE));
             // new ImageIcon(getClass().getResource(FRAME_ICON_IMAGE)).getImage());
         } catch (IOException e) {
-            System.err.println("Image could not be loaded: " + e.getMessage());
+            logger.fine("Image could not be loaded: " + e.getMessage());
+            IOUtil.logExceptions(logger, e, Level.FINE);
         }
 
         this.getContentPane().setBackground(Color.WHITE);
@@ -176,7 +181,7 @@ public class AdaptableCpmFrame extends JFrame implements ActionListener {
             frame.pack();
             frame.setVisible(true);
         } catch (Exception e) {
-            e.printStackTrace();
+            IOUtil.logExceptions(logger, e);
         }
     }
 }

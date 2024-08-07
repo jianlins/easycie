@@ -36,6 +36,7 @@ import org.pojava.datetime.DateTimeConfig;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -155,7 +156,7 @@ public class TemporalAnnotator_AE0 extends FastCNER_AE_General {
 
         } catch (Exception e) {
             logger.fine("Illegal date string: " + dateString);
-            logger.fine(e.getMessage());
+            IOUtil.logExceptions(logger, e, Level.FINE);
         }
 
 

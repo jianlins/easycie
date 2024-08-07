@@ -18,6 +18,7 @@ package edu.utah.bmi.nlp.uima.ae;
 
 
 import edu.utah.bmi.nlp.core.*;
+import edu.utah.bmi.nlp.easycie.core.CommonFunc;
 import edu.utah.bmi.nlp.fastner.uima.FastNER_AE_General;
 import edu.utah.bmi.nlp.sql.RecordRow;
 import edu.utah.bmi.nlp.type.system.Concept;
@@ -25,6 +26,7 @@ import edu.utah.bmi.nlp.type.system.ConceptBASE;
 import edu.utah.bmi.nlp.type.system.Date;
 import edu.utah.bmi.nlp.type.system.Sentence;
 import edu.utah.bmi.nlp.uima.common.AnnotationOper;
+import edu.utah.bmi.nlp.uima.common.UIMATypeFunctions;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
@@ -37,6 +39,7 @@ import org.pojava.datetime.DateTimeConfig;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -364,7 +367,7 @@ public class TemporalContext_AE extends JCasAnnotator_ImplBase implements RuleBa
 
         } catch (Exception e) {
             logger.fine("Illegal date string: " + dateString);
-            logger.fine(e.getMessage());
+            IOUtil.logExceptions(logger, e, Level.FINE);
         }
 
 
@@ -385,8 +388,7 @@ public class TemporalContext_AE extends JCasAnnotator_ImplBase implements RuleBa
                                  IntervalST<Integer> segementTree, ArrayList<Annotation> segments,
                                  boolean checkOverlap, Collection<Class<? extends Annotation>> exclusionClasses) {
         for (Class segClass : includeClasses) {
-            FSIndex annoIndex = jCas.getAnnotationIndex(segClass);
-            Iterator annoIter = annoIndex.iterator();
+            Iterator annoIter =JCasUtil.iterator(jCas, segClass);
             while (annoIter.hasNext()) {
                 Annotation segAnno = (Annotation) annoIter.next();
                 if (exclusionClasses != null && exclusionClasses.size() > 0 && checkExclusionClass(segAnno, exclusionClasses)) {

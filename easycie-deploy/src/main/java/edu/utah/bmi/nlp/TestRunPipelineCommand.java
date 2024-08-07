@@ -12,9 +12,11 @@ public class TestRunPipelineCommand {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime start = LocalDateTime.now();
         System.out.println("Start processing at: " + dtf.format(start));
-        String config="conf/scout_edw/dvt_edw/scout_dvt.xml";
-        System.out.println(new File(config).exists());
-        RunPipelineCommand.main(new String[]{"-c", config});
+        String config = "conf/scout_edw/dvt_edw/scout_dvt.xml";
+//        config = "conf/scout_edw/ssi_edw/scout_ssi.xml";
+        System.out.println(config+" exists: "+new File(config).exists());
+        String conf_folder=new File(config).getParentFile().getName();
+        RunPipelineCommand.main(new String[]{"-c", config, "-p", "classes/"+conf_folder,"-l","edu.utah.bmi.nlp.uima.loggers.NLPDBEDWLogger"});
 
     }
 }

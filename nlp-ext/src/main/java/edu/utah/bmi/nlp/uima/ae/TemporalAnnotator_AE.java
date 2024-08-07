@@ -40,6 +40,7 @@ import org.pojava.datetime.DateTimeConfig;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -368,8 +369,9 @@ public class TemporalAnnotator_AE extends FastCNER_AE_General {
             }
 
         } catch (Exception e) {
+            // This can happen a lot, if rule for datetime NER is not properly configured. Not need to warn, but enable it when debugging.
             logger.fine("Illegal date string: " + dateString);
-            logger.fine(e.getMessage());
+            IOUtil.logExceptions(logger, e, Level.FINE);
         }
 
 

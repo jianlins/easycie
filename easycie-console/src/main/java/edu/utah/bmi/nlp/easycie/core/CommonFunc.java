@@ -1,8 +1,10 @@
 package edu.utah.bmi.nlp.easycie.core;
 
+import edu.utah.bmi.nlp.core.IOUtil;
 import org.apache.commons.cli.*;
 
 import java.io.File;
+import java.util.logging.Level;
 
 /**
  * Created by Jianlin Shi on 8/4/17.
@@ -32,7 +34,7 @@ public class CommonFunc {
         try {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
-            System.out.println(e.getMessage());
+            IOUtil.logExceptions(IOUtil.getLogger(CommonFunc.class), e, Level.FINE);
             formatter.printHelp(commandName, options);
             System.exit(1);
             return null;
