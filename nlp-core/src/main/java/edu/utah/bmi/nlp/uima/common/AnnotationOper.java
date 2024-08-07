@@ -176,7 +176,7 @@ public class AnnotationOper {
         if (typeFullName.equals("uima.tcas.Annotation")) {
             return Annotation.class;
         }
-        Class<? extends Annotation> typeClass = null;
+        Class<? extends superClass> typeClass = null;
         try {
             typeClass = Class.forName(typeFullName).asSubclass(superClass);
             logger.finest(String.format("Load class %s from AppClassLoader", typeFullName));
