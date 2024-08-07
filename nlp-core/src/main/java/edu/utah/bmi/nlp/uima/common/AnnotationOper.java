@@ -176,7 +176,7 @@ public class AnnotationOper {
         if (typeFullName.equals("uima.tcas.Annotation")) {
             return Annotation.class;
         }
-        Class<? extends superClass> typeClass = null;
+        Class typeClass = null;
         try {
             typeClass = Class.forName(typeFullName).asSubclass(superClass);
             logger.finest(String.format("Load class %s from AppClassLoader", typeFullName));
@@ -198,11 +198,11 @@ public class AnnotationOper {
     }
 
     public static Class<? extends Annotation_Type> get_TypeClass(String typeFullName) {
-        return getClass(typeFullName, Annotation_Type.class);
+        return (Class<? extends Annotation_Type>) getClass(typeFullName, Annotation_Type.class);
     }
 
     public static Class<? extends Annotation> getTypeClass(String typeName) {
-        return getTypeClass(typeName, Annotation.class, true);
+        return (Class<? extends Annotation>) getTypeClass(typeName, Annotation.class, true);
     }
 
     public static Class<? extends Annotation> getTypeClass(String typeFullName, boolean checkDomain) {
@@ -329,8 +329,8 @@ public class AnnotationOper {
     public static Object getFeatureValue(String featureName, Annotation annotation) {
         Feature f = annotation.getType().getFeatureByBaseName(featureName);
 
-        if(f==null){
-            logger.info("Feature: "+featureName+" doesn't exists in annotation: "+annotation.getType());
+        if (f == null) {
+            logger.info("Feature: " + featureName + " doesn't exists in annotation: " + annotation.getType());
             return null;
         }
         Object value = FSUtil.getFeature(annotation, f, Object.class);
@@ -658,8 +658,8 @@ public class AnnotationOper {
                     evidenceFeatures = evidenceConceptGetFeatures.get(evidenceClassName);
                 }
                 if (evidenceFeatures.contains(featureName)) {
-                    value=AnnotationOper.getFeatureValue(featureName, evidenceAnnotation);
-                }else{
+                    value = AnnotationOper.getFeatureValue(featureName, evidenceAnnotation);
+                } else {
                     logger.fine(evidenceClassName + " doesn't have the feature: " + featureName);
                 }
             } else if (value instanceof String && isUpperCase(((String) value).charAt(0))) {
@@ -669,9 +669,9 @@ public class AnnotationOper {
                 if (evidenceAnnotation != null) {
                     List<String> evidenceFeatures = evidenceConceptGetFeatures.get(evidenceClassName);
                     if (evidenceFeatures.contains(featureName)) {
-                        value=AnnotationOper.getFeatureValue(featureName, evidenceAnnotation);
-                    }else{
-                        value=null;
+                        value = AnnotationOper.getFeatureValue(featureName, evidenceAnnotation);
+                    } else {
+                        value = null;
                         logger.fine(evidenceClassName + " doesn't have the feature: " + featureName);
                     }
                 }
@@ -690,7 +690,7 @@ public class AnnotationOper {
             if (featureName.indexOf(":") != -1)
                 featureName = featureName.split(":")[0].trim();
             Object value = featureValueEntry.getValue();
-            if(value==null){
+            if (value == null) {
                 continue;
             }
             String type = value.getClass().getSimpleName();
@@ -728,7 +728,7 @@ public class AnnotationOper {
                         break;
 
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 logger.info(e.toString());
             }
         }
