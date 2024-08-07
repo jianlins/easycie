@@ -7,7 +7,7 @@ on:
         description: 'set the publish version'
         type: string
         required: false
-        default: '2.0.1.0-jdk8-SNAPSHOT'
+        default: '2.0.1.1-jdk8-SNAPSHOT'
       jdk_version:
         description: 'set the jdk version'
         type: int
@@ -65,9 +65,9 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
+      #  has a "performRelease" profile in pom.xml, only use gpg when -DperformRelease=true
     - name: Publish to the Maven Central Repository
       run: |
-#       has a "performRelease" profile in pom.xml, only use gpg when -DperformRelease=true
         mvn -DperformRelease=true -Dmaven.test.skip --batch-mode clean deploy
       env:
         MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
