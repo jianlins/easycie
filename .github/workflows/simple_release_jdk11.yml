@@ -30,7 +30,6 @@ jobs:
       - name: Zip the deploy jar with dependencies
         run: |
           ls -l easycie-deploy/target/dist/
-          ls -l target/dist/
           zip -j target/easycie-${{ env.MAVEN_VERSION }}-jdk11-with-deps.zip \
             easycie-deploy/target/dist/*
 
