@@ -8,7 +8,7 @@
     <parent>
         <groupId>edu.utah.bmi.nlp</groupId>
         <artifactId>easycie</artifactId>
-        <version>2.0.1.1-jdk8</version>
+        <version>2.0.1.1</version>
     </parent>
     <name>RuSH (Rule-based sentence Segmenter using Hashing)</name>
     <description>RuSH is an efficient, reliable, and easy adaptable rule-based sentence segmentation solution. It is
