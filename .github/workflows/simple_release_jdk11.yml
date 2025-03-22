@@ -30,6 +30,7 @@ jobs:
       - name: Zip the deploy jar with dependencies
         run: |
           ls -l easycie-deploy/target/dist/
+          ls -l target/dist/
           zip -j target/easycie-${{ env.MAVEN_VERSION }}-jdk11-with-deps.zip \
             easycie-deploy/target/dist/*
 
@@ -68,8 +69,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/easycie-${{ env.MAVEN_VERSION }}.zip
-          asset_name: easycie-${{ env.MAVEN_VERSION }}.zip
+          asset_path: target/easycie-${{ env.MAVEN_VERSION }}-jdk11.zip
+          asset_name: easycie-${{ env.MAVEN_VERSION }}-jdk11.zip
           asset_content_type: application/zip
 
       - name: Upload Deploy Jar Release Asset
@@ -79,6 +80,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/easycie-${{ env.MAVEN_VERSION }}-with-deps.zip
-          asset_name: easycie-${{ env.MAVEN_VERSION }}-with-deps.zip
+          asset_path: target/easycie-${{ env.MAVEN_VERSION }}-jdk11-with-deps.zip
+          asset_name: easycie-${{ env.MAVEN_VERSION }}-jdk11-with-deps.zip
           asset_content_type: application/zip
