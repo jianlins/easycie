@@ -21,7 +21,7 @@ jobs:
       - name: Get the version
         id: get_version
         run: |
-          echo "MAVEN_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)-jdk11" >> $GITHUB_ENV
+          echo "MAVEN_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
           echo ${{ env.MAVEN_VERSION }}
 
       - name: Build with Maven
@@ -30,7 +30,7 @@ jobs:
       - name: Zip the deploy jar with dependencies
         run: |
           ls -l easycie-deploy/target/dist/
-          zip -j target/easycie-${{ env.MAVEN_VERSION }}-with-deps.zip \
+          zip -j target/easycie-${{ env.MAVEN_VERSION }}-jdk11-with-deps.zip \
             easycie-deploy/target/dist/*
 
 
@@ -42,7 +42,7 @@ jobs:
           ls fastner/target
           ls nlp-core/target
           ls section-detector-r/target
-          zip -j target/easycie-${{ env.MAVEN_VERSION }}.zip \
+          zip -j target/easycie-${{ env.MAVEN_VERSION }}-jdk11.zip \
             easycie-console/target/*${{ env.MAVEN_VERSION }}.jar \
             fastcontext/target/*${{ env.MAVEN_VERSION }}.jar \
             fastner/target/*${{ env.MAVEN_VERSION }}.jar \
@@ -56,8 +56,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.MAVEN_VERSION }}
-          release_name: Release ${{ env.MAVEN_VERSION }}
+          tag_name: ${{ env.MAVEN_VERSION }}-jdk11
+          release_name: Release ${{ env.MAVEN_VERSION }}-jdk11
           draft: false
           prerelease: false
 
