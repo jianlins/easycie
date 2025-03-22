@@ -25,9 +25,22 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
-      - name: Zip the package
+      - name: Zip the deploy jar with dependencies
         run: |
-          zip -j target/easycie-${{ env.MAVEN_VERSION }}.zip easycie-console/target/*${{ env.MAVEN_VERSION }}.jar fastcontext/target/*${{ env.MAVEN_VERSION }}.jar fastner/target/*${{ env.MAVEN_VERSION }}.jar nlp-core/target/*${{ env.MAVEN_VERSION }}.jar section-detector-r/target/*${{ env.MAVEN_VERSION }}.jar         
+          zip -j target/easycie-${{ env.MAVEN_VERSION }}-with-deps.zip \
+            easycie-deploy/target/dist/*
+
+
+      # Zip the original jars (without dependencies)
+      - name: Zip the original jars
+        run: |
+          zip -j target/easycie-${{ env.MAVEN_VERSION }}.zip \
+            easycie-console/target/*${{ env.MAVEN_VERSION }}.jar \
+            fastcontext/target/*${{ env.MAVEN_VERSION }}.jar \
+            fastner/target/*${{ env.MAVEN_VERSION }}.jar \
+            nlp-core/target/*${{ env.MAVEN_VERSION }}.jar \
+            section-detector-r/target/*${{ env.MAVEN_VERSION }}.jar      
+          
 
       - name: Create Release
         id: create_release
@@ -49,4 +62,15 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: target/easycie-${{ env.MAVEN_VERSION }}.zip
           asset_name: easycie-${{ env.MAVEN_VERSION }}.zip
+          asset_content_type: application/zip
+
+      - name: Upload Deploy Jar Release Asset
+        id: upload_deploy
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: target/easycie-${{ env.MAVEN_VERSION }}-with-deps.zip
+          asset_name: easycie-${{ env.MAVEN_VERSION }}-with-deps.zip
           asset_content_type: application/zip
