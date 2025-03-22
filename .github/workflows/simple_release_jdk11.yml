@@ -37,6 +37,11 @@ jobs:
       # Zip the original jars (without dependencies)
       - name: Zip the original jars
         run: |
+          ls easycie-console/target
+          ls fastcontext/target
+          ls fastner/target
+          ls nlp-core/target
+          ls section-detector-r/target
           zip -j target/easycie-${{ env.MAVEN_VERSION }}.zip \
             easycie-console/target/*${{ env.MAVEN_VERSION }}.jar \
             fastcontext/target/*${{ env.MAVEN_VERSION }}.jar \
