@@ -6,11 +6,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions: write-all
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: jdk8
 
       - name: Set up JDK 8
         uses: actions/setup-java@v4
@@ -21,14 +20,36 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo "MAVEN_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+        run: |
+          echo "MAVEN_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+          echo ${{ env.MAVEN_VERSION }}
 
       - name: Build with Maven
-        run: mvn clean package
+        run: mvn clean package -Pjdk8 -DperformRelease=true
 
-      - name: Zip the package
+      - name: Zip the deploy jar with dependencies
         run: |
-          zip -j target/easycie-${{ env.MAVEN_VERSION }}.zip easycie-console/target/*${{ env.MAVEN_VERSION }}.jar fastcontext/target/*${{ env.MAVEN_VERSION }}.jar fastner/target/*${{ env.MAVEN_VERSION }}.jar nlp-core/target/*${{ env.MAVEN_VERSION }}.jar section-detector-r/target/*${{ env.MAVEN_VERSION }}.jar         
+          ls -l easycie-deploy/target/deploy/
+          mkdir target
+          zip -j target/easycie-${{ env.MAVEN_VERSION }}-jdk8-with-deps.zip \
+            easycie-deploy/target/deploy/*
+
+
+      # Zip the original jars (without dependencies)
+      - name: Zip the original jars
+        run: |
+          ls easycie-console/target
+          ls fastcontext/target
+          ls fastner/target
+          ls nlp-core/target
+          ls section-detector-r/target
+          zip -j target/easycie-${{ env.MAVEN_VERSION }}-jdk8.zip \
+            easycie-console/target/*${{ env.MAVEN_VERSION }}-jdk8.jar \
+            fastcontext/target/*${{ env.MAVEN_VERSION }}-jdk8.jar \
+            fastner/target/*${{ env.MAVEN_VERSION }}-jdk8.jar \
+            nlp-core/target/*${{ env.MAVEN_VERSION }}-jdk8.jar \
+            section-detector-r/target/*${{ env.MAVEN_VERSION }}-jdk8.jar      
+          
 
       - name: Create Release
         id: create_release
@@ -36,8 +57,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.MAVEN_VERSION }}
-          release_name: Release ${{ env.MAVEN_VERSION }}
+          tag_name: ${{ env.MAVEN_VERSION }}-jdk8
+          release_name: Release ${{ env.MAVEN_VERSION }}-jdk8
           draft: false
           prerelease: false
 
@@ -48,6 +69,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/easycie-${{ env.MAVEN_VERSION }}.zip
-          asset_name: easycie-${{ env.MAVEN_VERSION }}.zip
+          asset_path: target/easycie-${{ env.MAVEN_VERSION }}-jdk8.zip
+          asset_name: easycie-${{ env.MAVEN_VERSION }}-jdk8.zip
+          asset_content_type: application/zip
+
+      - name: Upload Deploy Jar Release Asset
+        id: upload_deploy
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: target/easycie-${{ env.MAVEN_VERSION }}-jdk8-with-deps.zip
+          asset_name: easycie-${{ env.MAVEN_VERSION }}-jdk8-with-deps.zip
           asset_content_type: application/zip
