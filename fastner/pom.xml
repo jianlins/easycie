@@ -38,6 +38,7 @@
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>nlp-core</artifactId>
             <version>${project.parent.version}</version>
+            <classifier>${build.classifier}</classifier>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.blulab</groupId>

@@ -19,6 +19,7 @@
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>easycie-console</artifactId>
             <version>${project.parent.version}</version>
+            <classifier>${build.classifier}</classifier>
         </dependency>
     </dependencies>
     <build>

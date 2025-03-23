@@ -36,26 +36,31 @@
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>nlp-core</artifactId>
             <version>${project.parent.version}</version>
+            <classifier>${build.classifier}</classifier>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>rush</artifactId>
             <version>${project.parent.version}</version>
+            <classifier>${build.classifier}</classifier>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>fastner</artifactId>
             <version>${project.parent.version}</version>
+            <classifier>${build.classifier}</classifier>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>fastcontext</artifactId>
             <version>${project.parent.version}</version>
+            <classifier>${build.classifier}</classifier>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>section-detector-r</artifactId>
             <version>${project.parent.version}</version>
+            <classifier>${build.classifier}</classifier>
         </dependency>
         <!--<dependency>-->
         <!--<groupId>edu.utah.bmi.blulab</groupId>-->

@@ -47,6 +47,7 @@
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>fastner</artifactId>
             <version>${project.parent.version}</version>
+            <classifier>${build.classifier}</classifier>
         </dependency>
         <dependency>
             <groupId>com.github.cbismuth</groupId>

@@ -21,6 +21,7 @@
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>nlp-ext</artifactId>
             <version>${project.parent.version}</version>
+            <classifier>${build.classifier}</classifier>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
@@ -36,6 +37,8 @@
                 <version>3.6.0</version>
                 <configuration>
                     <outputDirectory>${project.build.directory}/deploy</outputDirectory>
+                    <finalName>${project.artifactId}-${project.version}-${build.classifier}</finalName>
+                    <appendAssemblyId>true</appendAssemblyId>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>

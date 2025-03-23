@@ -19,12 +19,14 @@
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>fastner</artifactId>
             <version>${project.parent.version}</version>
+            <classifier>${build.classifier}</classifier>
         </dependency>
         <dependency>
             <groupId>edu.utah.bmi.nlp</groupId>
             <artifactId>rush</artifactId>
             <version>${project.parent.version}</version>
             <scope>test</scope>
+            <classifier>${build.classifier}</classifier>
         </dependency>
     </dependencies>
 
