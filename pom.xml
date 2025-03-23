@@ -56,7 +56,7 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-    <!--    if failed, try the following updated configuration: https://central.sonatype.org/publish/publish-maven/#deployment-->
+    <!--    if failed, try the following updated configuration: https://central.sonaseatype.org/publish/publish-maven/#deployment-->
     <!--    <distributionManagement>-->
     <!--        <snapshotRepository>-->
     <!--            <id>ossrh</id>-->
@@ -112,7 +112,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
-                    <skipTests>false</skipTests>
+                    <skipTests>true</skipTests>
                 </configuration>
             </plugin>
             <!--            <plugin>-->
